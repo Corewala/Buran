@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gemtext_text_monospace_textview"
+    android:textSize="@dimen/large_text_size"
+    android:textColor="@color/stroke"
+    android:layout_marginLeft="@dimen/screen_margin"
+    android:layout_marginRight="@dimen/screen_margin"
+    android:paddingLeft="@dimen/default_margin"
+    android:paddingRight="@dimen/default_margin"
+    android:paddingTop="@dimen/default_margin"
+    android:paddingBottom="@dimen/default_margin"
+    android:textStyle="italic"
+    android:background="@color/code_background"
+    android:textIsSelectable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:lineHeight="@dimen/large_line_height"/>

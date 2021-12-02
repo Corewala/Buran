@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/bookmark_layout"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/default_margin_big"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bookmark_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="My Homepage"
+        android:layout_toLeftOf="@+id/bookmark_overflow"
+        android:textColor="@color/vibrant_stroke"
+        android:textSize="@dimen/text_large" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bookmark_uri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="gemini://myhomepage.gmi"
+        android:textSize="@dimen/text_small"
+        android:layout_toLeftOf="@+id/bookmark_overflow"
+        android:layout_below="@+id/bookmark_name"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/bookmark_overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/vector_overflow" />
+
+</RelativeLayout>

@@ -1,0 +1,125 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewmodel" type="corewala.buran.ui.GemViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/root_coord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.GemActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/header_background"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimaryDark"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:toolbarId="@+id/toolbar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin">
+
+                <RelativeLayout android:id="@+id/address_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/default_margin">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/home"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/button_margin"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/vector_home" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/home"
+                        android:layout_toStartOf="@+id/more">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/address_edit"
+                            android:background="@drawable/drawable_filled_rounded_rect"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="12dp"
+                            android:paddingBottom="12dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:drawablePadding="4dp"
+                            android:inputType="textNoSuggestions|textUri"
+                            android:singleLine="true"
+                            android:textSize="12sp"
+                            android:imeOptions="actionGo"
+                            android:hint="@string/main_input_hint" />
+
+
+                    </RelativeLayout>
+
+
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/more"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/button_margin"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/vector_overflow" />
+
+
+                </RelativeLayout>
+
+                <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:indeterminateTint="@color/stroke"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_below="@+id/address_bar"
+                        android:indeterminate="true"/>
+
+            </RelativeLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/pull_to_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gemtext_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            android:paddingTop="@dimen/screen_margin"
+            android:paddingBottom="@dimen/screen_margin"
+            />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_action_import_bookmarks"
+        android:title="@string/import_bookmarks"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_action_export_bookmarks"
+        android:title="@string/export_bookmarks"
+        app:showAsAction="never"/>
+</menu>

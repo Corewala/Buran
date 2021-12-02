@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/bookmarks_toolbar"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_height="@dimen/bar_height"
+            app:menu="@menu/bookmark_import_export"
+            app:title="@string/bookmarks"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookmarks_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bookmarks_toolbar"/>
+
+    <RelativeLayout
+        android:id="@+id/bookmarks_empty_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:paddingBottom="60dp"
+            android:gravity="center_horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bookmarks_empty"
+                android:paddingTop="@dimen/default_margin_big"/>
+
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

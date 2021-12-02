@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/screen_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginRight="@dimen/screen_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatTextView
+            android:textSize="@dimen/default_text_size"
+            android:textColor="@color/stroke"
+            android:id="@id/show_code_block"
+            android:background="?android:selectableItemBackground"
+            android:focusable="true" android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="@string/show_code"
+            android:drawablePadding="4.0dip"
+            />
+
+    <HorizontalScrollView
+            android:background="@drawable/block_background"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/def_quarter"
+            android:layout_marginBottom="@dimen/def_quarter"
+            android:layout_below="@id/show_code_block">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:scrollbarStyle="insideOverlay"
+                android:textSize="@dimen/code_text_size"
+                android:typeface="monospace"
+                android:textColor="@color/stroke"
+                android:id="@id/gemtext_text_monospace_textview"
+                android:paddingLeft="@dimen/default_margin_big"
+                android:paddingTop="@dimen/default_margin_big"
+                android:paddingRight="@dimen/default_margin_big"
+                android:paddingBottom="0.0dip"
+                android:scrollbars="horizontal|vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollHorizontally="true"
+                android:isScrollContainer="true"
+                android:overScrollMode="ifContentScrolls"
+                android:textIsSelectable="true"
+                android:fontFamily="@font/code_font"
+                app:fontFamily="@font/code_font"
+                app:lineHeight="@dimen/code_text_size"/>
+
+    </HorizontalScrollView>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/link_menu_load_image"
+        android:title="@string/load_image" />
+    <item android:id="@+id/link_menu_copy"
+        android:title="@string/copy_address" />
+</menu>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="@dimen/default_margin">
+
+
+<androidx.appcompat.widget.AppCompatEditText
+    android:id="@+id/home_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/set_home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentRight="true"
+        android:text="Update"
+        android:layout_below="@+id/home_edit_text"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/use_current_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/set_home_button"
+        android:text="Use current"
+        android:layout_below="@+id/home_edit_text"/>
+</RelativeLayout>

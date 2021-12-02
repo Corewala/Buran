@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/gemtext_text_link"
+    android:textColor="@color/stroke"
+    android:textSize="@dimen/default_text_size"
+    android:clickable="true"
+    android:focusable="true"
+    android:drawableEnd="@drawable/vector_photo"
+    android:drawablePadding="4dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginLeft="@dimen/screen_margin"
+    android:layout_marginRight="@dimen/screen_margin"
+    tools:text="an image"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/gemtext_inline_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/screen_margin"
+        android:layout_marginRight="@dimen/screen_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:background="#ffffff"
+        android:visibility="gone"
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/gemtext_text_link"/>
+</RelativeLayout>

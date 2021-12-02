@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/gemtext_text_link"
+        android:textColor="@color/stroke"
+        android:layout_marginLeft="@dimen/screen_margin"
+        android:layout_marginRight="@dimen/screen_margin"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:layout_marginBottom="@dimen/default_margin_small"
+        android:textSize="@dimen/large_text_size"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAllCaps="false"
+        android:textAlignment="viewStart"
+        android:padding="@dimen/accessibility_button_padding"
+        android:backgroundTint="@color/accessibility_button_background"
+        android:drawablePadding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
