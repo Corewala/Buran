@@ -198,6 +198,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
         //Accessibility - inline icons
         val showInlineIconsPreference = SwitchPreferenceCompat(context)
+        showInlineIconsPreference.setDefaultValue(true)
         showInlineIconsPreference.key = "show_inline_icons"
         showInlineIconsPreference.title = getString(R.string.show_inline_icons)
         accessibilityCategory.addPreference(showInlineIconsPreference)
