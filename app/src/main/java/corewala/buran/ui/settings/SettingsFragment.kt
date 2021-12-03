@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.*
@@ -151,7 +150,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
 
         val backgroundColourPreference = ListPreference(context)
-        backgroundColourPreference.key = "background_colour";
+        backgroundColourPreference.key = "background_colour"
         backgroundColourPreference.setDialogTitle(R.string.prefs_override_page_background_dialog_title)
         backgroundColourPreference.setTitle(R.string.prefs_override_page_background_title)
         backgroundColourPreference.setSummary(R.string.prefs_override_page_background)
