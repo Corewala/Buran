@@ -63,7 +63,7 @@
     <string name="use_client_certificate">Use Client Certificate</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="history_cleared">History cleared</string>
-    <string name="runtime_cahce_cleared">Runtime cache cleared</string>
+    <string name="runtime_cache_cleared">Runtime cache cleared</string>
     <string name="show_inline_icons" tools:ignore="MissingTranslation">Inline link icons</string>
     <string name="bookmarks_empty" tools:ignore="MissingTranslation">You don\'t have any bookmarks yet</string>
     <string name="import_bookmarks" tools:ignore="MissingTranslation">Import bookmarks</string>

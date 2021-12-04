@@ -63,7 +63,7 @@
     <string name="use_client_certificate">Utiliser un Certificat Client</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
     <string name="history_cleared">Historique vidé</string>
-    <string name="runtime_cahce_cleared">Cache d\'exécution vidé</string>
+    <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>
     <string name="bookmarks_empty">Vous n\'avez encore aucun marque-pages</string>
     <string name="import_bookmarks">Importer des marque-pages</string>

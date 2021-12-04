@@ -40,7 +40,7 @@ object HistoryDialog {
                     }
                 }else if(menuItem.itemId == R.id.history_overflow_clear_runtime_cache){
                     dialog.dismiss()
-                    Toast.makeText(context, context.getString(R.string.runtime_cahce_cleared), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.runtime_cache_cleared), Toast.LENGTH_SHORT).show()
                 }
                 true
             }
