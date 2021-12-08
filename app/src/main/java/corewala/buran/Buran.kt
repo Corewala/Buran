@@ -1,23 +1,8 @@
 package corewala.buran
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
 
 class Buran: Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-
-        when {
-            prefs.getBoolean("theme_Light", false) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            prefs.getBoolean("theme_Dark", false) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            prefs.getBoolean("theme_FollowSystem", true) -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
-
-    }
 
     companion object{
         const val DEFAULT_HOME_CAPSULE = "gemini://rawtext.club/~sloum/spacewalk.gmi"

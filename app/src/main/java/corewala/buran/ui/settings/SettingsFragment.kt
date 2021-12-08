@@ -113,40 +113,44 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         themeCategory.title = getString(R.string.theme)
         appCategory.addPreference(themeCategory)
 
-        val themeFollowSystemPreference = SwitchPreferenceCompat(context)
-        themeFollowSystemPreference.key = "theme_FollowSystem"
-        themeFollowSystemPreference.title = getString(R.string.system_default)
-        themeFollowSystemPreference.onPreferenceChangeListener = this
-        themeCategory.addPreference(themeFollowSystemPreference)
+        val themeLabels = mutableListOf<String>()
+        val themeValues = mutableListOf<String>()
+        themeLabels.add(getString(R.string.system_default))
+        themeLabels.add(getString(R.string.light))
+        themeLabels.add(getString(R.string.dark))
+        themeValues.add("theme_FollowSystem")
+        themeValues.add("theme_Light")
+        themeValues.add("theme_Dark")
 
-        val themeLightPreference = SwitchPreferenceCompat(context)
-        themeLightPreference.key = "theme_Light"
-        themeLightPreference.title = getString(R.string.light)
-        themeLightPreference.onPreferenceChangeListener = this
-        themeCategory.addPreference(themeLightPreference)
+        val themePreference = ListPreference(context)
+        themePreference.key = "theme"
+        themePreference.setDialogTitle(R.string.theme)
+        themePreference.setTitle(R.string.theme)
+        themePreference.setSummary(R.string.prefs_override_theme)
+        themePreference.setDefaultValue("theme_FollowSystem")
+        themePreference.entries = themeLabels.toTypedArray()
+        themePreference.entryValues = themeValues.toTypedArray()
+        themeCategory.addPreference(themePreference)
 
-        val themeDarkPreference = SwitchPreferenceCompat(context)
-        themeDarkPreference.key = "theme_Dark"
-        themeDarkPreference.title = getString(R.string.dark)
-        themeDarkPreference.onPreferenceChangeListener = this
-        themeCategory.addPreference(themeDarkPreference)
+        themePreference.setOnPreferenceChangeListener{ _, theme ->
+            when (theme) {
+                "theme_FollowSystem" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                "theme_Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                "theme_Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
 
-
-        val isThemePrefSet =
-            prefs.getBoolean("theme_FollowSystem", false) ||
-                    prefs.getBoolean("theme_Light", false) ||
-                    prefs.getBoolean("theme_Dark", false)
-        if (!isThemePrefSet) themeFollowSystemPreference.isChecked = true
+            true
+        }
 
         val coloursCSV = resources.openRawResource(R.raw.colours).bufferedReader().use { it.readLines() }
 
-        val labels = mutableListOf<String>()
-        val values = mutableListOf<String>()
+        val colourLabels = mutableListOf<String>()
+        val colourValues = mutableListOf<String>()
 
         coloursCSV.forEach{ line ->
             val colour = line.split(",")
-            labels.add(colour[0])
-            values.add(colour[1])
+            colourLabels.add(colour[0])
+            colourValues.add(colour[1])
         }
 
         val backgroundColourPreference = ListPreference(context)
@@ -155,8 +159,8 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         backgroundColourPreference.setTitle(R.string.prefs_override_page_background_title)
         backgroundColourPreference.setSummary(R.string.prefs_override_page_background)
         backgroundColourPreference.setDefaultValue("#XXXXXX")
-        backgroundColourPreference.entries = labels.toTypedArray()
-        backgroundColourPreference.entryValues = values.toTypedArray()
+        backgroundColourPreference.entries = colourLabels.toTypedArray()
+        backgroundColourPreference.entryValues = colourValues.toTypedArray()
 
         backgroundColourPreference.setOnPreferenceChangeListener { _, colour ->
             when (colour) {

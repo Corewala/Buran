@@ -46,6 +46,7 @@
     <string name="home_capsule">Capsule d\'accueil</string>
     <string name="update">Mettre à jour</string>
     <string name="theme">Thème</string>
+    <string name="prefs_override_theme">Choisir un thème</string>
     <string name="system_default">Paramètre système</string>
     <string name="light">Clair</string>
     <string name="dark">Sombre</string>
