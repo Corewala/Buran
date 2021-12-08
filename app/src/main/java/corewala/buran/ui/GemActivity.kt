@@ -431,7 +431,7 @@ class GemActivity : AppCompatActivity() {
                 }catch (e: ActivityNotFoundException){
                     showAlert(
                         String.format(
-                            getString(R.string.not_app_installed_that_can_open),
+                            getString(R.string.no_app_installed_that_can_open),
                             state.uri
                         )
                     )
