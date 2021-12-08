@@ -178,10 +178,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
         //Accessibility - code blocks
         val aboutCodeBlocksPref = Preference(context)
-        aboutCodeBlocksPref.key = "unused_accessibility_pref"
         aboutCodeBlocksPref.summary = getString(R.string.collapse_code_blocks_about)
-        aboutCodeBlocksPref.isPersistent = false
-        aboutCodeBlocksPref.isSelectable = false
         accessibilityCategory.addPreference(aboutCodeBlocksPref)
 
         val collapseCodeBlocksPreference = SwitchPreferenceCompat(context)
