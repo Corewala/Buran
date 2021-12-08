@@ -338,33 +338,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
             tlsChangeListener(preference, newValue)
             return true
         }
-
-        if(preference.key.startsWith("theme")){
-            when(preference.key){
-                "theme_FollowSystem" -> {
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_Light")?.isChecked =
-                        false
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_Dark")?.isChecked =
-                        false
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                }
-                "theme_Light" -> {
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_FollowSystem")?.isChecked =
-                        false
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_Dark")?.isChecked =
-                        false
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-                "theme_Dark" -> {
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_FollowSystem")?.isChecked =
-                        false
-                    preferenceScreen.findPreference<SwitchPreferenceCompat>("theme_Light")?.isChecked =
-                        false
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-            }
-            return true
-        }
         return false
     }
 
