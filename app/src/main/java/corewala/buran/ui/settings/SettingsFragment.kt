@@ -14,11 +14,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.*
 import corewala.buran.Buran
 import corewala.buran.R
-import java.security.SecureRandom
-import java.util.*
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
 
 
 const val PREFS_SET_CLIENT_CERT_REQ = 20
@@ -26,7 +21,6 @@ const val PREFS_SET_CLIENT_CERT_REQ = 20
 class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
 
     lateinit var prefs: SharedPreferences
-    lateinit var protocols: Array<String>
 
     private lateinit var clientCertPref: Preference
     private lateinit var useClientCertPreference: SwitchPreferenceCompat
@@ -82,9 +76,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
         //Web ----------------------------------------------
         buildWebSection(context, screen)
-
-        //TLS ----------------------------------------------
-        buildTLSSection(context, screen)
 
         preferenceScreen = screen
     }
@@ -204,48 +195,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         accessibilityCategory.addPreference(showInlineIconsPreference)
     }
 
-    private fun buildTLSSection(context: Context?, screen: PreferenceScreen) {
-        val tlsCategory = PreferenceCategory(context)
-        tlsCategory.key = "tls_category"
-        tlsCategory.title = getString(R.string.tls_config)
-        screen.addPreference(tlsCategory)
-
-        val tlsDefaultPreference = SwitchPreferenceCompat(context)
-        tlsDefaultPreference.key = "tls_Default"
-        tlsDefaultPreference.title = getString(R.string.tls_default)
-        tlsDefaultPreference.onPreferenceChangeListener = this
-        tlsCategory.addPreference(tlsDefaultPreference)
-
-        //This feel inelegant:
-        var tlsPrefSet = false
-        prefs.all.forEach { pref ->
-            if (pref.key.startsWith("tls_")) tlsPrefSet = true
-        }
-
-        if (!tlsPrefSet) {
-            tlsDefaultPreference.isChecked = true
-        }
-
-        val tlsAllSupportedPreference = SwitchPreferenceCompat(context)
-        tlsAllSupportedPreference.key = "tls_All_Supported"
-        tlsAllSupportedPreference.title = getString(R.string.tls_enable_all_supported)
-        tlsAllSupportedPreference.onPreferenceChangeListener = this
-        tlsCategory.addPreference(tlsAllSupportedPreference)
-
-        val sslContext = SSLContext.getInstance("TLS")
-        sslContext.init(null, null, SecureRandom())
-        val factory: SSLSocketFactory = sslContext.socketFactory
-        val socket = factory.createSocket() as SSLSocket
-        protocols = socket.supportedProtocols
-        protocols.forEach { protocol ->
-            val tlsPreference = SwitchPreferenceCompat(context)
-            tlsPreference.key = "tls_${protocol.toLowerCase(Locale.getDefault())}"
-            tlsPreference.title = protocol
-            tlsPreference.onPreferenceChangeListener = this
-            tlsCategory.addPreference(tlsPreference)
-        }
-    }
-
     private fun buildClientCertificateSection(context: Context?, appCategory: PreferenceCategory) {
         if (Buran.FEATURE_CLIENT_CERTS) {
 
@@ -332,59 +281,8 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
     }
 
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-        if(preference == null) return false
-
-        if(preference.key.startsWith("tls")){
-            tlsChangeListener(preference, newValue)
-            return true
-        }
         return false
     }
-
-    private fun tlsChangeListener(
-        preference: Preference?, newValue: Any?
-    ) {
-        if (preference is SwitchPreferenceCompat && newValue is Boolean && newValue == true) {
-            preference.key?.let { key ->
-                when {
-                    key.startsWith("tls_") -> {
-                        if (key != "tls_Default") {
-                            val default = preferenceScreen.findPreference<SwitchPreferenceCompat>("tls_Default")
-                            default?.isChecked = false
-                        }
-                        if (key != "tls_All_Supported") {
-                            val all = preferenceScreen.findPreference<SwitchPreferenceCompat>("tls_All_Supported")
-                            all?.isChecked = false
-                        }
-                        protocols.forEach { protocol ->
-                            val tlsSwitchKey = "tls_${protocol.toLowerCase(Locale.getDefault())}"
-                            if (tlsSwitchKey != key) {
-                                val otherTLSSwitch =
-                                    preferenceScreen.findPreference<SwitchPreferenceCompat>(
-                                        tlsSwitchKey
-                                    )
-                                otherTLSSwitch?.isChecked = false
-                            }
-                        }
-                    }
-                }
-            }
-
-            when (preference.key) {
-                "tls_Default" -> setTLSProtocol("TLS")
-                "tls_All_Supported" -> setTLSProtocol("TLS_ALL")
-                else -> {
-                    val prefTitle = preference.title.toString()
-                    setTLSProtocol(prefTitle)
-                }
-            }
-        }
-    }
-
-    private fun setTLSProtocol(protocol: String) = preferenceManager.sharedPreferences.edit().putString(
-        "tls_protocol",
-        protocol
-    ).apply()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == PREFS_SET_CLIENT_CERT_REQ && resultCode == RESULT_OK){

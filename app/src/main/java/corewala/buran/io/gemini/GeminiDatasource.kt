@@ -17,7 +17,6 @@ import java.net.URI
 import java.net.UnknownHostException
 import javax.net.ssl.*
 
-const val GEMINI_SCHEME = "gemini"
 
 class GeminiDatasource(private val context: Context, val history: BuranHistory): Datasource {
 
@@ -61,7 +60,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
     }
 
     private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit){
-        val protocol = prefs.getString("tls_protocol", "TLS")
+        val protocol = "TLS"
         val useClientCert = prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)
 
         //Update factory if operating mode has changed
@@ -71,18 +70,9 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
             !useClientCert && buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!)
         }
 
-        println("REQ_PROTOCOL: $protocol")
-
         val socket: SSLSocket?
         try {
             socket = socketFactory?.createSocket(uri.host, 1965) as SSLSocket
-
-            when (protocol) {
-                "TLS" -> {
-                }//Use default enabled protocols
-                "TLS_ALL" -> socket.enabledProtocols = socket.supportedProtocols
-                else -> socket.enabledProtocols = arrayOf(protocol)
-            }
 
             println("Buran socket handshake with ${uri.host}")
             socket.startHandshake()
