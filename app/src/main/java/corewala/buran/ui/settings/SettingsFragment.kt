@@ -68,8 +68,8 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         //Home - Certificates
         buildClientCertificateSection(context, appCategory)
 
-        //Theme --------------------------------------------
-        buildThemeSection(context, appCategory)
+        //Appearance --------------------------------------------
+        buildAppearanceSection(context, appCategory)
 
         //Accessibility ------------------------------------
         buildsAccessibility(context, screen)
@@ -98,11 +98,11 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
     }
 
-    private fun buildThemeSection(context: Context?, appCategory: PreferenceCategory) {
-        val themeCategory = PreferenceCategory(context)
-        themeCategory.key = "theme_category"
-        themeCategory.title = getString(R.string.theme)
-        appCategory.addPreference(themeCategory)
+    private fun buildAppearanceSection(context: Context?, appCategory: PreferenceCategory) {
+        val appearanceCategory = PreferenceCategory(context)
+        appearanceCategory.key = "appearance_category"
+        appearanceCategory.title = getString(R.string.appearance)
+        appCategory.addPreference(appearanceCategory)
 
         val themeLabels = mutableListOf<String>()
         val themeValues = mutableListOf<String>()
@@ -121,7 +121,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         themePreference.setDefaultValue("theme_FollowSystem")
         themePreference.entries = themeLabels.toTypedArray()
         themePreference.entryValues = themeValues.toTypedArray()
-        themeCategory.addPreference(themePreference)
+        appearanceCategory.addPreference(themePreference)
 
         themePreference.setOnPreferenceChangeListener{ _, theme ->
             when (theme) {
@@ -162,7 +162,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
             true
         }
 
-        themeCategory.addPreference(backgroundColourPreference)
+        appearanceCategory.addPreference(backgroundColourPreference)
     }
 
     private fun buildsAccessibility(context: Context?, screen: PreferenceScreen){
