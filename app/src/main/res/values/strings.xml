@@ -39,7 +39,7 @@
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
     <string name="error">Error</string>
-    <string name="not_app_installed_that_can_open">No app installed that can open %s</string>
+    <string name="no_app_installed_that_can_open">No app installed that can open %s</string>
     <string name="no_state_object_exists">File download error - no state object exists</string>
     <string name="file_saved_to_device">File saved to device</string>
     <string name="configure_buran">Configure Buran</string>

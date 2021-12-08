@@ -39,7 +39,7 @@
     <string name="download">Télécharger</string>
     <string name="cancel">Annuler</string>
     <string name="error">Erreur</string>
-    <string name="not_app_installed_that_can_open">Aucune app installée qui puisse ouvrir %s</string>
+    <string name="no_app_installed_that_can_open">Aucune app installée qui puisse ouvrir %s</string>
     <string name="no_state_object_exists">Erreur de téléchargement de fichier - aucun état d\'objet n\'existe</string>
     <string name="file_saved_to_device">Fichier sauvegardé dans l\'appareil</string>
     <string name="configure_buran">Configurer Buran</string>
