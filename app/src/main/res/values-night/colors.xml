@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#1d1d1d</color>
-    <color name="colorAccent">#F65E5E</color>
+    <color name="colorAccent">#26A69A</color>
     <color name="code_background">#000000</color>
     <color name="player_background">#1d1d1d</color>
     <color name="protocol_address">#ffdede</color>
