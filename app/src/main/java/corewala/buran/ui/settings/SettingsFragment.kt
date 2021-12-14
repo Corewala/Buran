@@ -86,9 +86,11 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         webCategory.title = getString(R.string.web_content)
         screen.addPreference(webCategory)
 
-        val customTabInfo = Preference(context)
-        customTabInfo.summary = getString(R.string.web_content_label)
-        webCategory.addPreference(customTabInfo)
+        val aboutCustomTabPref = Preference(context)
+        aboutCustomTabPref.summary = getString(R.string.web_content_label)
+        aboutCustomTabPref.isPersistent = false
+        aboutCustomTabPref.isSelectable = false
+        webCategory.addPreference(aboutCustomTabPref)
 
         val useCustomTabsPreference = SwitchPreferenceCompat(context)
         useCustomTabsPreference.setDefaultValue(true)
@@ -174,6 +176,8 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         //Accessibility - code blocks
         val aboutCodeBlocksPref = Preference(context)
         aboutCodeBlocksPref.summary = getString(R.string.collapse_code_blocks_about)
+        aboutCodeBlocksPref.isPersistent = false
+        aboutCodeBlocksPref.isSelectable = false
         accessibilityCategory.addPreference(aboutCodeBlocksPref)
 
         val collapseCodeBlocksPreference = SwitchPreferenceCompat(context)
