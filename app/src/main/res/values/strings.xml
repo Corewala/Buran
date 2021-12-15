@@ -66,17 +66,17 @@
     <string name="set_home_capsule">Set home capsule</string>
     <string name="history_cleared">History cleared</string>
     <string name="runtime_cache_cleared">Runtime cache cleared</string>
-    <string name="show_inline_icons" tools:ignore="MissingTranslation">Inline link icons</string>
-    <string name="bookmarks_empty" tools:ignore="MissingTranslation">You don\'t have any bookmarks yet</string>
-    <string name="import_bookmarks" tools:ignore="MissingTranslation">Import bookmarks</string>
-    <string name="export_bookmarks" tools:ignore="MissingTranslation">Export bookmarks</string>
-    <string name="accessibility" tools:ignore="MissingTranslation">Accessibility</string>
-    <string name="collapse_code_blocks" tools:ignore="MissingTranslation">Hide code blocks</string>
-    <string name="show_code" tools:ignore="MissingTranslation">Show code</string>
-    <string name="hide_code" tools:ignore="MissingTranslation">Hide code</string>
-    <string name="large_gemtext_and_button" tools:ignore="MissingTranslation">Large Gemtext</string>
-    <string name="collapse_code_blocks_about" tools:ignore="MissingTranslation">Gemini capsules unfortunately often use ascii-art headers rendered in monospaced code blocks. When code blocks are hidden they require a tap to expand which improves usability when using a screen reader.</string>
-    <string name="prefs_override_page_background" tools:ignore="MissingTranslation">Use custom page background colour</string>
-    <string name="prefs_override_page_background_dialog_title" tools:ignore="MissingTranslation">Page Background Colour</string>
-    <string name="prefs_override_page_background_title" tools:ignore="MissingTranslation">Page Background Colour</string>
+    <string name="show_inline_icons">Inline link icons</string>
+    <string name="bookmarks_empty">You don\'t have any bookmarks yet</string>
+    <string name="import_bookmarks">Import bookmarks</string>
+    <string name="export_bookmarks">Export bookmarks</string>
+    <string name="accessibility">Accessibility</string>
+    <string name="collapse_code_blocks">Hide code blocks</string>
+    <string name="show_code">Show code</string>
+    <string name="hide_code">Hide code</string>
+    <string name="large_gemtext_and_button">Large Gemtext</string>
+    <string name="collapse_code_blocks_about">Gemini capsules unfortunately often use ascii-art headers rendered in monospaced code blocks. When code blocks are hidden they require a tap to expand which improves usability when using a screen reader.</string>
+    <string name="prefs_override_page_background">Use custom page background colour</string>
+    <string name="prefs_override_page_background_dialog_title">Page Background Colour</string>
+    <string name="prefs_override_page_background_title">Page Background Colour</string>
 </resources>
