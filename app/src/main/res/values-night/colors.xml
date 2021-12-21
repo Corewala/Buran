@@ -11,7 +11,7 @@
     <color name="vibrant_stroke">#ffffff</color>
     <color name="themed_text">#ffffff</color>
     <color name="header_background">#1d1d1d</color>
+    <color name="navigation_bar_background">#1d1d1d</color>
     <color name="stroke">#d2d2d2</color>
-
     <color name="accessibility_button_background">#3A3A3A</color>
 </resources>

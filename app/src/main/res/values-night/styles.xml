@@ -8,6 +8,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_background</item>
     </style>
 
     <style name="SettingsTheme" parent="@style/AppTheme">
