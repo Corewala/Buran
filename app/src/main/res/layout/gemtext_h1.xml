@@ -4,7 +4,6 @@
     android:id="@+id/gemtext_text_textview"
     android:textSize="@dimen/h1_text_size"
     android:textColor="@color/stroke"
-    android:textStyle="bold"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textIsSelectable="true"
