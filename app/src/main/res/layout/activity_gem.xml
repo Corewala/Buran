@@ -90,15 +90,6 @@
 
                 </RelativeLayout>
 
-                <ProgressBar
-                        android:id="@+id/progress_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:indeterminateTint="@color/stroke"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_below="@+id/address_bar"
-                        android:indeterminate="true"/>
-
             </RelativeLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -120,6 +111,15 @@
             />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:indeterminateTint="@color/colorAccent"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:indeterminate="true" app:layout_anchorGravity="bottom|center"
+                app:layout_anchor="@+id/app_bar"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
