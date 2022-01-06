@@ -146,14 +146,16 @@ class GemActivity : AppCompatActivity() {
             }
         }
 
+        binding.addressEdit.setOnClickListener {
+            binding.addressEdit.clearFocus()
+            binding.addressEdit.showKeyboard()
+        }
+
         binding.addressEdit.setOnFocusChangeListener { v, hasFocus ->
 
             var addressPaddingRight = resources.getDimensionPixelSize(R.dimen.def_address_right_margin)
 
-            if(hasFocus) {
-                binding.addressEdit.showKeyboard()
-                focusEnd()
-            }else{
+            if(!hasFocus) {
                 binding.addressEdit.hideKeyboard()
             }
 
