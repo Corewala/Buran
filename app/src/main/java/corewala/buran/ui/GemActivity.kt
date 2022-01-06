@@ -149,6 +149,7 @@ class GemActivity : AppCompatActivity() {
         binding.addressEdit.setOnClickListener {
             binding.addressEdit.clearFocus()
             binding.addressEdit.showKeyboard()
+            binding.addressEdit.requestFocus()
         }
 
         binding.addressEdit.setOnFocusChangeListener { v, hasFocus ->
