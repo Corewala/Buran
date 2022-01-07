@@ -15,16 +15,6 @@
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config">
         <activity
-                android:name="corewala.buran.ui.ProcessTextActivity"
-                android:label="Open in Buran"
-                android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <data android:mimeType="text/plain"/>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
                 android:name="corewala.buran.ui.GemActivity"
                 android:launchMode="singleTop">
             <intent-filter>

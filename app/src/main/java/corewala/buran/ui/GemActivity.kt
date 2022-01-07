@@ -386,14 +386,6 @@ class GemActivity : AppCompatActivity() {
      */
     private fun checkIntentExtras(intent: Intent) {
 
-        //Via ProcessTextActivity from selected text in another app
-        if(intent.hasExtra("process_text")){
-            val processText = intent.getStringExtra("process_text")
-            binding.addressEdit.setText(processText)
-            model.request(processText ?: "")
-            return
-        }
-
         //From clicking a gemini:// address
         val uri = intent.data
         if(uri != null){
