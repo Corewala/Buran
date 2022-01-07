@@ -19,7 +19,6 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import corewala.*
-import kotlinx.android.synthetic.main.activity_gem.*
 import corewala.buran.Buran
 import corewala.buran.OmniTerm
 import corewala.buran.R
