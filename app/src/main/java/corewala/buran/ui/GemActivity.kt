@@ -265,11 +265,6 @@ class GemActivity : AppCompatActivity() {
             else -> hideClientCertShield()
         }
 
-        gemtext_recycler.adapter = null
-        adapter = AbstractGemtextAdapter.getAdapter(onLink)
-        gemtext_recycler.adapter = adapter
-        refresh()
-
         val hideCodeBlocks = prefs.getBoolean(
             "collapse_code_blocks",
             false

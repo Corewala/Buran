@@ -1,7 +1,6 @@
 package corewala.buran
 
 import android.net.Uri
-import corewala.buran.Buran.Companion.DEFAULT_HOME_CAPSULE
 import java.util.*
 
 const val GEM_SCHEME = "gemini://"
@@ -82,10 +81,7 @@ class OmniTerm(private val listener: Listener) {
     }
 
     fun getCurrent(): String {
-        if (history.isNotEmpty()){
-            return history.last().toString()
-        }
-        return DEFAULT_HOME_CAPSULE
+        return history.last().toString()
     }
 
     fun canGoBack(): Boolean {
