@@ -7,22 +7,13 @@
     <dimen name="screen_margin">20dp</dimen>
     <dimen name="button_margin">12dp</dimen>
 
-    <!-- Default Adapter-->
+    <!-- Gemtext Adapter-->
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="default_line_height">20sp</dimen>
     <dimen name="code_text_size">14sp</dimen>
     <dimen name="h1_text_size">32sp</dimen>
     <dimen name="h2_text_size">26sp</dimen>
     <dimen name="h3_text_size">22sp</dimen>
-
-    <!-- Large Adapter -->
-    <dimen name="large_text_size">22sp</dimen>
-    <dimen name="large_line_height">28sp</dimen>
-    <dimen name="large_code_text_size">18sp</dimen>
-    <dimen name="large_h1_text_size">40sp</dimen>
-    <dimen name="large_h2_text_size">34sp</dimen>
-    <dimen name="large_h3_text_size">30sp</dimen>
-
 
     <dimen name="button_size">32dp</dimen>
     <dimen name="bar_height">50dp</dimen>

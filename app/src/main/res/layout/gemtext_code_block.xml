@@ -12,7 +12,7 @@
     <androidx.appcompat.widget.AppCompatTextView
             android:textSize="@dimen/default_text_size"
             android:textColor="@color/stroke"
-            android:id="@id/show_code_block"
+            android:id="@+id/show_code_block"
             android:background="?android:selectableItemBackground"
             android:focusable="true" android:clickable="true"
             android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package corewala.buran.ui.gemtext_adapters
+package corewala.buran.ui.gemtext_adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

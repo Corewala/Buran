@@ -1,4 +1,4 @@
-package corewala.buran.ui.gemtext_adapters
+package corewala.buran.ui.gemtext_adapter
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.gemtext_large_code_block.view.*
-import kotlinx.android.synthetic.main.gemtext_large_image_link.view.*
-import kotlinx.android.synthetic.main.gemtext_large_link.view.gemtext_text_link
-import kotlinx.android.synthetic.main.gemtext_large_text.view.*
+import kotlinx.android.synthetic.main.gemtext_code_block.view.*
+import kotlinx.android.synthetic.main.gemtext_image_link.view.*
+import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
+import kotlinx.android.synthetic.main.gemtext_text.view.*
 import corewala.buran.R
 import corewala.endsWithImage
 import corewala.visible
 import java.net.URI
 
-class LargeGemtextAdapter(
-    typeId: Int,
+class GemtextAdapter(
     onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit)
-    : AbstractGemtextAdapter(typeId, onLink) {
+    : AbstractGemtextAdapter(onLink) {
 
     private var lines = mutableListOf<String>()
     private var inlineImages = HashMap<Int, Uri>()
@@ -46,16 +45,16 @@ class LargeGemtextAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GmiViewHolder {
         return when(viewType){
-            typeText -> GmiViewHolder.Text(inflate(parent, R.layout.gemtext_large_text))
-            typeH1 -> GmiViewHolder.H1(inflate(parent, R.layout.gemtext_large_h1))
-            typeH2 -> GmiViewHolder.H2(inflate(parent, R.layout.gemtext_large_h2))
-            typeH3 -> GmiViewHolder.H3(inflate(parent, R.layout.gemtext_large_h3))
-            typeListItem -> GmiViewHolder.ListItem(inflate(parent, R.layout.gemtext_large_text))
-            typeImageLink -> GmiViewHolder.ImageLink(inflate(parent, R.layout.gemtext_large_image_link))
-            typeLink -> GmiViewHolder.Link(inflate(parent, R.layout.gemtext_large_link))
-            typeCodeBlock-> GmiViewHolder.Code(inflate(parent, R.layout.gemtext_large_code_block))
-            typeQuote -> GmiViewHolder.Quote(inflate(parent, R.layout.gemtext_large_quote))
-            else -> GmiViewHolder.Text(inflate(parent, R.layout.gemtext_large_text))
+            typeText -> GmiViewHolder.Text(inflate(parent, R.layout.gemtext_text))
+            typeH1 -> GmiViewHolder.H1(inflate(parent, R.layout.gemtext_h1))
+            typeH2 -> GmiViewHolder.H2(inflate(parent, R.layout.gemtext_h2))
+            typeH3 -> GmiViewHolder.H3(inflate(parent, R.layout.gemtext_h3))
+            typeListItem -> GmiViewHolder.ListItem(inflate(parent, R.layout.gemtext_text))
+            typeImageLink -> GmiViewHolder.ImageLink(inflate(parent, R.layout.gemtext_image_link))
+            typeLink -> GmiViewHolder.Link(inflate(parent, R.layout.gemtext_link))
+            typeCodeBlock-> GmiViewHolder.Code(inflate(parent, R.layout.gemtext_code_block))
+            typeQuote -> GmiViewHolder.Quote(inflate(parent, R.layout.gemtext_quote))
+            else -> GmiViewHolder.Text(inflate(parent, R.layout.gemtext_text))
         }
     }
 
@@ -100,6 +99,7 @@ class LargeGemtextAdapter(
                         holder.itemView.show_code_block.append(": $altText")
                     }
                     holder.itemView.show_code_block.visible(true)
+                    holder.itemView.show_code_block.paint.isUnderlineText = true
                     holder.itemView.show_code_block.setOnClickListener {
                         setupCodeBlockToggle(holder, altText)
                     }
@@ -142,6 +142,7 @@ class LargeGemtextAdapter(
 
                 val displayText = linkName
                 holder.itemView.gemtext_text_link.text = displayText
+                holder.itemView.gemtext_text_link.paint.isUnderlineText = true
 
                 when {
                     showInlineIcons && linkParts.first().startsWith("http") -> holder.itemView.gemtext_text_link.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_open_browser, 0)
@@ -169,6 +170,7 @@ class LargeGemtextAdapter(
 
                 val displayText = linkName
                 holder.itemView.gemtext_text_link.text = displayText
+                holder.itemView.gemtext_text_link.paint.isUnderlineText = true
                 holder.itemView.gemtext_text_link.setOnClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User clicked link: $uri")

@@ -185,12 +185,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         collapseCodeBlocksPreference.title = getString(R.string.collapse_code_blocks)
         accessibilityCategory.addPreference(collapseCodeBlocksPreference)
 
-        //Accessibility - large text and buttons
-        val largeGemtextPreference = SwitchPreferenceCompat(context)
-        largeGemtextPreference.key = "use_large_gemtext_adapter"
-        largeGemtextPreference.title = getString(R.string.large_gemtext_and_button)
-        accessibilityCategory.addPreference(largeGemtextPreference)
-
         //Accessibility - inline icons
         val showInlineIconsPreference = SwitchPreferenceCompat(context)
         showInlineIconsPreference.setDefaultValue(true)

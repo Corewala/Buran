@@ -1,14 +1,10 @@
-package corewala.buran.ui.gemtext_adapters
+package corewala.buran.ui.gemtext_adapter
 
 import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import java.net.URI
 
-const val GEMTEXT_ADAPTER_DEFAULT = 0
-const val GEMTEXT_ADAPTER_LARGE = 1
-
 abstract class AbstractGemtextAdapter(
-    val typeId: Int,
     val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit
 ): RecyclerView.Adapter<GmiViewHolder>() {
 
@@ -23,12 +19,8 @@ abstract class AbstractGemtextAdapter(
     abstract fun inferTitle(): String?
 
     companion object{
-        fun getDefault(onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit): AbstractGemtextAdapter {
-            return DefaultGemtextAdapter(GEMTEXT_ADAPTER_DEFAULT, onLink)
-        }
-
-        fun getLargeGmi(onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit): AbstractGemtextAdapter {
-            return LargeGemtextAdapter(GEMTEXT_ADAPTER_LARGE, onLink)
+        fun getAdapter(onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit): AbstractGemtextAdapter {
+            return GemtextAdapter(onLink)
         }
     }
 }

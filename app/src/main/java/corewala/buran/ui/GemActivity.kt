@@ -33,7 +33,7 @@ import corewala.buran.ui.bookmarks.BookmarkDialog
 import corewala.buran.ui.bookmarks.BookmarksDialog
 import corewala.buran.ui.content_image.ImageDialog
 import corewala.buran.ui.content_text.TextDialog
-import corewala.buran.ui.gemtext_adapters.*
+import corewala.buran.ui.gemtext_adapter.*
 import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.input.InputDialog
@@ -117,10 +117,7 @@ class GemActivity : AppCompatActivity() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        adapter = when {
-            prefs.getBoolean("use_large_gemtext_adapter", false) -> AbstractGemtextAdapter.getLargeGmi(onLink)
-            else -> AbstractGemtextAdapter.getDefault(onLink)
-        }
+        adapter = AbstractGemtextAdapter.getAdapter(onLink)
 
         binding.gemtextRecycler.adapter = adapter
 
@@ -268,25 +265,10 @@ class GemActivity : AppCompatActivity() {
             else -> hideClientCertShield()
         }
 
-        val useLargeGmiAdapter = prefs.getBoolean("use_large_gemtext_adapter", false)
-        when {
-            useLargeGmiAdapter -> {
-                if(adapter.typeId != GEMTEXT_ADAPTER_LARGE){
-                    gemtext_recycler.adapter = null
-                    adapter = AbstractGemtextAdapter.getLargeGmi(onLink)
-                    gemtext_recycler.adapter = adapter
-                    refresh()
-                }
-            }
-            else -> {
-                if(adapter.typeId != GEMTEXT_ADAPTER_DEFAULT) {
-                    gemtext_recycler.adapter = null
-                    adapter = AbstractGemtextAdapter.getDefault(onLink)
-                    gemtext_recycler.adapter = adapter
-                    refresh()
-                }
-            }
-        }
+        gemtext_recycler.adapter = null
+        adapter = AbstractGemtextAdapter.getAdapter(onLink)
+        gemtext_recycler.adapter = adapter
+        refresh()
 
         val hideCodeBlocks = prefs.getBoolean(
             "collapse_code_blocks",

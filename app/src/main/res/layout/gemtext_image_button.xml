@@ -7,7 +7,7 @@
 <androidx.appcompat.widget.AppCompatButton
     android:id="@+id/gemtext_text_link"
     android:textColor="@color/stroke"
-    android:textSize="@dimen/large_text_size"
+    android:textSize="@dimen/default_text_size"
     android:clickable="true"
     android:focusable="true"
     android:drawableEnd="@drawable/vector_photo"

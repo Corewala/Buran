@@ -72,7 +72,6 @@
     <string name="collapse_code_blocks">Hide code blocks</string>
     <string name="show_code">Show code</string>
     <string name="hide_code">Hide code</string>
-    <string name="large_gemtext_and_button">Large Gemtext</string>
     <string name="collapse_code_blocks_about">Gemini capsules unfortunately often use ascii-art headers rendered in monospaced code blocks. When code blocks are hidden they require a tap to expand which improves usability when using a screen reader.</string>
     <string name="prefs_override_page_background">Use custom page background colour</string>
     <string name="prefs_override_page_background_dialog_title">Page Background Colour</string>

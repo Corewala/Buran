@@ -12,7 +12,7 @@
         android:layout_marginRight="@dimen/screen_margin"
         android:layout_marginTop="@dimen/default_margin_small"
         android:layout_marginBottom="@dimen/default_margin_small"
-        android:textSize="@dimen/large_text_size"
+        android:textSize="@dimen/default_text_size"
         android:clickable="true"
         android:focusable="true"
         android:textAllCaps="false"
