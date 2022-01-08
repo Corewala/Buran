@@ -326,7 +326,7 @@ class GemActivity : AppCompatActivity() {
                     loadingView(false)
                     AlertDialog.Builder(this, R.style.AppDialogTheme)
                         .setTitle(R.string.unknown_host_dialog_title)
-                        .setMessage("Host not found: ${state.uri}\n\nSearch with GUS instead?")
+                        .setMessage("Host not found: ${state.uri}\n\nSearch with TLGS instead?")
                         .setPositiveButton(getString(R.string.search)) { _, _ ->
                             loadingView(true)
                             omniTerm.search(state.uri.toString())

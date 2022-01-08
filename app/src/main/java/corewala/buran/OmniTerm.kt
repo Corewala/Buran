@@ -4,7 +4,7 @@ import android.net.Uri
 import java.util.*
 
 const val GEM_SCHEME = "gemini://"
-const val GUS_SEARCH_BASE = "gemini://geminispace.info/search?"
+const val SEARCH_BASE = "gemini://tlgs.one/search?"
 
 class OmniTerm(private val listener: Listener) {
     val history = ArrayList<OppenURI>()
@@ -26,14 +26,14 @@ class OmniTerm(private val listener: Listener) {
             }
             else -> {
                 val encoded = Uri.encode(term)
-                listener.request("$GUS_SEARCH_BASE$encoded")
+                listener.request("$SEARCH_BASE$encoded")
             }
         }
     }
 
     fun search(term: String){
         val encoded = Uri.encode(term)
-        listener.request("$GUS_SEARCH_BASE$encoded")
+        listener.request("$SEARCH_BASE$encoded")
     }
 
 
