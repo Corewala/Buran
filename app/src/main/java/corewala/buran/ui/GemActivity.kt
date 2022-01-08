@@ -71,27 +71,18 @@ class GemActivity : AppCompatActivity() {
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
         if(longTap){
-            loadingView(true)
-
-            omniTerm.imageAddress(uri.toString())
-            omniTerm.uri.let{
-                model.requestInlineImage(URI.create(it.toString())){ imageUri ->
-                    imageUri?.let{
-                        runOnUiThread {
-                            loadingView(false)
-                            loadImage(position, imageUri)
-                        }
-                    }
-                }
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, uri.toString())
+                type = "text/plain"
+                startActivity(Intent.createChooser(this, null))
             }
-
         }else{
             //Reset input text hint after user has been searching
             if(inSearch) {
                 binding.addressEdit.hint = getString(R.string.main_input_hint)
                 inSearch = false
             }
-
             omniTerm.navigation(uri.toString())
         }
     }
