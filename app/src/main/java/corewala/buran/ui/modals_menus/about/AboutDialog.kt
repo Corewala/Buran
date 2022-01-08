@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.dialog_about.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import corewala.buran.R
+import kotlinx.android.synthetic.main.dialog_content_text.view.*
 import java.lang.StringBuilder
 import java.security.SecureRandom
 import java.security.Security
@@ -27,7 +28,8 @@ object AboutDialog {
         val view = View.inflate(context, R.layout.dialog_about, null)
         dialog.setContentView(view)
 
-        view.close_tab_dialog.setOnClickListener {
+        view.about_toolbar.setNavigationIcon(R.drawable.vector_close)
+        view.about_toolbar.setNavigationOnClickListener {
             dialog.dismiss()
         }
 

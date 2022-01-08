@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDialog
 import kotlinx.android.synthetic.main.dialog_content_text.view.*
 import corewala.buran.R
 import corewala.buran.io.GemState
+import kotlinx.android.synthetic.main.dialog_bookmarks.view.*
 
 object TextDialog {
 
@@ -17,9 +18,11 @@ object TextDialog {
 
         view.text_content.text = state.content
 
-        view.close_text_content_dialog.setOnClickListener {
+        view.text_toolbar.setNavigationIcon(R.drawable.vector_close)
+        view.text_toolbar.setNavigationOnClickListener {
             dialog.dismiss()
         }
+
 
 
         dialog.show()

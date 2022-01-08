@@ -5,12 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.MenuCompat
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -22,9 +20,6 @@ import corewala.buran.io.database.bookmarks.BookmarksDatasource
 import corewala.buran.ui.CREATE_BOOKMARK_EXPORT_FILE_REQ
 import corewala.buran.ui.CREATE_BOOKMARK_IMPORT_FILE_REQ
 import corewala.visible
-import kotlinx.android.synthetic.main.dialog_about.view.*
-import kotlinx.android.synthetic.main.dialog_bookmarks.view.close_tab_dialog
-import kotlinx.android.synthetic.main.dialog_history.view.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -46,44 +41,43 @@ class BookmarksDialog(
 
         setContentView(view)
 
-        view.close_tab_dialog.setOnClickListener {
+        view.bookmarks_toolbar.setNavigationIcon(R.drawable.vector_close)
+        view.bookmarks_toolbar.setNavigationOnClickListener {
             dismiss()
         }
 
-        view.bookmark_overflow.setOnClickListener { menu ->
-            val popup = PopupMenu(view.context, view.bookmark_overflow)
-            val inflater: MenuInflater = popup.menuInflater
-            inflater.inflate(R.menu.history_overflow_menu, popup.menu)
-            popup.setOnMenuItemClickListener { menuItem ->
-                if(menuItem.itemId == R.id.menu_action_import_bookmarks){
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    intent.type = "application/json"
-                    context.startActivityForResult(intent, CREATE_BOOKMARK_IMPORT_FILE_REQ)
-                }else if(menuItem.itemId == R.id.menu_action_export_bookmarks){
-                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.type = "application/json"
-                    intent.putExtra(Intent.EXTRA_TITLE, "buran_bookmarks.json")
-                    context.startActivityForResult(intent, CREATE_BOOKMARK_EXPORT_FILE_REQ)
+        view.bookmarks_toolbar.menu.forEach { menu ->
+            menu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.menu_action_import_bookmarks -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        intent.type = "application/json"
+                        context.startActivityForResult(intent, CREATE_BOOKMARK_IMPORT_FILE_REQ)
+                    }
+                    R.id.menu_action_export_bookmarks -> {
+                        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+                        intent.addCategory(Intent.CATEGORY_OPENABLE)
+                        intent.type = "application/json"
+                        intent.putExtra(Intent.EXTRA_TITLE, "buran_bookmarks.json")
+                        context.startActivityForResult(intent, CREATE_BOOKMARK_EXPORT_FILE_REQ)
+                    }
+                    else -> {
+
+                    }
                 }
                 true
             }
-            MenuCompat.setGroupDividerEnabled(popup.menu, true)
-            popup.show()
         }
 
 
 
         //None as yet
-        /*
         view.bookmarks_toolbar.inflateMenu(R.menu.add_bookmarks)
         view.bookmarks_toolbar.setOnMenuItemClickListener { _ ->
             true
         }
-
-         */
 
         view.bookmarks_recycler.layoutManager = LinearLayoutManager(context)
 
@@ -120,10 +114,7 @@ class BookmarksDialog(
 
             Handler(Looper.getMainLooper()).post {
                 when {
-                    /*
                     bookmarks.isEmpty() -> view.bookmarks_empty_layout.visible(true)
-
-                     */
                     else -> bookmarksAdapter.update(bookmarks)
                 }
             }
@@ -240,9 +231,7 @@ class BookmarksDialog(
                     bookmarkDatasource.add(bookmarkEntries.toTypedArray()){
                         bookmarkDatasource.get { bookmarks ->
                             Handler(Looper.getMainLooper()).post {
-
                                 view.bookmarks_empty_layout.visible(false)
-
                                 bookmarksAdapter.update(bookmarks)
                                 when {
                                     skipped > 0 -> {

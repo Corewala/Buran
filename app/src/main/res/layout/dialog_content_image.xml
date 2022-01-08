@@ -1,52 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <corewala.buran.ui.content_image.TouchImageView
-        android:id="@+id/image_view"
-        android:scaleType="centerInside"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        />
-
-    <RelativeLayout
-            android:id="@+id/header"
+            android:id="@+id/image_view"
+            android:scaleType="centerInside"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/default_margin">
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+    />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/close_image_content_dialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="@dimen/button_margin"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/vector_close"/>
-
-        <android.widget.TextView
-                android:id="@+id/header_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="48dp"
-                android:textSize="24sp"
-                android:text="@string/image"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/image_overflow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="@dimen/button_margin"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/vector_overflow"/>
-
-    </RelativeLayout>
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/image_toolbar"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_height="@dimen/bar_height"
+                app:menu="@menu/image_overflow_menu"
+                app:title="@string/image"/>
 
 </RelativeLayout>
