@@ -21,6 +21,16 @@
                 android:layout_marginStart="@dimen/button_margin" android:layout_marginEnd="@dimen/button_margin"
                 android:layout_marginBottom="@dimen/button_margin"/>
 
+        <android.widget.TextView
+                android:id="@+id/header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/close_tab_dialog"
+                android:layout_marginLeft="@dimen/screen_margin"
+                android:textSize="@dimen/h3_text_size"
+                android:text="@string/bookmarks"/>
+
         <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/bookmark_overflow"
                 android:layout_width="wrap_content"

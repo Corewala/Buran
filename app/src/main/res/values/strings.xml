@@ -28,6 +28,8 @@
     <string name="page_backlinks">Backlinks</string>
     <string name="add_bookmark">Add Bookmark</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="image">Image</string>
+    <string name="text">Text</string>
     <string name="name">Name</string>
     <string name="gemini_uri">Gemini URL</string>
     <string name="edit">Edit</string>

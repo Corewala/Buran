@@ -28,6 +28,8 @@
     <string name="page_backlinks">Liens de retour</string>
     <string name="add_bookmark">Ajouter marque-page</string>
     <string name="bookmarks">Marque-pages</string>
+    <string name="image">Image</string>
+    <string name="text">Texte</string>
     <string name="name">Nom</string>
     <string name="gemini_uri">URL Gemini</string>
     <string name="edit">Éditer</string>
