@@ -99,7 +99,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         webCategory.addPreference(useCustomTabsPreference)
 
         val showInlineImages = SwitchPreferenceCompat(context)
-        showInlineImages.setDefaultValue(true)
+        showInlineImages.setDefaultValue(false)
         showInlineImages.key = "show_inline_images"
         showInlineImages.title = getString(R.string.show_inline_images)
         webCategory.addPreference(showInlineImages)
