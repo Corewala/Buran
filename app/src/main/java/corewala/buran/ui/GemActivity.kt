@@ -71,9 +71,16 @@ class GemActivity : AppCompatActivity() {
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
         if(longTap){
+            var fullUri = uri.toString()
+            if(uri.toString().first() == '/'){
+                if (omniTerm.getCurrent().last() == '/'){
+                    fullUri = fullUri.drop(1)
+                }
+                fullUri = omniTerm.getCurrent() + fullUri
+            }
             Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, uri.toString())
+                putExtra(Intent.EXTRA_TEXT, fullUri)
                 type = "text/plain"
                 startActivity(Intent.createChooser(this, null))
             }
