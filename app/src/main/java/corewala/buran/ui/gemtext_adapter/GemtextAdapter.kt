@@ -16,8 +16,9 @@ import corewala.visible
 import java.net.URI
 
 class GemtextAdapter(
-    onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit)
-    : AbstractGemtextAdapter(onLink) {
+    onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit,
+    inlineImage: (link: URI, adapterPosition: Int) -> Unit
+): AbstractGemtextAdapter(onLink, inlineImage) {
 
     private var lines = mutableListOf<String>()
     private var inlineImages = HashMap<Int, Uri>()
@@ -163,6 +164,7 @@ class GemtextAdapter(
                 }
             }
             is GmiViewHolder.ImageLink -> {
+
                 val linkParts = line.substring(2).trim().split("\\s+".toRegex(), 2)
                 var linkName = linkParts[0]
 
@@ -189,7 +191,15 @@ class GemtextAdapter(
                         holder.itemView.gemtext_inline_image.visible(true)
                         holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
                     }
-                    else -> holder.itemView.gemtext_inline_image.visible(false)
+                    else -> {
+                        holder.itemView.gemtext_inline_image.visible(false)
+                        if (showInlineImages){
+                            val uri = getUri(lines[holder.adapterPosition])
+                            println("Inline image rendered: $uri")
+                            inlineImage(uri, holder.adapterPosition)
+                        }
+
+                    }
                 }
 
                 when {
@@ -245,6 +255,11 @@ class GemtextAdapter(
 
     override fun inlineIcons(visible: Boolean){
         this.showInlineIcons = visible
+        notifyDataSetChanged()
+    }
+
+    override fun inlineImages(visible: Boolean){
+        this.showInlineImages = visible
         notifyDataSetChanged()
     }
 

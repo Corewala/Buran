@@ -57,6 +57,7 @@
     <string name="web_content">Contenu Web</string>
     <string name="web_content_label">Ouvrir les sites web en interne en utilisant des \'Onglets Personnalisés\', plutôt que d\'utiliser le navigateur par défaut. Cela pourrait vous aider à rester dans le Geminispace plutôt que d\'être distrait·e par le vaste web. Cela requiert un navigateur par défaut compatible.</string>
     <string name="web_content_switch_label">Ouvrir en interne</string>
+    <string name="show_inline_images">Images en ligne</string>
     <string name="pkcs_notice">Seuls les magasins de clés client PKCS12 sont actuellement supportés</string>
     <string name="client_certificate">Certificat Client</string>
     <string name="tap_to_select_client_certificate">Cliquez pour sélectionner un certificat client</string>

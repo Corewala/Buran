@@ -98,6 +98,12 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         useCustomTabsPreference.title = getString(R.string.web_content_switch_label)
         webCategory.addPreference(useCustomTabsPreference)
 
+        val showInlineImages = SwitchPreferenceCompat(context)
+        showInlineImages.setDefaultValue(true)
+        showInlineImages.key = "show_inline_images"
+        showInlineImages.title = getString(R.string.show_inline_images)
+        webCategory.addPreference(showInlineImages)
+
     }
 
     private fun buildAppearanceSection(context: Context?, appCategory: PreferenceCategory) {

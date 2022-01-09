@@ -94,6 +94,21 @@ class GemActivity : AppCompatActivity() {
         }
     }
 
+    private val inlineImage: (link: URI, adapterPosition: Int) -> Unit = { uri, position: Int ->
+
+        omniTerm.imageAddress(uri.toString())
+        omniTerm.uri.let{
+            model.requestInlineImage(URI.create(it.toString())){ imageUri ->
+                imageUri?.let{
+                    runOnUiThread {
+                        loadImage(position, imageUri)
+                        loadingView(false)
+                    }
+                }
+            }
+        }
+    }
+
     private fun loadImage(position: Int, uri: Uri) {
         adapter.loadImage(position, uri)
     }
@@ -114,7 +129,7 @@ class GemActivity : AppCompatActivity() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
-        adapter = AbstractGemtextAdapter.getAdapter(onLink)
+        adapter = AbstractGemtextAdapter.getAdapter(onLink, inlineImage)
 
         binding.gemtextRecycler.adapter = adapter
 
@@ -274,6 +289,11 @@ class GemActivity : AppCompatActivity() {
         )
         adapter.inlineIcons(showInlineIcons)
 
+        val showInlineImages = prefs.getBoolean(
+            "show_inline_images",
+            true
+        )
+        adapter.inlineImages(showInlineImages)
 
         model.invalidateDatasource()
     }
