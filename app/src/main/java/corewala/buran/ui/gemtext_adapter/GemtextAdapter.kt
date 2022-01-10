@@ -185,6 +185,18 @@ class GemtextAdapter(
                     onLink(uri, true, holder.adapterPosition)
                     true
                 }
+                holder.itemView.gemtext_inline_image.setOnClickListener {
+                    val uri = getUri(lines[holder.adapterPosition])
+                    println("User clicked image: $uri")
+                    onLink(uri, false, holder.adapterPosition)
+
+                }
+                holder.itemView.gemtext_inline_image.setOnLongClickListener {
+                    val uri = getUri(lines[holder.adapterPosition])
+                    println("User long-clicked image: $uri")
+                    onLink(uri, true, holder.adapterPosition)
+                    true
+                }
 
                 when {
                     inlineImages.containsKey(position) -> {
@@ -198,7 +210,6 @@ class GemtextAdapter(
                             println("Inline image rendered: $uri")
                             inlineImage(uri, holder.adapterPosition)
                         }
-
                     }
                 }
 
