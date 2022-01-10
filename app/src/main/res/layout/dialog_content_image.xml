@@ -4,14 +4,6 @@
                 android:layout_height="match_parent"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <corewala.buran.ui.content_image.TouchImageView
-            android:id="@+id/image_view"
-            android:scaleType="centerInside"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-    />
-
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/image_toolbar"
                 android:layout_width="match_parent"
@@ -19,5 +11,14 @@
                 android:layout_height="@dimen/bar_height"
                 app:menu="@menu/image_overflow_menu"
                 app:title="@string/image"/>
+
+    <corewala.buran.ui.content_image.TouchImageView
+            android:id="@+id/image_view"
+            android:scaleType="centerInside"
+            android:layout_below="@id/image_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+    />
 
 </RelativeLayout>
