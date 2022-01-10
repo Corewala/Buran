@@ -204,7 +204,6 @@ class GemtextAdapter(
                         holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
                     }
                     else -> {
-                        holder.itemView.gemtext_inline_image.visible(false)
                         if (showInlineImages){
                             val uri = getUri(lines[holder.adapterPosition])
                             println("Inline image rendered: $uri")
@@ -216,6 +215,11 @@ class GemtextAdapter(
                 when {
                     showInlineIcons -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_photo, 0)
                     else -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
+
+                when {
+                    showInlineImages -> holder.itemView.gemtext_inline_image.visible(true)
+                    else -> holder.itemView.gemtext_inline_image.visible(false)
                 }
             }
         }
