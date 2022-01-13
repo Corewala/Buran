@@ -200,7 +200,7 @@ class GemtextAdapter(
 
                 when {
                     inlineImages.containsKey(position) -> {
-                        holder.itemView.gemtext_inline_image.visible(true)
+                        holder.itemView.rounded_image_frame.visible(true)
                         holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
                     }
                     else -> {
