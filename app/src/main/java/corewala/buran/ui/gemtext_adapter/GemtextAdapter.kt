@@ -218,8 +218,8 @@ class GemtextAdapter(
                 }
 
                 when {
-                    showInlineImages -> holder.itemView.gemtext_inline_image.visible(true)
-                    else -> holder.itemView.gemtext_inline_image.visible(false)
+                    showInlineImages -> holder.itemView.rounded_image_frame.visible(true)
+                    else -> holder.itemView.rounded_image_frame.visible(false)
                 }
             }
         }
