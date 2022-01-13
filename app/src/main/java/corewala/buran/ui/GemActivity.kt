@@ -71,16 +71,13 @@ class GemActivity : AppCompatActivity() {
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
         if(longTap){
-            var fullUri = uri.toString()
-            if(uri.toString().first() == '/'){
-                if (omniTerm.getCurrent().last() == '/'){
-                    fullUri = fullUri.drop(1)
-                }
-                fullUri = omniTerm.getCurrent() + fullUri
+            var globalURI = uri.toString()
+            if(globalURI.first() == '/'){
+                globalURI = (omniTerm.getCurrent() + globalURI).replace("%2F", "/").replace("//", "/").replace("gemini:/", "gemini://")
             }
             Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, fullUri)
+                putExtra(Intent.EXTRA_TEXT, globalURI)
                 type = "text/plain"
                 startActivity(Intent.createChooser(this, null))
             }
