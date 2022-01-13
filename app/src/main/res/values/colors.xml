@@ -8,10 +8,9 @@
     <color name="protocol_address">#002121</color>
     <color name="address_background">#dfdfdf</color>
 
-    <color name="vibrant_stroke">#000000</color>
     <color name="themed_text">#000000</color>
     <color name="header_background">#ffffff</color>
     <color name="navigation_bar_background">#ffffff</color>
-    <color name="stroke">#1d1d1d</color>
+    <color name="stroke">#000000</color>
     <color name="accessibility_button_background">#f9dede</color>
 </resources>

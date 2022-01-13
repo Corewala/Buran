@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         tools:text="My Homepage"
         android:layout_toLeftOf="@+id/bookmark_overflow"
-        android:textColor="@color/vibrant_stroke"
+        android:textColor="@color/stroke"
         android:textSize="@dimen/text_large" />
 
     <androidx.appcompat.widget.AppCompatTextView
