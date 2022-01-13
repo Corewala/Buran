@@ -24,7 +24,7 @@
             android:id="@+id/rounded_image_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="@dimen/default_margin_big"
             android:layout_marginLeft="@dimen/screen_margin"
             android:layout_marginRight="@dimen/screen_margin"
             android:layout_marginTop="@dimen/default_margin"
@@ -36,7 +36,6 @@
                 android:id="@+id/gemtext_inline_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
                 android:adjustViewBounds="true"/>
     </androidx.cardview.widget.CardView>
 
