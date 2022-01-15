@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.AppCompatTextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gemtext_text_monospace_textview"
-    android:textSize="@dimen/default_text_size"
-    android:textColor="@color/stroke"
-    android:layout_marginLeft="@dimen/screen_margin"
-    android:layout_marginRight="@dimen/screen_margin"
-    android:paddingLeft="@dimen/default_margin"
-    android:paddingRight="@dimen/default_margin"
-    android:paddingTop="@dimen/default_margin"
-    android:paddingBottom="@dimen/default_margin"
-    android:textStyle="italic"
-    android:background="@color/code_background"
-    android:textIsSelectable="true"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:lineHeight="@dimen/default_line_height"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/rounded_image_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/code_background"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="@dimen/default_margin_big"
+            android:layout_marginLeft="@dimen/screen_margin"
+            android:layout_marginRight="@dimen/screen_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/gemtext_text_monospace_textview"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/stroke"
+                android:layout_marginLeft="@dimen/screen_margin"
+                android:layout_marginRight="@dimen/screen_margin"
+                android:paddingTop="@dimen/default_margin"
+                android:paddingBottom="@dimen/default_margin"
+                android:textStyle="italic"
+                android:textIsSelectable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineHeight="@dimen/default_line_height"/>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
