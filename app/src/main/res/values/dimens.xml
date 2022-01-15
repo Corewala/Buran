@@ -11,7 +11,7 @@
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="default_line_height">20sp</dimen>
     <dimen name="code_text_size">14sp</dimen>
-    <dimen name="h1_text_size">32sp</dimen>
+    <dimen name="h1_text_size">36sp</dimen>
     <dimen name="h2_text_size">26sp</dimen>
     <dimen name="h3_text_size">22sp</dimen>
 
