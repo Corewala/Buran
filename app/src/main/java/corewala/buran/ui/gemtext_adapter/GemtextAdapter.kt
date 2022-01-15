@@ -196,7 +196,7 @@ class GemtextAdapter(
                     true
                 }
 
-                if(getLink(lines[holder.adapterPosition]).first() == '/'){
+                if("://" !in getLink(lines[holder.adapterPosition])){
                     when {
                         inlineImages.containsKey(position) -> {
                             holder.itemView.rounded_image_frame.visible(true)
@@ -210,10 +210,8 @@ class GemtextAdapter(
                             }
                         }
                     }
-                    when {
-                        showInlineImages -> holder.itemView.rounded_image_frame.visible(true)
-                        else -> holder.itemView.rounded_image_frame.visible(false)
-                    }
+                }else{
+                    holder.itemView.rounded_image_frame.visible(false)
                 }
 
                 when {
