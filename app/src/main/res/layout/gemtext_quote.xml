@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -23,10 +24,11 @@
                 android:textColor="@color/stroke"
                 android:layout_marginLeft="@dimen/screen_margin"
                 android:layout_marginRight="@dimen/screen_margin"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
+                android:paddingTop="@dimen/default_margin_big"
+                android:paddingBottom="@dimen/default_margin_big"
                 android:textStyle="italic"
                 android:textIsSelectable="true"
+                tools:text="an image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineHeight="@dimen/default_line_height"/>
