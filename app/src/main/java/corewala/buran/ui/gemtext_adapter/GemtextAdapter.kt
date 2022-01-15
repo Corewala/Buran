@@ -177,7 +177,6 @@ class GemtextAdapter(
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User clicked link: $uri")
                     onLink(uri, false, holder.adapterPosition)
-
                 }
                 holder.itemView.gemtext_text_link.setOnLongClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
@@ -189,7 +188,6 @@ class GemtextAdapter(
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User clicked image: $uri")
                     onLink(uri, false, holder.adapterPosition)
-
                 }
                 holder.itemView.gemtext_inline_image.setOnLongClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
@@ -198,28 +196,29 @@ class GemtextAdapter(
                     true
                 }
 
-                when {
-                    inlineImages.containsKey(position) -> {
-                        holder.itemView.rounded_image_frame.visible(true)
-                        holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
-                    }
-                    else -> {
-                        if (showInlineImages){
-                            val uri = getUri(lines[holder.adapterPosition])
-                            println("Inline image rendered: $uri")
-                            inlineImage(uri, holder.adapterPosition)
+                if(getLink(lines[holder.adapterPosition]).first() == '/'){
+                    when {
+                        inlineImages.containsKey(position) -> {
+                            holder.itemView.rounded_image_frame.visible(true)
+                            holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
                         }
+                        else -> {
+                            if (showInlineImages){
+                                val uri = getUri(lines[holder.adapterPosition])
+                                println("Inline image rendered: $uri")
+                                inlineImage(uri, holder.adapterPosition)
+                            }
+                        }
+                    }
+                    when {
+                        showInlineImages -> holder.itemView.rounded_image_frame.visible(true)
+                        else -> holder.itemView.rounded_image_frame.visible(false)
                     }
                 }
 
                 when {
                     showInlineIcons -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_photo, 0)
                     else -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                }
-
-                when {
-                    showInlineImages -> holder.itemView.rounded_image_frame.visible(true)
-                    else -> holder.itemView.rounded_image_frame.visible(false)
                 }
             }
         }
