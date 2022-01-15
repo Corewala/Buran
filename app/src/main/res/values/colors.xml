@@ -12,5 +12,5 @@
     <color name="header_background">#ffffff</color>
     <color name="navigation_bar_background">#ffffff</color>
     <color name="stroke">#000000</color>
-    <color name="accessibility_button_background">#f9dede</color>
+    <color name="accessibility_button_background">#26A69A</color>
 </resources>
