@@ -197,6 +197,13 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         showInlineIconsPreference.key = "show_inline_icons"
         showInlineIconsPreference.title = getString(R.string.show_inline_icons)
         accessibilityCategory.addPreference(showInlineIconsPreference)
+
+        //Accessibility - full-width buttons
+        val showLinkButtonsPreference = SwitchPreferenceCompat(context)
+        showLinkButtonsPreference.setDefaultValue(false)
+        showLinkButtonsPreference.key = "show_link_buttons"
+        showLinkButtonsPreference.title = getString(R.string.show_link_buttons)
+        accessibilityCategory.addPreference(showLinkButtonsPreference)
     }
 
     private fun buildClientCertificateSection(context: Context?, appCategory: PreferenceCategory) {

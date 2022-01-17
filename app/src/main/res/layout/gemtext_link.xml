@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/gemtext_text_link"
-        android:textColor="@color/stroke"
-        android:layout_marginLeft="@dimen/screen_margin"
-        android:layout_marginRight="@dimen/screen_margin"
-        android:layout_marginTop="@dimen/default_margin_small"
-        android:layout_marginBottom="@dimen/default_margin_small"
-        android:textSize="@dimen/default_text_size"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:drawablePadding="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            android:id="@+id/gemtext_text_link"
+            android:textColor="@color/stroke"
+            android:layout_marginLeft="@dimen/screen_margin"
+            android:layout_marginRight="@dimen/screen_margin"
+            tools:text="a link"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:textSize="@dimen/default_text_size"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawablePadding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/gemtext_link_button"
+            android:textColor="@color/stroke"
+            android:layout_marginLeft="@dimen/screen_margin"
+            android:layout_marginRight="@dimen/screen_margin"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:textSize="@dimen/default_text_size"
+            android:clickable="true"
+            android:focusable="true"
+            android:textAlignment="viewStart"
+            android:padding="@dimen/accessibility_button_padding"
+            app:cornerRadius="@dimen/default_margin_big"
+            android:textAllCaps="false"
+            tools:text="a link"
+            android:backgroundTint="@color/accessibility_button_background"
+            android:drawablePadding="4dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 </RelativeLayout>
