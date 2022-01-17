@@ -68,6 +68,7 @@
     <string name="history_cleared">Historique vidé</string>
     <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>
+    <string name="show_link_buttons">Afficher boutons de liens</string>
     <string name="bookmarks_empty">Vous n\'avez encore aucun marque-pages</string>
     <string name="import_bookmarks">Importer des marque-pages</string>
     <string name="export_bookmarks">Exporter des marque-pages</string>
