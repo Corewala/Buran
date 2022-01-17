@@ -179,18 +179,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         accessibilityCategory.title = getString(R.string.accessibility)
         screen.addPreference(accessibilityCategory)
 
-        //Accessibility - code blocks
-        val aboutCodeBlocksPref = Preference(context)
-        aboutCodeBlocksPref.summary = getString(R.string.collapse_code_blocks_about)
-        aboutCodeBlocksPref.isPersistent = false
-        aboutCodeBlocksPref.isSelectable = false
-        accessibilityCategory.addPreference(aboutCodeBlocksPref)
-
-        val collapseCodeBlocksPreference = SwitchPreferenceCompat(context)
-        collapseCodeBlocksPreference.key = "collapse_code_blocks"
-        collapseCodeBlocksPreference.title = getString(R.string.collapse_code_blocks)
-        accessibilityCategory.addPreference(collapseCodeBlocksPreference)
-
         //Accessibility - inline icons
         val showInlineIconsPreference = SwitchPreferenceCompat(context)
         showInlineIconsPreference.setDefaultValue(true)

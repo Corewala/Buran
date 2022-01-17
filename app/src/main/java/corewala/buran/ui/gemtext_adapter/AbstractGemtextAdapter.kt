@@ -10,7 +10,6 @@ abstract class AbstractGemtextAdapter(
 ): RecyclerView.Adapter<GmiViewHolder>() {
 
     var showInlineIcons: Boolean = false
-    var hideCodeBlocks: Boolean = false
     var showLinkButtons: Boolean = false
     var showInlineImages: Boolean = false
 
@@ -18,7 +17,6 @@ abstract class AbstractGemtextAdapter(
     abstract fun loadImage(position: Int, cacheUri: Uri)
     abstract fun inlineIcons(visible: Boolean)
     abstract fun inlineImages(visible: Boolean)
-    abstract fun hideCodeBlocks(hideCodeBlocks: Boolean)
     abstract fun linkButtons(visible: Boolean)
 
     abstract fun inferTitle(): String?
