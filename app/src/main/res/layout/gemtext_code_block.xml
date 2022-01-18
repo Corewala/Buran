@@ -9,12 +9,27 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.appcompat.widget.AppCompatTextView
+            android:textSize="@dimen/default_text_size"
+            android:textColor="@color/stroke"
+            android:id="@+id/show_code_block"
+            android:background="?android:selectableItemBackground"
+            android:focusable="true" android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="@string/show_code"
+            android:drawablePadding="4.0dip"
+            />
+
     <HorizontalScrollView
             android:background="@drawable/block_background"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/def_quarter"
-            android:layout_marginBottom="@dimen/def_quarter">
+            android:layout_marginBottom="@dimen/def_quarter"
+            android:layout_below="@id/show_code_block">
 
         <androidx.appcompat.widget.AppCompatTextView
                 android:scrollbarStyle="insideOverlay"

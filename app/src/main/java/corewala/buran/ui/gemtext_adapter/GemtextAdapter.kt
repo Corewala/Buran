@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.gemtext_code_block.view.*
 import kotlinx.android.synthetic.main.gemtext_image_link.view.*
+import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
 import kotlinx.android.synthetic.main.gemtext_text.view.*
 import corewala.buran.R
 import corewala.endsWithImage
 import corewala.visible
-import kotlinx.android.synthetic.main.gemtext_image_link.view.gemtext_link_button
-import kotlinx.android.synthetic.main.gemtext_link.view.*
-import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
 import java.net.URI
 
 class GemtextAdapter(
@@ -95,6 +93,27 @@ class GemtextAdapter(
                 }else{
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(3)
                 }
+
+                if(hideCodeBlocks){
+                    holder.itemView.show_code_block.setText(R.string.show_code)//reset for recycling
+                    altText?.let{
+                        holder.itemView.show_code_block.append(": $altText")
+                    }
+                    holder.itemView.show_code_block.visible(true)
+                    holder.itemView.show_code_block.paint.isUnderlineText = true
+                    holder.itemView.show_code_block.setOnClickListener {
+                        setupCodeBlockToggle(holder, altText)
+                    }
+                    holder.itemView.gemtext_text_monospace_textview.visible(false)
+
+                    when {
+                        showInlineIcons -> holder.itemView.show_code_block.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_code, 0)
+                        else -> holder.itemView.show_code_block.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
+                    }
+                }else{
+                    holder.itemView.show_code_block.visible(false)
+                    holder.itemView.gemtext_text_monospace_textview.visible(true)
+                }
             }
             is GmiViewHolder.Quote -> holder.itemView.gemtext_text_monospace_textview.text = line.substring(1).trim()
             is GmiViewHolder.H1 -> {
@@ -123,48 +142,21 @@ class GemtextAdapter(
                 if(linkParts.size > 1) linkName = linkParts[1]
 
                 val displayText = linkName
+                holder.itemView.gemtext_text_link.text = displayText
+                holder.itemView.gemtext_text_link.paint.isUnderlineText = true
 
                 when {
-                    showLinkButtons -> {
-                        holder.itemView.gemtext_text_link.visible(false)
-                        holder.itemView.gemtext_link_button.visible(true)
-                        holder.itemView.gemtext_link_button.text = displayText
-                    } else -> {
-                        holder.itemView.gemtext_link_button.visible(false)
-                        holder.itemView.gemtext_text_link.visible(true)
-                        holder.itemView.gemtext_text_link.text = displayText
-                        holder.itemView.gemtext_text_link.paint.isUnderlineText = true
-                    }
-                }
-
-                when {
-                    showInlineIcons && linkParts.first().startsWith("http") -> {
-                        holder.itemView.gemtext_text_link.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_open_browser, 0)
-                        holder.itemView.gemtext_link_button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_open_browser, 0)
-                    }
-                    else -> {
-                        holder.itemView.gemtext_text_link.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-                        holder.itemView.gemtext_link_button.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-                    }
+                    showInlineIcons && linkParts.first().startsWith("http") -> holder.itemView.gemtext_text_link.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_open_browser, 0)
+                    else -> holder.itemView.gemtext_text_link.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
                 }
 
                 holder.itemView.gemtext_text_link.setOnClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User clicked link: $uri")
                     onLink(uri, false, holder.adapterPosition)
+
                 }
                 holder.itemView.gemtext_text_link.setOnLongClickListener {
-                    val uri = getUri(lines[holder.adapterPosition])
-                    println("User long-clicked link: $uri")
-                    onLink(uri, true, holder.adapterPosition)
-                    true
-                }
-                holder.itemView.gemtext_link_button.setOnClickListener {
-                    val uri = getUri(lines[holder.adapterPosition])
-                    println("User clicked link: $uri")
-                    onLink(uri, false, holder.adapterPosition)
-                }
-                holder.itemView.gemtext_link_button.setOnLongClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User long-clicked link: $uri")
                     onLink(uri, true, holder.adapterPosition)
@@ -179,37 +171,14 @@ class GemtextAdapter(
                 if(linkParts.size > 1) linkName = linkParts[1]
 
                 val displayText = linkName
-
-                when {
-                    showLinkButtons -> {
-                        holder.itemView.gemtext_text_link.visible(false)
-                        holder.itemView.gemtext_link_button.visible(true)
-                        holder.itemView.gemtext_link_button.text = displayText
-                    } else -> {
-                        holder.itemView.gemtext_link_button.visible(false)
-                        holder.itemView.gemtext_text_link.visible(true)
-                        holder.itemView.gemtext_text_link.text = displayText
-                        holder.itemView.gemtext_text_link.paint.isUnderlineText = true
-                    }
-                }
-
+                holder.itemView.gemtext_text_link.text = displayText
+                holder.itemView.gemtext_text_link.paint.isUnderlineText = true
                 holder.itemView.gemtext_text_link.setOnClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User clicked link: $uri")
                     onLink(uri, false, holder.adapterPosition)
                 }
                 holder.itemView.gemtext_text_link.setOnLongClickListener {
-                    val uri = getUri(lines[holder.adapterPosition])
-                    println("User long-clicked link: $uri")
-                    onLink(uri, true, holder.adapterPosition)
-                    true
-                }
-                holder.itemView.gemtext_link_button.setOnClickListener {
-                    val uri = getUri(lines[holder.adapterPosition])
-                    println("User clicked link: $uri")
-                    onLink(uri, false, holder.adapterPosition)
-                }
-                holder.itemView.gemtext_link_button.setOnLongClickListener {
                     val uri = getUri(lines[holder.adapterPosition])
                     println("User long-clicked link: $uri")
                     onLink(uri, true, holder.adapterPosition)
@@ -246,14 +215,28 @@ class GemtextAdapter(
                 }
 
                 when {
-                    showInlineIcons -> {
-                        holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_photo, 0)
-                        holder.itemView.gemtext_link_button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_photo, 0)
-                    }
-                    else -> {
-                        holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                        holder.itemView.gemtext_link_button.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                    }
+                    showInlineIcons -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_photo, 0)
+                    else -> holder.itemView.gemtext_text_link.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
+            }
+        }
+    }
+
+    private fun setupCodeBlockToggle(holder: GmiViewHolder.Code, altText: String?) {
+        //val adapterPosition = holder.adapterPosition
+        when {
+            holder.itemView.gemtext_text_monospace_textview.isVisible -> {
+                holder.itemView.show_code_block.setText(R.string.show_code)
+                holder.itemView.gemtext_text_monospace_textview.visible(false)
+                altText?.let{
+                    holder.itemView.show_code_block.append(": $altText")
+                }
+            }
+            else -> {
+                holder.itemView.show_code_block.setText(R.string.hide_code)
+                holder.itemView.gemtext_text_monospace_textview.visible(true)
+                altText?.let{
+                    holder.itemView.show_code_block.append(": $altText")
                 }
             }
         }
@@ -287,13 +270,13 @@ class GemtextAdapter(
         notifyDataSetChanged()
     }
 
-    override fun linkButtons(visible: Boolean){
-        this.showLinkButtons = visible
+    override fun inlineImages(visible: Boolean){
+        this.showInlineImages = visible
         notifyDataSetChanged()
     }
 
-    override fun inlineImages(visible: Boolean){
-        this.showInlineImages = visible
+    override fun hideCodeBlocks(hideCodeBlocks: Boolean) {
+        this.hideCodeBlocks = hideCodeBlocks
         notifyDataSetChanged()
     }
 }

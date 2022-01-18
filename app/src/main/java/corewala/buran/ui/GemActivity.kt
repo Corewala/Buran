@@ -274,18 +274,17 @@ class GemActivity : AppCompatActivity() {
             else -> hideClientCertShield()
         }
 
+        val hideCodeBlocks = prefs.getBoolean(
+            "collapse_code_blocks",
+            false
+        )
+        adapter.hideCodeBlocks(hideCodeBlocks)
+
         val showInlineIcons = prefs.getBoolean(
             "show_inline_icons",
             true
         )
         adapter.inlineIcons(showInlineIcons)
-
-
-        val showLinkButtons = prefs.getBoolean(
-            "show_link_buttons",
-            true
-        )
-        adapter.linkButtons(showLinkButtons)
 
         val showInlineImages = prefs.getBoolean(
             "show_inline_images",

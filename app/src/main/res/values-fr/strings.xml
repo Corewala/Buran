@@ -68,11 +68,14 @@
     <string name="history_cleared">Historique vidé</string>
     <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>
-    <string name="show_link_buttons">Afficher boutons de liens</string>
     <string name="bookmarks_empty">Vous n\'avez encore aucun marque-pages</string>
     <string name="import_bookmarks">Importer des marque-pages</string>
     <string name="export_bookmarks">Exporter des marque-pages</string>
     <string name="accessibility">Accessibilité</string>
+    <string name="collapse_code_blocks">Cacher les rectangles pleins</string>
+    <string name="show_code">Montrer le code</string>
+    <string name="hide_code">Cacher le code</string>
+    <string name="collapse_code_blocks_about">Les capsules Gemini utilisent malheureusement souvent des en-têtes en ascii-art rendus avec des rectangles pleins à largeur fixe. Quand les rectangles pleins sont cachés, ils nécessitent un clic pour être affichés, ce qui améliore l\'ergonomie en cas d\'utilisation d\'un lecteur d\'écran.</string>
     <string name="prefs_override_page_background">Utiliser une couleur d\'arrière-plan personnalisée</string>
     <string name="prefs_override_page_background_dialog_title">Couleur d\'arrière-plan</string>
     <string name="prefs_override_page_background_title">Couleur d\'arrière-plan</string>

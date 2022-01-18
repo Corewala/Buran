@@ -179,19 +179,24 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         accessibilityCategory.title = getString(R.string.accessibility)
         screen.addPreference(accessibilityCategory)
 
+        //Accessibility - code blocks
+        val aboutCodeBlocksPref = Preference(context)
+        aboutCodeBlocksPref.summary = getString(R.string.collapse_code_blocks_about)
+        aboutCodeBlocksPref.isPersistent = false
+        aboutCodeBlocksPref.isSelectable = false
+        accessibilityCategory.addPreference(aboutCodeBlocksPref)
+
+        val collapseCodeBlocksPreference = SwitchPreferenceCompat(context)
+        collapseCodeBlocksPreference.key = "collapse_code_blocks"
+        collapseCodeBlocksPreference.title = getString(R.string.collapse_code_blocks)
+        accessibilityCategory.addPreference(collapseCodeBlocksPreference)
+
         //Accessibility - inline icons
         val showInlineIconsPreference = SwitchPreferenceCompat(context)
         showInlineIconsPreference.setDefaultValue(true)
         showInlineIconsPreference.key = "show_inline_icons"
         showInlineIconsPreference.title = getString(R.string.show_inline_icons)
         accessibilityCategory.addPreference(showInlineIconsPreference)
-
-        //Accessibility - full-width buttons
-        val showLinkButtonsPreference = SwitchPreferenceCompat(context)
-        showLinkButtonsPreference.setDefaultValue(false)
-        showLinkButtonsPreference.key = "show_link_buttons"
-        showLinkButtonsPreference.title = getString(R.string.show_link_buttons)
-        accessibilityCategory.addPreference(showLinkButtonsPreference)
     }
 
     private fun buildClientCertificateSection(context: Context?, appCategory: PreferenceCategory) {
