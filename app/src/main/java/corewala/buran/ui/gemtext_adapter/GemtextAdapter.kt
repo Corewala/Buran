@@ -196,18 +196,16 @@ class GemtextAdapter(
                     true
                 }
 
-                if("://" !in getLink(lines[holder.adapterPosition])){
+                if(("://" !in getLink(lines[holder.adapterPosition])) and showInlineImages){
                     when {
                         inlineImages.containsKey(position) -> {
                             holder.itemView.rounded_image_frame.visible(true)
                             holder.itemView.gemtext_inline_image.setImageURI(inlineImages[position])
                         }
                         else -> {
-                            if (showInlineImages){
-                                val uri = getUri(lines[holder.adapterPosition])
-                                println("Inline image rendered: $uri")
-                                inlineImage(uri, holder.adapterPosition)
-                            }
+                            val uri = getUri(lines[holder.adapterPosition])
+                            println("Inline image rendered: $uri")
+                            inlineImage(uri, holder.adapterPosition)
                         }
                     }
                 }else{
