@@ -12,7 +12,7 @@
     <string name="set_home">Set Home</string>
     <string name="settings">Settings</string>
     <string name="about_body">Buran: A Gemini protocol browser from Corewala</string>
-    <string name="copyright">Copyright © 2021 Corewala</string>
+    <string name="copyright">Copyright © 2022 Corewala</string>
     <string name="about_ariane_source">Buran is based on the Ariane browser by ÖLAB under the European Union Public Licence</string>
     <string name="about_font">Code blocks are rendered using JetBrains Mono by JetBrains</string>
     <string name="about_glyphs">Glyphs used are from Material Icons by Google</string>
