@@ -5,7 +5,8 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://github.com/Corewala/Buran#buran)
 [![forthebadge](https://forthebadge.com/images/badges/as-seen-on-tv.svg)](https://github.com/Corewala/Buran#buran)
 
-[![shields](https://img.shields.io/badge/Download-Here-orange?style=for-the-badge&logo=github)](https://github.com/Corewala/Buran/releases/latest)
+[![shields](https://img.shields.io/badge/Download-Here-orange?style=for-the-badge)](https://github.com/Corewala/Buran/releases/latest)
+[![shields](https://img.shields.io/badge/license-GPL-blue?style=for-the-badge)](https://github.com/Corewala/Buran/blob/master/LICENSE)
 
 Buran is a simple Gemini protocol browser for Android.
 
