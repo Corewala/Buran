@@ -24,6 +24,7 @@
             />
 
     <HorizontalScrollView
+            android:scrollbars="none"
             android:background="@drawable/block_background"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -32,7 +33,6 @@
             android:layout_below="@id/show_code_block">
 
         <androidx.appcompat.widget.AppCompatTextView
-                android:scrollbarStyle="insideOverlay"
                 android:textSize="@dimen/code_text_size"
                 android:typeface="monospace"
                 android:textColor="@color/stroke"
@@ -41,7 +41,6 @@
                 android:paddingTop="@dimen/default_margin_big"
                 android:paddingRight="@dimen/default_margin_big"
                 android:paddingBottom="0.0dip"
-                android:scrollbars="horizontal|vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollHorizontally="true"
