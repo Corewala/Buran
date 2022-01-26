@@ -21,6 +21,10 @@ Buran is a simple Gemini protocol browser for Android.
 - [ ] Page navigation feature
 - [ ] Update notifier
 
+## Statement about Ariane
+
+> I've seen some pretty cringe discussion in geminispace complaining about the decision by Öppen to close-source the Ariane browser, sometimes referencing this project as a more "stable" or "principled" project. Just to be 100% clear, I think that the license that Öppen used for Ariane 4 was actually much better than the one that Ariane 3 used, and I would have made the same decision if the EUPL was compatible with copyfarleft. Although I wish Ariane could continue to grow as an open-source project, I respect his decision to make Seren closed source. I only made this fork out of a legitimate desire to keep some fragment of this project public and an interest in learning Kotlin. Even though this fork exists, you should still consider buying a copy of Seren. He's definitely a better developer than me, and I don't want this project to be used as a rhetorical tool against him.
+
 ## Credits
 
 Buran is based on the [Ariane source code](https://web.archive.org/web/20210920212507/https://codeberg.org/oppenlab/Ariane) (now [Seren](https://orllewin.uk/)), created by ÖLAB.
