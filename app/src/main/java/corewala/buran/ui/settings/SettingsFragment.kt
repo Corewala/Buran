@@ -202,7 +202,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         val showLinkButtonsPreference = SwitchPreferenceCompat(context)
         showLinkButtonsPreference.setDefaultValue(false)
         showLinkButtonsPreference.key = "show_link_buttons"
-        showLinkButtonsPreference.title = (R.string.show_link_buttons.toString())
+        showLinkButtonsPreference.title = getString(R.string.show_link_buttons)
         accessibilityCategory.addPreference(showLinkButtonsPreference)
     }
 
