@@ -286,6 +286,13 @@ class GemActivity : AppCompatActivity() {
         )
         adapter.inlineIcons(showInlineIcons)
 
+        val showLinkButtons = prefs.getBoolean(
+            "show_link_buttons",
+            true
+        )
+        adapter.linkButtons(showLinkButtons)
+
+
         val showInlineImages = prefs.getBoolean(
             "show_inline_images",
             true

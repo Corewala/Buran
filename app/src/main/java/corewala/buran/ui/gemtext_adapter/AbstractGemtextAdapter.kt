@@ -11,6 +11,7 @@ abstract class AbstractGemtextAdapter(
 
     var showInlineIcons: Boolean = false
     var hideCodeBlocks: Boolean = false
+    var showLinkButtons: Boolean = false
     var showInlineImages: Boolean = false
 
     abstract fun render(lines: List<String>)
@@ -18,6 +19,7 @@ abstract class AbstractGemtextAdapter(
     abstract fun inlineIcons(visible: Boolean)
     abstract fun inlineImages(visible: Boolean)
     abstract fun hideCodeBlocks(hideCodeBlocks: Boolean)
+    abstract fun linkButtons(visible: Boolean)
 
     abstract fun inferTitle(): String?
 

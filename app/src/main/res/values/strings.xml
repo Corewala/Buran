@@ -68,6 +68,7 @@
     <string name="history_cleared">History cleared</string>
     <string name="runtime_cache_cleared">Runtime cache cleared</string>
     <string name="show_inline_icons">Inline link icons</string>
+    <string name="show_link_buttons">Show link buttons</string>
     <string name="bookmarks_empty">You don\'t have any bookmarks yet</string>
     <string name="import_bookmarks">Import bookmarks</string>
     <string name="export_bookmarks">Export bookmarks</string>
