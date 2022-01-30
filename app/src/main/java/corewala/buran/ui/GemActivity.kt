@@ -276,12 +276,6 @@ class GemActivity : AppCompatActivity() {
             else -> hideClientCertShield()
         }
 
-        val hideCodeBlocks = prefs.getBoolean(
-            "collapse_code_blocks",
-            false
-        )
-        adapter.hideCodeBlocks(hideCodeBlocks)
-
         val showInlineIcons = prefs.getBoolean(
             "show_inline_icons",
             true

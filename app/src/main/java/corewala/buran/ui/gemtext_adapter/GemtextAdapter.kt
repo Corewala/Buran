@@ -93,27 +93,6 @@ class GemtextAdapter(
                 }else{
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(3)
                 }
-
-                if(hideCodeBlocks){
-                    holder.itemView.show_code_block.setText(R.string.show_code)//reset for recycling
-                    altText?.let{
-                        holder.itemView.show_code_block.append(": $altText")
-                    }
-                    holder.itemView.show_code_block.visible(true)
-                    holder.itemView.show_code_block.paint.isUnderlineText = true
-                    holder.itemView.show_code_block.setOnClickListener {
-                        setupCodeBlockToggle(holder, altText)
-                    }
-                    holder.itemView.gemtext_text_monospace_textview.visible(false)
-
-                    when {
-                        showInlineIcons -> holder.itemView.show_code_block.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.vector_code, 0)
-                        else -> holder.itemView.show_code_block.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-                    }
-                }else{
-                    holder.itemView.show_code_block.visible(false)
-                    holder.itemView.gemtext_text_monospace_textview.visible(true)
-                }
             }
             is GmiViewHolder.Quote -> holder.itemView.gemtext_text_monospace_textview.text = line.substring(1).trim()
             is GmiViewHolder.H1 -> {
@@ -281,26 +260,6 @@ class GemtextAdapter(
         }
     }
 
-    private fun setupCodeBlockToggle(holder: GmiViewHolder.Code, altText: String?) {
-        //val adapterPosition = holder.adapterPosition
-        when {
-            holder.itemView.gemtext_text_monospace_textview.isVisible -> {
-                holder.itemView.show_code_block.setText(R.string.show_code)
-                holder.itemView.gemtext_text_monospace_textview.visible(false)
-                altText?.let{
-                    holder.itemView.show_code_block.append(": $altText")
-                }
-            }
-            else -> {
-                holder.itemView.show_code_block.setText(R.string.hide_code)
-                holder.itemView.gemtext_text_monospace_textview.visible(true)
-                altText?.let{
-                    holder.itemView.show_code_block.append(": $altText")
-                }
-            }
-        }
-    }
-
     private fun getLink(line: String): String{
         val linkParts = line.substring(2).trim().split("\\s+".toRegex(), 2)
         return linkParts[0]
@@ -336,11 +295,6 @@ class GemtextAdapter(
 
     override fun inlineImages(visible: Boolean){
         this.showInlineImages = visible
-        notifyDataSetChanged()
-    }
-
-    override fun hideCodeBlocks(hideCodeBlocks: Boolean) {
-        this.hideCodeBlocks = hideCodeBlocks
         notifyDataSetChanged()
     }
 }

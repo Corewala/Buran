@@ -57,7 +57,7 @@
     <string name="web_content">Web Content</string>
     <string name="web_content_label">Open websites internally using \'Custom Tabs\', instead of using the default browser. This might help you stay in Geminispace instead of being distracted by the wider web. Requires compatible default browser.</string>
     <string name="web_content_switch_label">Open internally</string>
-    <string name="show_inline_images">Inline images</string>
+    <string name="show_inline_images">Inline local images</string>
     <string name="pkcs_notice">Only PKCS12 client keystores are currently supported</string>
     <string name="client_certificate">Client Certificate</string>
     <string name="tap_to_select_client_certificate">Tap to select client certificate</string>
@@ -73,10 +73,6 @@
     <string name="import_bookmarks">Import bookmarks</string>
     <string name="export_bookmarks">Export bookmarks</string>
     <string name="accessibility">Accessibility</string>
-    <string name="collapse_code_blocks">Hide code blocks</string>
-    <string name="show_code">Show code</string>
-    <string name="hide_code">Hide code</string>
-    <string name="collapse_code_blocks_about">Gemini capsules unfortunately often use ascii-art headers rendered in monospaced code blocks. When code blocks are hidden they require a tap to expand which improves usability when using a screen reader.</string>
     <string name="prefs_override_page_background">Use custom page background colour</string>
     <string name="prefs_override_page_background_dialog_title">Page Background Colour</string>
     <string name="prefs_override_page_background_title">Page Background Colour</string>
