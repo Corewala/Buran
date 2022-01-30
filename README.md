@@ -27,7 +27,7 @@ Buran is a simple Gemini protocol browser for Android.
 
 ## Credits
 
-Buran is based on the [Ariane source code](https://web.archive.org/web/20210920212507/https://codeberg.org/oppenlab/Ariane) (now [Seren](https://orllewin.uk/)), created by ÖLAB.
+Buran is based on the [Ariane source code](https://web.archive.org/web/20210920212507/https://codeberg.org/oppenlab/Ariane) (now [Seren](https://orllewin.neocities.org/seren/)), created by ÖLAB.
 
 The font used in code blocks is [JetBrains Mono](https://www.jetbrains.com/lp/mono/), created by JetBrains.
 
