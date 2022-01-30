@@ -16,7 +16,7 @@ Buran is a simple Gemini protocol browser for Android.
   - [ ] Keystore generator and catalog
   - [ ] Option to require password or biometric authentication
 - [ ] Color palette interface for picking background and accent colors
-- [ ] Option to render links as buttons
+- [x] Option to render links as buttons
 - [X] Inline rendering of images
 - [ ] Page navigation feature
 - [ ] Update notifier
