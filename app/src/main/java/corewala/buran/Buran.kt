@@ -5,7 +5,7 @@ import android.app.Application
 class Buran: Application() {
 
     companion object{
-        const val DEFAULT_HOME_CAPSULE = "gemini://rawtext.club/~sloum/spacewalk.gmi"
+        const val DEFAULT_HOME_CAPSULE = "gemini://tlgs.one"
 
         const val FEATURE_CLIENT_CERTS = true
 
