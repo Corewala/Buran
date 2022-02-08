@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
@@ -155,7 +156,6 @@ class GemActivity : AppCompatActivity() {
             when (actionId) {
                 EditorInfo.IME_ACTION_GO -> {
                     omniTerm.input(binding.addressEdit.text.toString().trim())
-                    binding.addressEdit.hideKeyboard()
                     binding.addressEdit.clearFocus()
                     return@setOnEditorActionListener true
                 }
@@ -164,8 +164,6 @@ class GemActivity : AppCompatActivity() {
         }
 
         binding.addressEdit.setOnClickListener {
-            binding.addressEdit.clearFocus()
-            binding.addressEdit.showKeyboard()
             binding.addressEdit.requestFocus()
         }
 
