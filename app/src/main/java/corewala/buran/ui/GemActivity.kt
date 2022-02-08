@@ -132,15 +132,24 @@ class GemActivity : AppCompatActivity() {
 
         binding.gemtextRecycler.adapter = adapter
 
-        model.initialise(
-            home = prefs.getString(
-                "home_capsule",
-                Buran.DEFAULT_HOME_CAPSULE
-            ) ?: Buran.DEFAULT_HOME_CAPSULE,
-            gemini = Datasource.factory(this, db.history()),
-            db = db,
-            onState = this::handleState
-        )
+        if(intent.data == null){
+            model.initialise(
+                home = prefs.getString(
+                    "home_capsule",
+                    Buran.DEFAULT_HOME_CAPSULE
+                ) ?: Buran.DEFAULT_HOME_CAPSULE,
+                gemini = Datasource.factory(this, db.history()),
+                db = db,
+                onState = this::handleState
+            )
+        }else{
+            model.initialise(
+                home = intent.data.toString(),
+                gemini = Datasource.factory(this, db.history()),
+                db = db,
+                onState = this::handleState
+            )
+        }
 
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
