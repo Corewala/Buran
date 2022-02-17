@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/default_margin_big">
+    android:paddingHorizontal="@dimen/screen_margin">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/query_input"
