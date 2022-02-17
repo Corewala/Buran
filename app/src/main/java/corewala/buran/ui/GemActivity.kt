@@ -9,8 +9,11 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +39,6 @@ import corewala.buran.ui.content_text.TextDialog
 import corewala.buran.ui.gemtext_adapter.*
 import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
-import corewala.buran.ui.modals_menus.input.InputDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
 import java.io.File
@@ -314,12 +316,29 @@ class GemActivity : AppCompatActivity() {
 
         when (state) {
             is GemState.AppQuery -> runOnUiThread { showAlert("App backdoor/query not implemented yet") }
+
             is GemState.ResponseInput -> runOnUiThread {
+                val builder = AlertDialog.Builder(this)
+                val inflater: LayoutInflater = layoutInflater
+                val dialogLayout: View = inflater.inflate(R.layout.dialog_input_query, null)
+                val editText: EditText = dialogLayout.findViewById(R.id.query_input)
+                editText.requestFocus()
+                editText.showKeyboard()
                 loadingView(false)
-                InputDialog.show(this, state) { queryAddress ->
-                    model.request(queryAddress)
+                with(builder) {
+                    setTitle(state.header.meta)
+                    setPositiveButton("Ok"){ dialog, which ->
+                        model.request("${state.uri}?${Uri.encode(editText.text.toString())}")
+                        editText.hideKeyboard()
+                    }
+                    setNegativeButton(R.string.cancel){ dialog, which ->
+                        editText.hideKeyboard()
+                    }
+                    setView(dialogLayout)
+                    show()
                 }
             }
+
             is GemState.Requesting -> loadingView(true)
             is GemState.NotGeminiRequest -> externalProtocol(state)
             is GemState.ResponseError -> {
