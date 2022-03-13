@@ -65,7 +65,14 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
         appCategory.addPreference(homePreference)
 
-        //Home - Certificates
+        //Updates ---------------------------------------------
+        val checkForUpdates = SwitchPreferenceCompat(context)
+        checkForUpdates.setDefaultValue(true)
+        checkForUpdates.key = "check_for_updates"
+        checkForUpdates.title = getString(R.string.check_for_updates)
+        appCategory.addPreference(checkForUpdates)
+
+        //Home - Certificates - Updates
         buildClientCertificateSection(context, appCategory)
 
         //Appearance --------------------------------------------

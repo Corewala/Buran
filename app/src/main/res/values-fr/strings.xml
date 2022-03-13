@@ -65,6 +65,8 @@
     <string name="no_password">Pas de mot de passe</string>
     <string name="use_client_certificate">Utiliser un Certificat Client</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
+    <string name="check_for_updates">Rechercher des nouvelles versions</string>
+    <string name="new_version_available">Nouvelle version disponible</string>
     <string name="history_cleared">Historique vidé</string>
     <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>

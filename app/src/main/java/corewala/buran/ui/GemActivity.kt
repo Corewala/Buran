@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +22,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import corewala.*
+import corewala.buran.BuildConfig
 import corewala.buran.Buran
 import corewala.buran.OmniTerm
 import corewala.buran.R
@@ -32,6 +32,7 @@ import corewala.buran.io.database.BuranDatabase
 import corewala.buran.io.database.bookmarks.BookmarksDatasource
 import corewala.buran.io.gemini.Datasource
 import corewala.buran.io.gemini.GeminiResponse
+import corewala.buran.io.update.BuranUpdates
 import corewala.buran.ui.bookmarks.BookmarkDialog
 import corewala.buran.ui.bookmarks.BookmarksDialog
 import corewala.buran.ui.content_image.ImageDialog
@@ -152,6 +153,24 @@ class GemActivity : AppCompatActivity() {
                 db = db,
                 onState = this::handleState
             )
+        }
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+                "check_for_updates",
+                false
+            )) {
+            val updates = BuranUpdates()
+            val latestVersion = updates.getLatestVersion()
+
+            if (latestVersion == BuildConfig.VERSION_NAME){
+                println("No new version available")
+            } else {
+                println("New version available")
+
+                Snackbar.make(binding.root, getString(R.string.new_version_available), Snackbar.LENGTH_LONG).setAction(getString(R.string.update)) {
+                    updates.installUpdate(this, latestVersion)
+                }.show()
+            }
         }
 
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
