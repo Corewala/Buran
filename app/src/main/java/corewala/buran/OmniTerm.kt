@@ -4,7 +4,6 @@ import android.net.Uri
 import java.util.*
 
 const val GEM_SCHEME = "gemini://"
-const val SEARCH_BASE = "gemini://tlgs.one/search?"
 
 class OmniTerm(private val listener: Listener) {
     val history = ArrayList<OppenURI>()
@@ -15,7 +14,7 @@ class OmniTerm(private val listener: Listener) {
      * User input to the 'omni bar' - could be an address or a search term
      * @param term - User-inputted term
      */
-    fun input(term: String){
+    fun input(term: String, searchbase: String?){
         when {
             term.startsWith(GEM_SCHEME) && term != GEM_SCHEME -> {
                 listener.request(term)
@@ -26,14 +25,14 @@ class OmniTerm(private val listener: Listener) {
             }
             else -> {
                 val encoded = Uri.encode(term)
-                listener.request("$SEARCH_BASE$encoded")
+                listener.request("$searchbase$encoded")
             }
         }
     }
 
-    fun search(term: String){
+    fun search(term: String, searchbase: String?){
         val encoded = Uri.encode(term)
-        listener.request("$SEARCH_BASE$encoded")
+        listener.request("$searchbase$encoded")
     }
 
 

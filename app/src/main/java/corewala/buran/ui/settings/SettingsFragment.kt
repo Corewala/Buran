@@ -65,6 +65,31 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
         appCategory.addPreference(homePreference)
 
+        //Search ---------------------------------------------
+        val searchPreference = EditTextPreference(context)
+        searchPreference.title = getString(R.string.search_engine)
+        searchPreference.key = "search_base"
+        searchPreference.dialogTitle = getString(R.string.search_base)
+
+        val searchengine = preferenceManager.sharedPreferences.getString(
+            "search_base",
+            Buran.DEFAULT_SEARCH_BASE
+        )
+
+        searchPreference.summary = searchengine
+        searchPreference.positiveButtonText = getString(R.string.update)
+        searchPreference.negativeButtonText = getString(R.string.cancel)
+        searchPreference.title = getString(R.string.search_engine)
+        searchPreference.setOnPreferenceChangeListener { _, newValue ->
+            searchPreference.summary = newValue.toString()
+            true
+        }
+        searchPreference.setOnBindEditTextListener{ editText ->
+            editText.imeOptions = EditorInfo.IME_ACTION_DONE
+            editText.setSelection(editText.text.toString().length)//Set caret position to end
+        }
+        appCategory.addPreference(searchPreference)
+
         //Updates ---------------------------------------------
         val checkForUpdates = SwitchPreferenceCompat(context)
         checkForUpdates.setDefaultValue(true)

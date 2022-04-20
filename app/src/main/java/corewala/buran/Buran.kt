@@ -6,6 +6,7 @@ class Buran: Application() {
 
     companion object{
         const val DEFAULT_HOME_CAPSULE = "gemini://tlgs.one"
+        const val DEFAULT_SEARCH_BASE = "gemini://tlgs.one/search?"
 
         const val FEATURE_CLIENT_CERTS = true
 

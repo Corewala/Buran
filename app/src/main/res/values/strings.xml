@@ -46,6 +46,8 @@
     <string name="file_saved_to_device">File saved to device</string>
     <string name="configure_buran">Configure Buran</string>
     <string name="home_capsule">Home Capsule</string>
+    <string name="search_engine">Search Engine</string>
+    <string name="search_base">Search Base</string>
     <string name="update">Update</string>
     <string name="appearance">Appearance</string>
     <string name="theme">Theme</string>

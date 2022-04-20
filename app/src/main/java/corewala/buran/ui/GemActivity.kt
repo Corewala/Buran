@@ -176,7 +176,11 @@ class GemActivity : AppCompatActivity() {
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_GO -> {
-                    omniTerm.input(binding.addressEdit.text.toString().trim())
+                    val searchbase = prefs.getString(
+                        "search_base",
+                        Buran.DEFAULT_SEARCH_BASE
+                    )
+                    omniTerm.input(binding.addressEdit.text.toString().trim(), searchbase)
                     binding.addressEdit.clearFocus()
                     return@setOnEditorActionListener true
                 }
@@ -395,13 +399,17 @@ class GemActivity : AppCompatActivity() {
             }
             is GemState.ResponseUnknownHost -> {
                 runOnUiThread {
+                    val searchbase = prefs.getString(
+                        "search_base",
+                        Buran.DEFAULT_SEARCH_BASE
+                    )
                     loadingView(false)
                     AlertDialog.Builder(this, R.style.AppDialogTheme)
                         .setTitle(R.string.unknown_host_dialog_title)
                         .setMessage("Host not found: ${state.uri}\n\nSearch with TLGS instead?")
                         .setPositiveButton(getString(R.string.search)) { _, _ ->
                             loadingView(true)
-                            omniTerm.search(state.uri.toString())
+                            omniTerm.search(state.uri.toString(), searchbase)
                         }
                         .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                         .show()

@@ -46,6 +46,8 @@
     <string name="file_saved_to_device">Fichier sauvegardé dans l\'appareil</string>
     <string name="configure_buran">Configurer Buran</string>
     <string name="home_capsule">Capsule d\'accueil</string>
+    <string name="search_engine">Moteur de recherche</string>
+    <string name="search_base">Base de recherche</string>
     <string name="update">Mettre à jour</string>
     <string name="appearance">Apparence</string>
     <string name="theme">Thème</string>
