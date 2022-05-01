@@ -647,7 +647,11 @@ class GemActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (omniTerm.canGoBack()){
-            model.request(omniTerm.goBack())
+            if(getInternetStatus()){
+                model.request(omniTerm.goBack())
+            }else{
+                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            }
         }else{
             println("Buran history is empty - exiting")
             super.onBackPressed()
