@@ -10,6 +10,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -183,6 +184,7 @@ class GemActivity : AppCompatActivity() {
         }else{
             loadingView(false)
             Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            binding.addressEdit.inputType = InputType.TYPE_NULL
         }
 
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
