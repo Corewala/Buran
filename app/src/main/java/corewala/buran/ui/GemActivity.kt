@@ -268,7 +268,11 @@ class GemActivity : AppCompatActivity() {
                         this,
                         db.history()
                     ) { historyAddress ->
-                        model.request(historyAddress)
+                        if(getInternetStatus()){
+                            model.request(historyAddress)
+                        }else{
+                            Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+                        }
                     }
                     R.id.overflow_menu_about -> AboutDialog.show(this)
                     R.id.overflow_menu_settings -> {
