@@ -68,8 +68,12 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            loadingView(true)
-            model.request(address)
+            if(getInternetStatus()){
+                loadingView(true)
+                model.request(address)
+            }else{
+                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            }
         }
 
         override fun openBrowser(address: String) = openWebLink(address)
