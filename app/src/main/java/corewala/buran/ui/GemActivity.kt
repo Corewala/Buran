@@ -284,7 +284,12 @@ class GemActivity : AppCompatActivity() {
         }
 
         binding.pullToRefresh.setOnRefreshListener {
-            refresh()
+            if(getInternetStatus()){
+                refresh()
+            }else{
+                binding.pullToRefresh.isRefreshing = false
+                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            }
         }
 
         checkIntentExtras(intent)
