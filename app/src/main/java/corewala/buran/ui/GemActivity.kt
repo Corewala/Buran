@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,6 +49,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.URI
 
+
 const val CREATE_IMAGE_FILE_REQ = 628
 const val CREATE_BINARY_FILE_REQ = 630
 const val CREATE_BOOKMARK_EXPORT_FILE_REQ = 631
@@ -70,6 +73,8 @@ class GemActivity : AppCompatActivity() {
 
         override fun openBrowser(address: String) = openWebLink(address)
     })
+
+    private var internetStatus: Boolean = false
 
     lateinit var adapter: AbstractGemtextAdapter
 
@@ -136,41 +141,48 @@ class GemActivity : AppCompatActivity() {
 
         binding.gemtextRecycler.adapter = adapter
 
-        if(intent.data == null){
-            model.initialise(
-                home = prefs.getString(
-                    "home_capsule",
-                    Buran.DEFAULT_HOME_CAPSULE
-                ) ?: Buran.DEFAULT_HOME_CAPSULE,
-                gemini = Datasource.factory(this, db.history()),
-                db = db,
-                onState = this::handleState
-            )
-        }else{
-            model.initialise(
-                home = intent.data.toString(),
-                gemini = Datasource.factory(this, db.history()),
-                db = db,
-                onState = this::handleState
-            )
-        }
+        internetStatus = getInternetStatus()
 
-        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-                "check_for_updates",
-                false
-            )) {
-            val updates = BuranUpdates()
-            val latestVersion = updates.getLatestVersion()
-
-            if (latestVersion == BuildConfig.VERSION_NAME){
-                println("No new version available")
-            } else {
-                println("New version available")
-
-                Snackbar.make(binding.root, getString(R.string.new_version_available), Snackbar.LENGTH_LONG).setAction(getString(R.string.update)) {
-                    updates.installUpdate(this, latestVersion)
-                }.show()
+        if(internetStatus){
+            if(intent.data == null){
+                model.initialise(
+                    home = prefs.getString(
+                        "home_capsule",
+                        Buran.DEFAULT_HOME_CAPSULE
+                    ) ?: Buran.DEFAULT_HOME_CAPSULE,
+                    gemini = Datasource.factory(this, db.history()),
+                    db = db,
+                    onState = this::handleState
+                )
+            }else{
+                model.initialise(
+                    home = intent.data.toString(),
+                    gemini = Datasource.factory(this, db.history()),
+                    db = db,
+                    onState = this::handleState
+                )
             }
+
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+                    "check_for_updates",
+                    false
+                )) {
+                val updates = BuranUpdates()
+                val latestVersion = updates.getLatestVersion()
+
+                if (latestVersion == BuildConfig.VERSION_NAME){
+                    println("No new version available")
+                } else {
+                    println("New version available")
+
+                    Snackbar.make(binding.root, getString(R.string.new_version_available), Snackbar.LENGTH_LONG).setAction(getString(R.string.update)) {
+                        updates.installUpdate(this, latestVersion)
+                    }.show()
+                }
+            }
+        }else{
+            loadingView(false)
+            Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
         }
 
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
@@ -327,7 +339,9 @@ class GemActivity : AppCompatActivity() {
         )
         adapter.inlineImages(showInlineImages)
 
-        model.invalidateDatasource()
+        if(internetStatus){
+            model.invalidateDatasource()
+        }
     }
 
     private fun hideClientCertShield(){
@@ -604,6 +618,25 @@ class GemActivity : AppCompatActivity() {
     private fun loadingView(visible: Boolean) = runOnUiThread {
         binding.progressBar.visibleRetainingSpace(visible)
         if(visible) binding.appBar.setExpanded(true)
+    }
+
+    private fun getInternetStatus(): Boolean {
+        val connectivityManager = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        if(connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                println("Internet access found")
+                if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return true
+                }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    return true
+                }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return true
+                }
+            }
+        }
+        println("No internet access found")
+        return false
     }
 
     override fun onBackPressed() {
