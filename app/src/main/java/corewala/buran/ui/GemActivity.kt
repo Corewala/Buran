@@ -248,7 +248,11 @@ class GemActivity : AppCompatActivity() {
                     }
                     R.id.overflow_menu_bookmarks -> {
                         bookmarksDialog = BookmarksDialog(this, bookmarkDatasource) { bookmark ->
-                            model.request(bookmark.uri.toString())
+                            if(getInternetStatus()){
+                                model.request(bookmark.uri.toString())
+                            }else{
+                                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+                            }
                         }
                         bookmarksDialog?.show()
                     }
