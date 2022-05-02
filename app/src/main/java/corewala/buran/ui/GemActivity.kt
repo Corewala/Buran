@@ -68,12 +68,7 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            if(getInternetStatus()){
-                loadingView(true)
-                model.request(address)
-            }else{
-                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
-            }
+            model.request(address)
         }
 
         override fun openBrowser(address: String) = openWebLink(address)
@@ -98,24 +93,29 @@ class GemActivity : AppCompatActivity() {
                 startActivity(Intent.createChooser(this, null))
             }
         }else{
-            //Reset input text hint after user has been searching
-            if(inSearch) {
-                binding.addressEdit.hint = getString(R.string.main_input_hint)
-                inSearch = false
+            if(getInternetStatus()){
+                //Reset input text hint after user has been searching
+                if(inSearch) {
+                    binding.addressEdit.hint = getString(R.string.main_input_hint)
+                    inSearch = false
+                }
+                omniTerm.navigation(uri.toString())
+            }else{
+                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
             }
-            omniTerm.navigation(uri.toString())
         }
     }
 
     private val inlineImage: (link: URI, adapterPosition: Int) -> Unit = { uri, position: Int ->
-
-        omniTerm.imageAddress(uri.toString())
-        omniTerm.uri.let{
-            model.requestInlineImage(URI.create(it.toString())){ imageUri ->
-                imageUri?.let{
-                    runOnUiThread {
-                        loadImage(position, imageUri)
-                        loadingView(false)
+        if(getInternetStatus()){
+            omniTerm.imageAddress(uri.toString())
+            omniTerm.uri.let{
+                model.requestInlineImage(URI.create(it.toString())){ imageUri ->
+                    imageUri?.let{
+                        runOnUiThread {
+                            loadImage(position, imageUri)
+                            loadingView(false)
+                        }
                     }
                 }
             }
@@ -248,11 +248,7 @@ class GemActivity : AppCompatActivity() {
                     }
                     R.id.overflow_menu_bookmarks -> {
                         bookmarksDialog = BookmarksDialog(this, bookmarkDatasource) { bookmark ->
-                            if(getInternetStatus()){
-                                model.request(bookmark.uri.toString())
-                            }else{
-                                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
-                            }
+                            request(bookmark.uri.toString())
                         }
                         bookmarksDialog?.show()
                     }
@@ -268,11 +264,7 @@ class GemActivity : AppCompatActivity() {
                         this,
                         db.history()
                     ) { historyAddress ->
-                        if(getInternetStatus()){
-                            model.request(historyAddress)
-                        }else{
-                            Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
-                        }
+                        request(historyAddress)
                     }
                     R.id.overflow_menu_about -> AboutDialog.show(this)
                     R.id.overflow_menu_settings -> {
@@ -288,7 +280,7 @@ class GemActivity : AppCompatActivity() {
                 Buran.DEFAULT_HOME_CAPSULE
             )
             omniTerm.history.clear()
-            model.request(home!!)
+            request(home!!)
         }
 
         binding.pullToRefresh.setOnRefreshListener {
@@ -307,7 +299,7 @@ class GemActivity : AppCompatActivity() {
         omniTerm.getCurrent().run{
             binding.addressEdit.setText(this)
             focusEnd()
-            model.request(this)
+            request(this)
         }
     }
 
@@ -384,7 +376,7 @@ class GemActivity : AppCompatActivity() {
                 with(builder) {
                     setTitle(state.header.meta)
                     setPositiveButton("Ok"){ dialog, which ->
-                        model.request("${state.uri}?${Uri.encode(editText.text.toString())}")
+                        request("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
                     setNegativeButton(R.string.cancel){ dialog, which ->
@@ -419,15 +411,19 @@ class GemActivity : AppCompatActivity() {
 
                     val download = getString(R.string.download)
 
-                    AlertDialog.Builder(this, R.style.AppDialogTheme)
-                        .setTitle("$download: ${state.header.meta}")
-                        .setMessage("${state.uri}")
-                        .setPositiveButton(getString(R.string.download)) { _, _ ->
-                            loadingView(true)
-                            model.requestBinaryDownload(state.uri)
-                        }
-                        .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                        .show()
+                    if(getInternetStatus()) {
+                        AlertDialog.Builder(this, R.style.AppDialogTheme)
+                            .setTitle("$download: ${state.header.meta}")
+                            .setMessage("${state.uri}")
+                            .setPositiveButton(getString(R.string.download)) { _, _ ->
+                                loadingView(true)
+                                model.requestBinaryDownload(state.uri)
+                            }
+                            .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                            .show()
+                    }else{
+                        Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }
             is GemState.ResponseUnknownHost -> {
@@ -470,7 +466,7 @@ class GemActivity : AppCompatActivity() {
         val uri = intent.data
         if(uri != null){
             binding.addressEdit.setText(uri.toString())
-            model.request(uri.toString())
+            request(uri.toString())
             return
         }
     }
@@ -658,13 +654,19 @@ class GemActivity : AppCompatActivity() {
         return false
     }
 
+    private fun request(address: String){
+        if(getInternetStatus()){
+            loadingView(true)
+            return model.request(address)
+        }else{
+            Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            loadingView(false)
+        }
+    }
+
     override fun onBackPressed() {
         if (omniTerm.canGoBack()){
-            if(getInternetStatus()){
-                model.request(omniTerm.goBack())
-            }else{
-                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
-            }
+            request(omniTerm.goBack())
         }else{
             println("Buran history is empty - exiting")
             super.onBackPressed()
@@ -687,7 +689,7 @@ class GemActivity : AppCompatActivity() {
         savedInstanceState.getString("uri")?.run {
             omniTerm.set(this)
             binding.addressEdit.setText(this)
-            model.request(this)
+            request(this)
         }
     }
 }
