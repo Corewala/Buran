@@ -24,7 +24,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import corewala.*
 import corewala.buran.BuildConfig
 import corewala.buran.Buran
 import corewala.buran.OmniTerm
@@ -40,11 +39,15 @@ import corewala.buran.ui.bookmarks.BookmarkDialog
 import corewala.buran.ui.bookmarks.BookmarksDialog
 import corewala.buran.ui.content_image.ImageDialog
 import corewala.buran.ui.content_text.TextDialog
-import corewala.buran.ui.gemtext_adapter.*
+import corewala.buran.ui.gemtext_adapter.AbstractGemtextAdapter
 import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
+import corewala.hideKeyboard
+import corewala.showKeyboard
+import corewala.toPx
+import corewala.visibleRetainingSpace
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -75,6 +78,8 @@ class GemActivity : AppCompatActivity() {
     })
 
     private var internetStatus: Boolean = false
+
+    private var initialised: Boolean = false
 
     lateinit var adapter: AbstractGemtextAdapter
 
@@ -185,6 +190,8 @@ class GemActivity : AppCompatActivity() {
                     }.show()
                 }
             }
+
+            initialised = true
         }else{
             loadingView(false)
             Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
@@ -285,7 +292,14 @@ class GemActivity : AppCompatActivity() {
 
         binding.pullToRefresh.setOnRefreshListener {
             if(getInternetStatus()){
-                refresh()
+                if(initialised){
+                    refresh()
+                }else{
+                    val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
+                    intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    finish()
+                    startActivity(intent)
+                }
             }else{
                 binding.pullToRefresh.isRefreshing = false
                 Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
@@ -656,8 +670,15 @@ class GemActivity : AppCompatActivity() {
 
     private fun request(address: String){
         if(getInternetStatus()){
-            loadingView(true)
-            return model.request(address)
+            if(initialised){
+                loadingView(true)
+                return model.request(address)
+            }else{
+                val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
+                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                finish()
+                startActivity(intent)
+            }
         }else{
             Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
             loadingView(false)
