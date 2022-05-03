@@ -380,25 +380,24 @@ class GemActivity : AppCompatActivity() {
             is GemState.AppQuery -> runOnUiThread { showAlert("App backdoor/query not implemented yet") }
 
             is GemState.ResponseInput -> runOnUiThread {
-                val builder = AlertDialog.Builder(this)
+                val builder = AlertDialog.Builder(this, R.style.AppDialogTheme)
                 val inflater: LayoutInflater = layoutInflater
                 val dialogLayout: View = inflater.inflate(R.layout.dialog_input_query, null)
                 val editText: EditText = dialogLayout.findViewById(R.id.query_input)
                 editText.requestFocus()
                 editText.showKeyboard()
                 loadingView(false)
-                with(builder) {
-                    setTitle(state.header.meta)
-                    setPositiveButton("Ok"){ dialog, which ->
+                builder
+                    .setTitle(state.header.meta)
+                    .setPositiveButton("Ok"){ dialog, which ->
                         request("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
-                    setNegativeButton(getString(R.string.cancel)){ dialog, which ->
+                    .setNegativeButton(getString(R.string.cancel)){ dialog, which ->
                         editText.hideKeyboard()
                     }
-                    setView(dialogLayout)
-                    show()
-                }
+                    .setView(dialogLayout)
+                    .show()
             }
 
             is GemState.ClientCertRequired -> runOnUiThread {
