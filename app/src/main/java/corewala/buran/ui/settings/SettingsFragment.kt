@@ -97,8 +97,8 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         checkForUpdates.title = getString(R.string.check_for_updates)
         appCategory.addPreference(checkForUpdates)
 
-        //Home - Certificates - Updates
-        buildClientCertificateSection(context, appCategory)
+        //Certificates
+        buildClientCertificateSection(context, screen)
 
         //Appearance --------------------------------------------
         buildAppearanceSection(context, appCategory)
@@ -226,80 +226,82 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         accessibilityCategory.addPreference(showLinkButtonsPreference)
     }
 
-    private fun buildClientCertificateSection(context: Context?, appCategory: PreferenceCategory) {
-        if (Buran.FEATURE_CLIENT_CERTS) {
+    private fun buildClientCertificateSection(context: Context?, screen: PreferenceScreen) {
 
-            val aboutPref = Preference(context)
-            aboutPref.key = "unused_pref"
-            aboutPref.summary = getString(R.string.pkcs_notice)
-            aboutPref.isPersistent = false
-            aboutPref.isSelectable = false
-            appCategory.addPreference(aboutPref)
+        val certificateCategory = PreferenceCategory(context)
+        certificateCategory.key = "certificate_category"
+        certificateCategory.title = getString(R.string.client_certificate)
+        screen.addPreference(certificateCategory)
 
-            clientCertPref = Preference(context)
-            clientCertPref.title = getString(R.string.client_certificate)
-            clientCertPref.key = Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE
+        val aboutPref = Preference(context)
+        aboutPref.summary = getString(R.string.pkcs_notice)
+        aboutPref.isPersistent = false
+        aboutPref.isSelectable = false
+        certificateCategory.addPreference(aboutPref)
 
-            val clientCertUriHumanReadable = preferenceManager.sharedPreferences.getString(
-                Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE,
-                null
-            )
+        clientCertPref = Preference(context)
+        clientCertPref.title = getString(R.string.client_certificate)
+        clientCertPref.key = Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE
 
-            val hasCert = clientCertUriHumanReadable != null
-            if (!hasCert) {
-                clientCertPref.summary = getString(R.string.tap_to_select_client_certificate)
-            } else {
-                clientCertPref.summary = clientCertUriHumanReadable
+        val clientCertUriHumanReadable = preferenceManager.sharedPreferences.getString(
+            Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE,
+            null
+        )
+
+        val hasCert = clientCertUriHumanReadable != null
+        if (!hasCert) {
+            clientCertPref.summary = getString(R.string.tap_to_select_client_certificate)
+        } else {
+            clientCertPref.summary = clientCertUriHumanReadable
+        }
+
+        clientCertPref.setOnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                type = "*/*"
             }
+            startActivityForResult(intent, PREFS_SET_CLIENT_CERT_REQ)
+            true
+        }
 
-            clientCertPref.setOnPreferenceClickListener {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    type = "*/*"
-                }
-                startActivityForResult(intent, PREFS_SET_CLIENT_CERT_REQ)
-                true
-            }
-
-            appCategory.addPreference(clientCertPref)
+        certificateCategory.addPreference(clientCertPref)
 
 
-            val clientCertPassword = EditTextPreference(context)
-            clientCertPassword.key = Buran.PREF_KEY_CLIENT_CERT_PASSWORD
-            clientCertPassword.title = getString(R.string.client_certificate_password)
+        val clientCertPassword = EditTextPreference(context)
+        clientCertPassword.key = Buran.PREF_KEY_CLIENT_CERT_PASSWORD
+        clientCertPassword.title = getString(R.string.client_certificate_password)
 
-            val certPasword = preferenceManager.sharedPreferences.getString(
-                Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                null
-            )
-            if (certPasword != null && certPasword.isNotEmpty()) {
-                clientCertPassword.summary = getDots(certPasword)
-            } else {
+        val certPasword = preferenceManager.sharedPreferences.getString(
+            Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+            null
+        )
+        if (certPasword != null && certPasword.isNotEmpty()) {
+            clientCertPassword.summary = getDots(certPasword)
+        } else {
+            clientCertPassword.summary = getString(R.string.no_password)
+        }
+        clientCertPassword.dialogTitle = getString(R.string.client_certificate_password)
+        clientCertPassword.setOnPreferenceChangeListener { _, newValue ->
+            val passphrase = "$newValue"
+            if (passphrase.isEmpty()) {
                 clientCertPassword.summary = getString(R.string.no_password)
-            }
-            clientCertPassword.dialogTitle = getString(R.string.client_certificate_password)
-            clientCertPassword.setOnPreferenceChangeListener { _, newValue ->
-                val passphrase = "$newValue"
-                if (passphrase.isEmpty()) {
-                    clientCertPassword.summary = getString(R.string.no_password)
-                } else {
-                    clientCertPassword.summary = getDots(passphrase)
-                }
-
-                true//update the value
+            } else {
+                clientCertPassword.summary = getDots(passphrase)
             }
 
-            appCategory.addPreference(clientCertPassword)
+            true//update the value
+        }
 
-            useClientCertPreference = SwitchPreferenceCompat(context)
-            useClientCertPreference.key = Buran.PREF_KEY_CLIENT_CERT_ACTIVE
-            useClientCertPreference.title = getString(R.string.use_client_certificate)
-            appCategory.addPreference(useClientCertPreference)
+        certificateCategory.addPreference(clientCertPassword)
 
-            if (!hasCert) {
-                useClientCertPreference.isVisible = false
-            }
+        useClientCertPreference = SwitchPreferenceCompat(context)
+        useClientCertPreference.key = Buran.PREF_KEY_CLIENT_CERT_ACTIVE
+        useClientCertPreference.title = getString(R.string.use_client_certificate)
+        certificateCategory.addPreference(useClientCertPreference)
+
+        if (!hasCert) {
+            useClientCertPreference.isVisible = false
         }
     }
 

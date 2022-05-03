@@ -8,8 +8,6 @@ class Buran: Application() {
         const val DEFAULT_HOME_CAPSULE = "gemini://tlgs.one"
         const val DEFAULT_SEARCH_BASE = "gemini://tlgs.one/search?"
 
-        const val FEATURE_CLIENT_CERTS = true
-
         const val PREF_KEY_CLIENT_CERT_URI = "client_cert_uri"
         const val PREF_KEY_CLIENT_CERT_HUMAN_READABLE = "client_cert_uri_human_readable"
         const val PREF_KEY_CLIENT_CERT_ACTIVE = "client_cert_active"
