@@ -40,6 +40,8 @@
     <string name="unknown_host_dialog_title" tools:ignore="MissingTranslation">Unknown Host</string>
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="confirm">Ok</string>
     <string name="error">Error</string>
     <string name="no_app_installed_that_can_open">No app installed that can open %s</string>
     <string name="no_state_object_exists">File download error - no state object exists</string>

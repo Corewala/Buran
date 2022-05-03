@@ -40,6 +40,8 @@
     <string name="unknown_host_dialog_title">Hôte inconnu</string>
     <string name="download">Télécharger</string>
     <string name="cancel">Annuler</string>
+    <string name="close">Fermer</string>
+    <string name="confirm">Confirmer</string>
     <string name="error">Erreur</string>
     <string name="no_app_installed_that_can_open">Aucune app installée qui puisse ouvrir %s</string>
     <string name="no_state_object_exists">Erreur de téléchargement de fichier - aucun état d\'objet n\'existe</string>

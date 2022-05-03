@@ -389,7 +389,7 @@ class GemActivity : AppCompatActivity() {
                 loadingView(false)
                 builder
                     .setTitle(state.header.meta)
-                    .setPositiveButton("Ok"){ dialog, which ->
+                    .setPositiveButton(getString(R.string.confirm)){ dialog, which ->
                         request("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
@@ -503,7 +503,7 @@ class GemActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.error))
                 .setMessage(message)
-                .setPositiveButton("OK"){ _, _ ->
+                .setPositiveButton(getString(R.string.close)){ _, _ ->
 
                 }
                 .show()
