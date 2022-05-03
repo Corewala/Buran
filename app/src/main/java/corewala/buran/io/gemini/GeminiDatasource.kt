@@ -32,12 +32,9 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private var socketFactory: SSLSocketFactory? = null
 
-    override fun request(address: String, forceDownload: Boolean, onUpdate: (state: GemState) -> Unit) {
+     override fun request(address: String, forceDownload: Boolean, clientCertAllowed: Boolean, onUpdate: (state: GemState) -> Unit) {
         this.forceDownload = forceDownload
-        request(address, onUpdate)
-    }
 
-    override fun request(address: String, onUpdate: (state: GemState) -> Unit) {
         this.onUpdate = onUpdate
 
         val uri = URI.create(address)
@@ -45,29 +42,29 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         onUpdate(GemState.Requesting(uri))
 
         GlobalScope.launch {
-            geminiRequest(uri, onUpdate)
+            geminiRequest(uri, onUpdate, clientCertAllowed)
         }
     }
 
-    private fun initSSLFactory(protocol: String){
+    private fun initSSLFactory(protocol: String, clientCertAllowed: Boolean){
         val sslContext = when (protocol) {
             "TLS_ALL" -> SSLContext.getInstance("TLS")
             else -> SSLContext.getInstance(protocol)
         }
 
-        sslContext.init(buranKeyManager.getFactory()?.keyManagers, DummyTrustManager.get(), null)
+        sslContext.init(buranKeyManager.getFactory(clientCertAllowed)?.keyManagers, DummyTrustManager.get(), null)
         socketFactory = sslContext.socketFactory
     }
 
-    private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit){
+    private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertAllowed: Boolean){
         val protocol = "TLS"
         val useClientCert = prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)
 
         //Update factory if operating mode has changed
         when {
-            socketFactory == null -> initSSLFactory(protocol!!)
-            useClientCert && !buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!)
-            !useClientCert && buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!)
+            socketFactory == null -> initSSLFactory(protocol!!, clientCertAllowed)
+            useClientCert && !buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!, clientCertAllowed)
+            !useClientCert && buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!, clientCertAllowed)
         }
 
         val socket: SSLSocket?
@@ -124,7 +121,8 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
         when {
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
-            header.code == GeminiResponse.REDIRECT -> request(URI.create(header.meta).toString(), onUpdate)
+            header.code == GeminiResponse.REDIRECT -> request(URI.create(header.meta).toString(), false, false, onUpdate)
+            header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
             header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
             header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, uri, header, onUpdate)
             header.meta.startsWith("text/") -> getString(socket, uri, header, onUpdate)
@@ -225,7 +223,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     override fun goBack(onUpdate: (state: GemState) -> Unit) {
         runtimeHistory.removeLast()
-        request(runtimeHistory.last().toString(), onUpdate)
+        request(runtimeHistory.last().toString(), false, false, onUpdate)
     }
 
     //This just forces the factory to rebuild before the next request

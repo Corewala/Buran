@@ -71,7 +71,7 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            model.request(address)
+            model.request(address, false)
         }
 
         override fun openBrowser(address: String) = openWebLink(address)
@@ -393,12 +393,24 @@ class GemActivity : AppCompatActivity() {
                         request("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
-                    setNegativeButton(R.string.cancel){ dialog, which ->
+                    setNegativeButton(getString(R.string.cancel)){ dialog, which ->
                         editText.hideKeyboard()
                     }
                     setView(dialogLayout)
                     show()
                 }
+            }
+
+            is GemState.ClientCertRequired -> runOnUiThread {
+                loadingView(false)
+                AlertDialog.Builder(this, R.style.AppDialogTheme)
+                    .setTitle(getString(R.string.client_certificate_required))
+                    .setMessage(state.header.meta)
+                    .setPositiveButton(getString(R.string.use_client_certificate)) { _, _ ->
+                        model.request(state.uri.toString(), true)
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                    .show()
             }
 
             is GemState.Requesting -> loadingView(true)
@@ -672,7 +684,7 @@ class GemActivity : AppCompatActivity() {
         if(getInternetStatus()){
             if(initialised){
                 loadingView(true)
-                return model.request(address)
+                return model.request(address, false)
             }else{
                 val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

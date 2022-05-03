@@ -65,7 +65,8 @@
     <string name="tap_to_select_client_certificate">Cliquez pour sélectionner un certificat client</string>
     <string name="client_certificate_password">Mot de passe du Certificat Client</string>
     <string name="no_password">Pas de mot de passe</string>
-    <string name="use_client_certificate">Utiliser un Certificat Client</string>
+    <string name="use_client_certificate">Utiliser Certificat Client</string>
+    <string name="client_certificate_required">Certificat Client Requis</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
     <string name="check_for_updates">Rechercher des nouvelles versions</string>
     <string name="new_version_available">Nouvelle version disponible</string>

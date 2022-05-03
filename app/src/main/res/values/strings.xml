@@ -66,6 +66,7 @@
     <string name="client_certificate_password">Client Certificate Password</string>
     <string name="no_password">No Password</string>
     <string name="use_client_certificate">Use Client Certificate</string>
+    <string name="client_certificate_required">Client Certificate Required</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="new_version_available">New version available</string>

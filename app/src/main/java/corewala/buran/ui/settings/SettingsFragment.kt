@@ -294,15 +294,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
 
         certificateCategory.addPreference(clientCertPassword)
-
-        useClientCertPreference = SwitchPreferenceCompat(context)
-        useClientCertPreference.key = Buran.PREF_KEY_CLIENT_CERT_ACTIVE
-        useClientCertPreference.title = getString(R.string.use_client_certificate)
-        certificateCategory.addPreference(useClientCertPreference)
-
-        if (!hasCert) {
-            useClientCertPreference.isVisible = false
-        }
     }
 
     private fun getDots(value: String): String {
