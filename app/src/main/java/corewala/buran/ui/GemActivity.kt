@@ -402,14 +402,23 @@ class GemActivity : AppCompatActivity() {
 
             is GemState.ClientCertRequired -> runOnUiThread {
                 loadingView(false)
-                AlertDialog.Builder(this, R.style.AppDialogTheme)
+                val builder = AlertDialog.Builder(this, R.style.AppDialogTheme)
+                builder
                     .setTitle(getString(R.string.client_certificate_required))
                     .setMessage(state.header.meta)
-                    .setPositiveButton(getString(R.string.use_client_certificate)) { _, _ ->
-                        model.request(state.uri.toString(), true)
-                    }
-                    .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                    .show()
+
+                if(prefs.getString(Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE, null) != null){
+                    builder
+                        .setPositiveButton(getString(R.string.use_client_certificate)) { _, _ ->
+                            model.request(state.uri.toString(), true)
+                        }
+                        .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                        .show()
+                }else{
+                    builder
+                        .setNegativeButton(getString(R.string.close)) { _, _ -> }
+                        .show()
+                }
             }
 
             is GemState.Requesting -> loadingView(true)
