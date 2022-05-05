@@ -39,28 +39,23 @@ class BuranUpdates {
         return latestVersion
     }
 
-
-
-    fun installUpdate(context: Context, latestVersion: String) {
+    fun installUpdate(context: Context, latestVersion: String){
         val updateUrl = "https://github.com/Corewala/Buran/releases/download/$latestVersion/Buran-$latestVersion.apk"
-        val updateFileName = "Buran.apk"
-        val updateDestination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path + "/$updateFileName"
+        var updateDestination = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/Buran.apk"
         val fileUri = Uri.parse("file://$updateDestination")
         val packageFile = File(updateDestination)
-        if (packageFile.exists()){
+        if(packageFile.exists()){
             packageFile.delete()
         }
 
-        val request = DownloadManager.Request(Uri.parse(updateUrl))
-        request.setTitle(context.getString(R.string.app_name) )
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
+        val downloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        val downloadUri = Uri.parse(updateUrl)
+        val request = DownloadManager.Request(downloadUri)
 
+        request.setTitle(context.getString(R.string.app_name))
+        request.setDescription("")
         request.setDestinationUri(fileUri)
         request.setMimeType("application/vnd.android.package-archive")
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        val updateDownloadManager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-        println("Downloading update")
-        updateDownloadManager.enqueue(request)
 
         val contentUri = FileProvider.getUriForFile(
             context,
@@ -68,24 +63,29 @@ class BuranUpdates {
             packageFile
         )
 
-        val updateDownloadReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
+        val updateDownloadReceiver: BroadcastReceiver = object : BroadcastReceiver(){
+            override fun onReceive(context: Context, intent: Intent){
                 val intent = Intent(Intent.ACTION_VIEW)
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
+                    intent.data = contentUri
                 } else {
-                    intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    intent.setDataAndType(
+                        fileUri,
+                        "application/vnd.android.package-archive"
+                    )
                 }
-
                 println("Installing update")
                 context.startActivity(intent)
+                context.unregisterReceiver(this)
             }
         }
-
         context.registerReceiver(updateDownloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-        packageFile.delete()
+        downloadManager.enqueue(request)
     }
 }
