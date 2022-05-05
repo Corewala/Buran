@@ -389,11 +389,11 @@ class GemActivity : AppCompatActivity() {
                 loadingView(false)
                 builder
                     .setTitle(state.header.meta)
-                    .setPositiveButton(getString(R.string.confirm)){ dialog, which ->
+                    .setPositiveButton(getString(R.string.confirm).toUpperCase()){ dialog, which ->
                         request("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
-                    .setNegativeButton(getString(R.string.cancel)){ dialog, which ->
+                    .setNegativeButton(getString(R.string.cancel).toUpperCase()){ dialog, which ->
                         editText.hideKeyboard()
                     }
                     .setView(dialogLayout)
@@ -409,14 +409,14 @@ class GemActivity : AppCompatActivity() {
 
                 if(prefs.getString(Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE, null) != null){
                     builder
-                        .setPositiveButton(getString(R.string.use_client_certificate)) { _, _ ->
+                        .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
                             model.request(state.uri.toString(), true)
                         }
-                        .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                        .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                         .show()
                 }else{
                     builder
-                        .setNegativeButton(getString(R.string.close)) { _, _ -> }
+                        .setNegativeButton(getString(R.string.close).toUpperCase()) { _, _ -> }
                         .show()
                 }
             }
@@ -449,11 +449,11 @@ class GemActivity : AppCompatActivity() {
                         AlertDialog.Builder(this, R.style.AppDialogTheme)
                             .setTitle("$download: ${state.header.meta}")
                             .setMessage("${state.uri}")
-                            .setPositiveButton(getString(R.string.download)) { _, _ ->
+                            .setPositiveButton(getString(R.string.download).toUpperCase()) { _, _ ->
                                 loadingView(true)
                                 model.requestBinaryDownload(state.uri)
                             }
-                            .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                            .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                             .show()
                     }else{
                         Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
@@ -470,11 +470,11 @@ class GemActivity : AppCompatActivity() {
                     AlertDialog.Builder(this, R.style.AppDialogTheme)
                         .setTitle(R.string.unknown_host_dialog_title)
                         .setMessage("Host not found: ${state.uri}\n\nSearch with TLGS instead?")
-                        .setPositiveButton(getString(R.string.search)) { _, _ ->
+                        .setPositiveButton(getString(R.string.search).toUpperCase()) { _, _ ->
                             loadingView(true)
                             omniTerm.search(state.uri.toString(), searchbase)
                         }
-                        .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+                        .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                         .show()
                 }
             }
@@ -512,7 +512,7 @@ class GemActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.error))
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.close)){ _, _ ->
+                .setPositiveButton(getString(R.string.close).toUpperCase()){ _, _ ->
 
                 }
                 .show()
