@@ -62,10 +62,6 @@ class OmniTerm(private val listener: Listener) {
         if(invokeListener) listener.request(address)
     }
 
-    fun traverse(address: String): String {
-        return OppenURI(address).traverse().toString()
-    }
-
     fun reset(){
         uri = penultimate.copy()
     }
