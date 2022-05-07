@@ -56,8 +56,7 @@ class OmniTerm(private val listener: Listener) {
             else -> uri.resolve(link)
         }
 
-        //todo - fix this, the double slash fix breaks the scheme, so this hack puts it back... uggh
-        val address = uri.toString().replace("%2F", "/").replace("//", "/").replace("gemini:/", "gemini://")
+        val address = uri.toString().replace("//", "/").replace("gemini:/", "gemini://")
         println("OmniTerm resolved address: $address")
 
         if(invokeListener) listener.request(address)
