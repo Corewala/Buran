@@ -184,12 +184,10 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private fun getBinary(socket: SSLSocket?, uri: URI, header: GeminiResponse.Header, onUpdate: (state: GemState) -> Unit){
 
-        var filename: String? = null
-        val fileSegmentIndex: Int = uri.path.lastIndexOf('/')
-
-        when {
-            fileSegmentIndex != -1 -> filename = uri.path.substring(fileSegmentIndex + 1)
-        }
+        val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
+        val filename = (1..12)
+            .map{charset.random()}
+            .joinToString("")
 
         val host = uri.host.replace(".", "_")
         val cacheName = "${host}_$filename"
