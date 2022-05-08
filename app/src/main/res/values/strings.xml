@@ -37,7 +37,8 @@
     <string name="move_down">Move down</string>
     <string name="move_up">Move up</string>
     <string name="unknown_mime_dialog_title">Unknown Mime Type</string>
-    <string name="unknown_host_dialog_title" tools:ignore="MissingTranslation">Unknown Host</string>
+    <string name="unknown_host">Unknown Host</string>
+    <string name="search_instead">Search instead?</string>
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>

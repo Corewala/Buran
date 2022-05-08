@@ -37,7 +37,8 @@
     <string name="move_down">Déplacer vers le bas</string>
     <string name="move_up">Déplacer vers le haut</string>
     <string name="unknown_mime_dialog_title">Type Mime inconnu</string>
-    <string name="unknown_host_dialog_title">Hôte inconnu</string>
+    <string name="unknown_host">Hôte inconnu</string>
+    <string name="search_instead">Rechercher au lieu?</string>
     <string name="download">Télécharger</string>
     <string name="cancel">Annuler</string>
     <string name="close">Fermer</string>

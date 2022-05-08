@@ -468,8 +468,8 @@ class GemActivity : AppCompatActivity() {
                     )
                     loadingView(false)
                     AlertDialog.Builder(this, R.style.AppDialogTheme)
-                        .setTitle(R.string.unknown_host_dialog_title)
-                        .setMessage("Host not found: ${state.uri}\n\nSearch with TLGS instead?")
+                        .setTitle(getString(R.string.unknown_host))
+                        .setMessage("${getString(R.string.unknown_host)}: ${state.uri}\n\n${getString(R.string.search_instead)}")
                         .setPositiveButton(getString(R.string.search).toUpperCase()) { _, _ ->
                             loadingView(true)
                             omniTerm.search(state.uri.toString(), searchbase)
