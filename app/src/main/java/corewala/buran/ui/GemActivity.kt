@@ -88,7 +88,7 @@ class GemActivity : AppCompatActivity() {
         if(longTap){
             var globalURI: String
             if(!uri.toString().contains("//")){
-                globalURI = (omniTerm.getCurrent() + uri.toString()).replace("%2F", "/").replace("//", "/").replace("gemini:/", "gemini://")
+                globalURI = (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace("gemini:/", "gemini://")
             } else {
                 globalURI = uri.toString()
             }
