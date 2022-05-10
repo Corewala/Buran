@@ -50,9 +50,9 @@ class OmniTerm(private val listener: Listener) {
      */
     private fun navigation(link: String, invokeListener: Boolean) {
         when {
-            link.startsWith("http") -> listener.openBrowser(link)
             link.startsWith(GEM_SCHEME) -> uri.set(link)
             link.startsWith("//") -> uri.set("gemini:$link")
+            link.contains(":") -> listener.openExternal(link)
             else -> uri.resolve(link)
         }
 
@@ -89,6 +89,6 @@ class OmniTerm(private val listener: Listener) {
 
     interface Listener{
         fun request(address: String)
-        fun openBrowser(address: String)
+        fun openExternal(address: String)
     }
 }

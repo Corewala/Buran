@@ -75,7 +75,7 @@ class GemActivity : AppCompatActivity() {
             model.request(address, false)
         }
 
-        override fun openBrowser(address: String) = openWebLink(address)
+        override fun openExternal(address: String) = openExternalLink(address)
     })
 
     private var internetStatus: Boolean = false
@@ -85,13 +85,15 @@ class GemActivity : AppCompatActivity() {
     lateinit var adapter: AbstractGemtextAdapter
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
+        println(uri.toString() + "COPE")
         if(longTap){
             var globalURI: String
-            if(!uri.toString().contains("//")){
+            if(!uri.toString().contains("//") and !uri.toString().contains(":")){
                 globalURI = (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace("gemini:/", "gemini://")
             } else {
                 globalURI = uri.toString()
             }
+            println(globalURI + "COPE")
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, globalURI)
@@ -533,7 +535,7 @@ class GemActivity : AppCompatActivity() {
         val uri = state.uri.toString()
 
         when {
-            (uri.startsWith("http://") || uri.startsWith("https://")) -> openWebLink(uri)
+            (uri.startsWith("http://") || uri.startsWith("https://")) -> openExternalLink(uri)
             else -> {
                 val viewIntent = Intent(Intent.ACTION_VIEW)
                 viewIntent.data = Uri.parse(state.uri.toString())
@@ -552,17 +554,28 @@ class GemActivity : AppCompatActivity() {
         }
     }
 
-    private fun openWebLink(address: String){
+    private fun openExternalLink(address: String){
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
                 Buran.PREF_KEY_USE_CUSTOM_TAB,
                 true
-            )) {
+            )or !address.startsWith("http")) {
             val builder = CustomTabsIntent.Builder()
             val intent = builder.build()
-            intent.launchUrl(this, Uri.parse(address))
+
+            try {
+                intent.launchUrl(this, Uri.parse(address))
+            }catch (e: ActivityNotFoundException){
+                showAlert(
+                    String.format(
+                        getString(R.string.no_app_installed_that_can_open),
+                        address
+                    )
+                )
+            }
         }else{
             val viewIntent = Intent(Intent.ACTION_VIEW)
             viewIntent.data = Uri.parse(address)
+
             startActivity(viewIntent)
         }
     }
