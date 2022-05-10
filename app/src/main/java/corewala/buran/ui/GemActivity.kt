@@ -85,7 +85,6 @@ class GemActivity : AppCompatActivity() {
     lateinit var adapter: AbstractGemtextAdapter
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
-        println(uri.toString() + "COPE")
         if(longTap){
             var globalURI: String
             if(!uri.toString().contains("//") and !uri.toString().contains(":")){
@@ -93,7 +92,6 @@ class GemActivity : AppCompatActivity() {
             } else {
                 globalURI = uri.toString()
             }
-            println(globalURI + "COPE")
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, globalURI)
