@@ -19,6 +19,7 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
@@ -146,6 +147,12 @@ class GemActivity : AppCompatActivity() {
         binding.gemtextRecycler.layoutManager = LinearLayoutManager(this)
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
+        when (prefs.getString("theme", "theme_FollowSystem")) {
+            "theme_FollowSystem" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            "theme_Light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            "theme_Dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
         adapter = AbstractGemtextAdapter.getAdapter(onLink, inlineImage)
 
