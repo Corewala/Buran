@@ -35,6 +35,9 @@ class OmniTerm(private val listener: Listener) {
         listener.request("$searchbase$encoded")
     }
 
+    fun resolve(link: String): String{
+        return uri.resolve(link)
+    }
 
     fun navigation(link: String) {
         navigation(link, true)
@@ -51,9 +54,7 @@ class OmniTerm(private val listener: Listener) {
     private fun navigation(link: String, invokeListener: Boolean) {
         when {
             link.startsWith(GEM_SCHEME) -> uri.set(link)
-            link.startsWith("//") -> uri.set("gemini:$link")
-            link.contains(":") -> listener.openExternal(link)
-            else -> uri.resolve(link)
+            else -> listener.openExternal(link)
         }
 
         val address = uri.toString().replace("//", "/").replace("gemini:/", "gemini://")

@@ -25,9 +25,9 @@ class OppenURI constructor(private var ouri: String) {
         extractHost()
     }
 
-    fun resolve(reference: String) {
+    fun resolve(reference: String): String{
         if(ouri == "$SCHEME$host") ouri = "$ouri/"
-        return when {
+        when {
             reference.startsWith(SCHEME) -> set(reference)
             reference.startsWith(SOLIDUS) -> ouri = "$SCHEME$host$reference"
             reference.startsWith(TRAVERSE) -> {
@@ -42,6 +42,7 @@ class OppenURI constructor(private var ouri: String) {
                 }
             }
         }
+        return ouri
     }
 
     fun traverse(): OppenURI{

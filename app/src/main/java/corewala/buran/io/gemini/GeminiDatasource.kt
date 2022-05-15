@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import corewala.buran.Buran
+import corewala.buran.OppenURI
 import corewala.buran.io.GemState
 import corewala.buran.io.database.history.BuranHistory
 import corewala.buran.io.keymanager.BuranKeyManager
@@ -121,7 +122,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
         when {
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
-            header.code == GeminiResponse.REDIRECT -> request(URI.create(header.meta).toString(), false, false, onUpdate)
+            header.code == GeminiResponse.REDIRECT -> request(resolve(uri.host, header.meta), false, false, onUpdate)
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
             header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
             header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, uri, header, onUpdate)
@@ -215,6 +216,12 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
                 }
             }
         }
+    }
+
+    private fun resolve(host: String, address: String): String{
+        val ouri = OppenURI()
+        ouri.set(host)
+        return ouri.resolve(address)
     }
 
     override fun canGoBack(): Boolean = runtimeHistory.isEmpty() || runtimeHistory.size > 1
