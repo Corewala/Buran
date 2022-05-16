@@ -85,9 +85,12 @@ class GemActivity : AppCompatActivity() {
     lateinit var adapter: AbstractGemtextAdapter
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
-        val globalURI = omniTerm.resolve(uri.toString())
-
         if(longTap){
+            val globalURI = if(!uri.toString().contains("//") and !uri.toString().contains(":")){
+                (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace("gemini:/", "gemini://")
+            } else {
+                uri.toString()
+            }
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, globalURI)
@@ -101,7 +104,7 @@ class GemActivity : AppCompatActivity() {
                     binding.addressEdit.hint = getString(R.string.main_input_hint)
                     inSearch = false
                 }
-                omniTerm.navigation(globalURI)
+                omniTerm.navigation(uri.toString())
             }else{
                 Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
             }
@@ -629,7 +632,7 @@ class GemActivity : AppCompatActivity() {
         if(resultCode == RESULT_OK && (requestCode == CREATE_IMAGE_FILE_REQ || requestCode == CREATE_BINARY_FILE_REQ)){
             //todo - tidy this mess up... refactor - none of this should be here
             if(imageState == null && binaryState == null) return
-                data?.data?.let{ uri ->
+            data?.data?.let{ uri ->
                 val cachedFile = when {
                     imageState != null -> File(imageState!!.cacheUri.path ?: "")
                     binaryState != null -> File(binaryState!!.cacheUri.path ?: "")
