@@ -280,6 +280,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
             null
         )
 
+        clientCertPassword.dialogTitle = getString(R.string.client_certificate_password)
         if (certPassword != null && certPassword.isNotEmpty()) {
             clientCertPassword.summary = getDots(certPassword)
         } else {
@@ -307,7 +308,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         certificateCategory.addPreference(passwordInitVector)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
-            useBiometrics.isVisible = certPassword?.isNotEmpty() ?: false
+            useBiometrics.isVisible = (certPassword?.isNotEmpty() ?: false) or useBiometrics.isChecked
 
             useBiometrics.setOnPreferenceChangeListener { _, newValue ->
                 val biometricManager = BuranBiometricManager()
@@ -333,7 +334,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
                             val initializationVector = encryptedData.initializationVector
                             passwordInitVector.text = initializationVector.contentToString()
                             passwordCiphertext.text = ciphertext.contentToString()
-                            clientCertPassword.text = "encrypted"
+                            clientCertPassword.text = null
                         }else{
                             val ciphertext = biometricManager.decodeByteArray(passwordCiphertext.text)
                             clientCertPassword.text = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
