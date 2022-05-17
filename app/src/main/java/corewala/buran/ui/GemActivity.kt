@@ -71,7 +71,6 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            println("L")
             gemRequest(address)
         }
 
