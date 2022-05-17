@@ -754,16 +754,14 @@ class GemActivity : AppCompatActivity() {
     }
 
     private fun request(address: String){
-        val certPassword = if((address.toURI().host == omniTerm.getCurrent().toURI().host)){
-            decryptedCertPassword
-        }else{
-            null
+        if(address.toURI().host != omniTerm.getCurrent().toURI().host) {
+            decryptedCertPassword = null
         }
 
         if(getInternetStatus()){
             if(initialised){
                 loadingView(true)
-                return model.request(address, certPassword)
+                return model.request(address, decryptedCertPassword)
             }else{
                 val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
