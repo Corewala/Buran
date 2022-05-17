@@ -18,7 +18,6 @@ import corewala.buran.Buran
 import corewala.buran.R
 import corewala.buran.io.keymanager.BuranBiometricManager
 
-
 const val PREFS_SET_CLIENT_CERT_REQ = 20
 
 class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
@@ -26,7 +25,6 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
     lateinit var prefs: SharedPreferences
 
     private lateinit var clientCertPref: Preference
-    private lateinit var useClientCertPreference: SwitchPreferenceCompat
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
@@ -420,6 +418,5 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
             readableReference
         ).apply()
         clientCertPref.summary = readableReference
-        useClientCertPreference.isChecked = true
     }
 }
