@@ -558,8 +558,8 @@ class GemActivity : AppCompatActivity() {
             )!!
         )
 
-        biometricManager.authenticateToDecryptData(initializationVector)
         biometricManager.createBiometricPrompt(this, this, callback)
+        biometricManager.authenticateToDecryptData(initializationVector)
     }
 
     private fun showAlert(message: String) = runOnUiThread{
