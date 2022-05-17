@@ -26,6 +26,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import corewala.*
 import corewala.buran.BuildConfig
 import corewala.buran.Buran
 import corewala.buran.OmniTerm
@@ -47,10 +48,6 @@ import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
-import corewala.hideKeyboard
-import corewala.showKeyboard
-import corewala.toPx
-import corewala.visibleRetainingSpace
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -74,7 +71,7 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            model.request(address, null)
+            request(address)
         }
 
         override fun openExternal(address: String) = openExternalLink(address)
@@ -423,13 +420,11 @@ class GemActivity : AppCompatActivity() {
                             if(prefs.getBoolean("use_biometrics", false) and !decryptedCertPassword.isNullOrEmpty()){
                                 biometricSecureRequest(state.uri.toString())
                             }else{
-                                model.request(
-                                    state.uri.toString(),
-                                    prefs.getString(
-                                        Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                                        decryptedCertPassword
-                                    )
+                                decryptedCertPassword = prefs.getString(
+                                    Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                    null
                                 )
+                                request(state.uri.toString())
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -549,8 +544,7 @@ class GemActivity : AppCompatActivity() {
                 )
 
                 decryptedCertPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
-
-                model.request(address, decryptedCertPassword)
+                request(address)
             }
         }
 
@@ -760,10 +754,16 @@ class GemActivity : AppCompatActivity() {
     }
 
     private fun request(address: String){
+        val certPassword = if((address.toURI().host == omniTerm.getCurrent().toURI().host)){
+            decryptedCertPassword
+        }else{
+            null
+        }
+
         if(getInternetStatus()){
             if(initialised){
                 loadingView(true)
-                return model.request(address, null)
+                return model.request(address, certPassword)
             }else{
                 val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
