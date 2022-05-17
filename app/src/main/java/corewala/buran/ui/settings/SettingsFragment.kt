@@ -7,13 +7,16 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.biometric.BiometricPrompt
 import androidx.preference.*
 import corewala.buran.Buran
 import corewala.buran.R
+import corewala.buran.io.keymanager.BuranBiometricManager
 
 
 const val PREFS_SET_CLIENT_CERT_REQ = 20
@@ -272,28 +275,98 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         clientCertPassword.key = Buran.PREF_KEY_CLIENT_CERT_PASSWORD
         clientCertPassword.title = getString(R.string.client_certificate_password)
 
-        val certPasword = preferenceManager.sharedPreferences.getString(
+        val certPassword = preferenceManager.sharedPreferences.getString(
             Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
             null
         )
-        if (certPasword != null && certPasword.isNotEmpty()) {
-            clientCertPassword.summary = getDots(certPasword)
+
+        if (certPassword != null && certPassword.isNotEmpty()) {
+            clientCertPassword.summary = getDots(certPassword)
         } else {
             clientCertPassword.summary = getString(R.string.no_password)
         }
-        clientCertPassword.dialogTitle = getString(R.string.client_certificate_password)
+        clientCertPassword.isVisible = !preferenceManager.sharedPreferences.getBoolean("use_biometrics", false)
+        certificateCategory.addPreference(clientCertPassword)
+
+        val useBiometrics = SwitchPreferenceCompat(context)
+        useBiometrics.setDefaultValue(false)
+        useBiometrics.key = "use_biometrics"
+        useBiometrics.title = getString(R.string.biometric_cert_verification)
+        useBiometrics.isVisible = false
+        certificateCategory.addPreference(useBiometrics)
+
+
+        val passwordCiphertext = EditTextPreference(context)
+        passwordCiphertext.key = "password_ciphertext"
+        passwordCiphertext.isVisible = false
+        certificateCategory.addPreference(passwordCiphertext)
+
+        val passwordInitVector = EditTextPreference(context)
+        passwordInitVector.key = "password_init_vector"
+        passwordInitVector.isVisible = false
+        certificateCategory.addPreference(passwordInitVector)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            useBiometrics.isVisible = certPassword?.isNotEmpty() ?: false
+
+            useBiometrics.setOnPreferenceChangeListener { _, newValue ->
+                val biometricManager = BuranBiometricManager()
+
+                val callback = object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                        super.onAuthenticationError(errorCode, errString)
+                        println("Authentication error: $errorCode: $errString")
+                        useBiometrics.isChecked = !(newValue as Boolean)
+                    }
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+                        println("Authentication failed")
+                        useBiometrics.isChecked = !(newValue as Boolean)
+                    }
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        println("Authentication succeeded")
+
+                        if(newValue as Boolean){
+                            val encryptedData = biometricManager.encryptData(certPassword!!, result.cryptoObject?.cipher!!)
+                            val ciphertext = encryptedData.ciphertext
+                            val initializationVector = encryptedData.initializationVector
+                            passwordInitVector.text = initializationVector.contentToString()
+                            passwordCiphertext.text = ciphertext.contentToString()
+                            clientCertPassword.text = "encrypted"
+                        }else{
+                            val ciphertext = biometricManager.decodeByteArray(passwordCiphertext.text)
+                            clientCertPassword.text = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
+                            clientCertPassword.summary = getDots(clientCertPassword.text)
+                        }
+                        clientCertPassword.isVisible = !(newValue as Boolean)
+                    }
+                }
+
+                biometricManager.createBiometricPrompt(requireContext(), this, callback)
+
+                if(newValue as Boolean){
+                    biometricManager.authenticateToEncryptData()
+                }else{
+                    val initializationVector = biometricManager.decodeByteArray(passwordInitVector.text)
+                    biometricManager.authenticateToDecryptData(initializationVector)
+                }
+
+                true
+            }
+        }
+
         clientCertPassword.setOnPreferenceChangeListener { _, newValue ->
             val passphrase = "$newValue"
             if (passphrase.isEmpty()) {
                 clientCertPassword.summary = getString(R.string.no_password)
+                useBiometrics.isVisible = false
             } else {
                 clientCertPassword.summary = getDots(passphrase)
+                useBiometrics.isVisible = true
             }
-
             true//update the value
         }
-
-        certificateCategory.addPreference(clientCertPassword)
     }
 
     private fun getDots(value: String): String {
