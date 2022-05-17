@@ -20,6 +20,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.biometric.BiometricPrompt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
@@ -35,6 +36,7 @@ import corewala.buran.io.database.BuranDatabase
 import corewala.buran.io.database.bookmarks.BookmarksDatasource
 import corewala.buran.io.gemini.Datasource
 import corewala.buran.io.gemini.GeminiResponse
+import corewala.buran.io.keymanager.BuranBiometricManager
 import corewala.buran.io.update.BuranUpdates
 import corewala.buran.ui.bookmarks.BookmarkDialog
 import corewala.buran.ui.bookmarks.BookmarksDialog
@@ -72,7 +74,7 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            model.request(address, false)
+            model.request(address, null)
         }
 
         override fun openExternal(address: String) = openExternalLink(address)
@@ -416,7 +418,17 @@ class GemActivity : AppCompatActivity() {
                 if(prefs.getString(Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE, null) != null){
                     builder
                         .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
-                            model.request(state.uri.toString(), true)
+                            if(prefs.getBoolean("use_biometrics", false)){
+                                biometricSecureRequest(state.uri.toString())
+                            }else{
+                                model.request(
+                                    state.uri.toString(),
+                                    prefs.getString(
+                                        Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                        null
+                                    )
+                                )
+                            }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                         .show()
@@ -509,6 +521,45 @@ class GemActivity : AppCompatActivity() {
             request(uri.toString())
             return
         }
+    }
+
+    private fun biometricSecureRequest(address: String){
+        val biometricManager = BuranBiometricManager()
+
+        val callback = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                println("Authentication error: $errorCode: $errString")
+            }
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                println("Authentication failed")
+            }
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                println("Authentication succeeded")
+
+                val ciphertext = biometricManager.decodeByteArray(
+                    prefs.getString(
+                        "password_ciphertext",
+                        null
+                    )!!
+                )
+
+                val certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
+                model.request(address, certPassword)
+            }
+        }
+
+        val initializationVector = biometricManager.decodeByteArray(
+            prefs.getString(
+                "password_init_vector",
+                null
+            )!!
+        )
+
+        biometricManager.authenticateToDecryptData(initializationVector)
+        biometricManager.createBiometricPrompt(this, this, callback)
     }
 
     private fun showAlert(message: String) = runOnUiThread{
@@ -709,7 +760,7 @@ class GemActivity : AppCompatActivity() {
         if(getInternetStatus()){
             if(initialised){
                 loadingView(true)
-                return model.request(address, false)
+                return model.request(address, null)
             }else{
                 val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

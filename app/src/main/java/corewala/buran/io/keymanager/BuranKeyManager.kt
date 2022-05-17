@@ -19,23 +19,22 @@ class BuranKeyManager(val context: Context, val onKeyError: (error: String) -> U
     var lastCallUsedKey = false
 
     //If the user has a key loaded load it here - or else return null
-    fun getFactory(clientCertAllowed: Boolean): KeyManagerFactory? {
+    fun getFactory(clientCertPassword: String?): KeyManagerFactory? {
         val isClientCertActive = prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)
         return when {
-            isClientCertActive and clientCertAllowed -> {
+            isClientCertActive and (clientCertPassword != null) -> {
                 lastCallUsedKey = true
                 val keyStore: KeyStore = KeyStore.getInstance("pkcs12")
 
                 val uriStr = prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, "")
-                val password = prefs.getString(Buran.PREF_KEY_CLIENT_CERT_PASSWORD, "")
                 val uri = Uri.parse(uriStr)
                 try {
                     context.contentResolver?.openInputStream(uri)?.use {
                         try {
-                            keyStore.load(it, password?.toCharArray())
+                            keyStore.load(it, clientCertPassword?.toCharArray())
                             val keyManagerFactory: KeyManagerFactory =
                                 KeyManagerFactory.getInstance("X509")
-                            keyManagerFactory.init(keyStore, password?.toCharArray())
+                            keyManagerFactory.init(keyStore, clientCertPassword?.toCharArray())
                             return@use keyManagerFactory
                         } catch (ioe: IOException) {
                             onKeyError("${ioe.message}")
