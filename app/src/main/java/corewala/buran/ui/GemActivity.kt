@@ -71,7 +71,8 @@ class GemActivity : AppCompatActivity() {
 
     private val omniTerm = OmniTerm(object : OmniTerm.Listener {
         override fun request(address: String) {
-            request(address)
+            println("L")
+            gemRequest(address)
         }
 
         override fun openExternal(address: String) = openExternalLink(address)
@@ -262,7 +263,7 @@ class GemActivity : AppCompatActivity() {
                     }
                     R.id.overflow_menu_bookmarks -> {
                         bookmarksDialog = BookmarksDialog(this, bookmarkDatasource) { bookmark ->
-                            request(bookmark.uri.toString())
+                            gemRequest(bookmark.uri.toString())
                         }
                         bookmarksDialog?.show()
                     }
@@ -278,7 +279,7 @@ class GemActivity : AppCompatActivity() {
                         this,
                         db.history()
                     ) { historyAddress ->
-                        request(historyAddress)
+                        gemRequest(historyAddress)
                     }
                     R.id.overflow_menu_about -> AboutDialog.show(this)
                     R.id.overflow_menu_settings -> {
@@ -294,7 +295,7 @@ class GemActivity : AppCompatActivity() {
                 Buran.DEFAULT_HOME_CAPSULE
             )
             omniTerm.history.clear()
-            request(home!!)
+            gemRequest(home!!)
         }
 
         binding.pullToRefresh.setOnRefreshListener {
@@ -320,7 +321,7 @@ class GemActivity : AppCompatActivity() {
         omniTerm.getCurrent().run{
             binding.addressEdit.setText(this)
             focusEnd()
-            request(this)
+            gemRequest(this)
         }
     }
 
@@ -397,7 +398,7 @@ class GemActivity : AppCompatActivity() {
                 builder
                     .setTitle(state.header.meta)
                     .setPositiveButton(getString(R.string.confirm).toUpperCase()){ dialog, which ->
-                        request("${state.uri}?${Uri.encode(editText.text.toString())}")
+                        gemRequest("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
                     .setNegativeButton(getString(R.string.cancel).toUpperCase()){ dialog, which ->
@@ -424,7 +425,7 @@ class GemActivity : AppCompatActivity() {
                                     Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
                                     null
                                 )
-                                request(state.uri.toString())
+                                gemRequest(state.uri.toString())
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -515,7 +516,7 @@ class GemActivity : AppCompatActivity() {
         val uri = intent.data
         if(uri != null){
             binding.addressEdit.setText(uri.toString())
-            request(uri.toString())
+            gemRequest(uri.toString())
             return
         }
     }
@@ -544,7 +545,7 @@ class GemActivity : AppCompatActivity() {
                 )
 
                 decryptedCertPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
-                request(address)
+                gemRequest(address)
             }
         }
 
@@ -753,7 +754,7 @@ class GemActivity : AppCompatActivity() {
         return false
     }
 
-    private fun request(address: String){
+    private fun gemRequest(address: String){
         if(address.toURI().host != omniTerm.getCurrent().toURI().host) {
             decryptedCertPassword = null
         }
@@ -776,7 +777,7 @@ class GemActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (omniTerm.canGoBack()){
-            request(omniTerm.goBack())
+            gemRequest(omniTerm.goBack())
         }else{
             println("Buran history is empty - exiting")
             super.onBackPressed()
@@ -799,7 +800,7 @@ class GemActivity : AppCompatActivity() {
         savedInstanceState.getString("uri")?.run {
             omniTerm.set(this)
             binding.addressEdit.setText(this)
-            request(this)
+            gemRequest(this)
         }
     }
 }
