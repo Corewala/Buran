@@ -80,6 +80,8 @@ class GemActivity : AppCompatActivity() {
         override fun openExternal(address: String) = openExternalLink(address)
     })
 
+    private var decryptedCertPassword: String? = null
+
     private var internetStatus: Boolean = false
 
     private var initialised: Boolean = false
@@ -418,14 +420,14 @@ class GemActivity : AppCompatActivity() {
                 if(prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)){
                     builder
                         .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
-                            if(prefs.getBoolean("use_biometrics", false)){
+                            if(prefs.getBoolean("use_biometrics", false) and !decryptedCertPassword.isNullOrEmpty()){
                                 biometricSecureRequest(state.uri.toString())
                             }else{
                                 model.request(
                                     state.uri.toString(),
                                     prefs.getString(
                                         Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                                        null
+                                        decryptedCertPassword
                                     )
                                 )
                             }
@@ -546,8 +548,9 @@ class GemActivity : AppCompatActivity() {
                     )!!
                 )
 
-                val certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
-                model.request(address, certPassword)
+                decryptedCertPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
+
+                model.request(address, decryptedCertPassword)
             }
         }
 
