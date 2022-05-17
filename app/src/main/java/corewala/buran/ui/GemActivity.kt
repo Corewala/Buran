@@ -415,7 +415,7 @@ class GemActivity : AppCompatActivity() {
                     .setTitle(getString(R.string.client_certificate_required))
                     .setMessage(state.header.meta)
 
-                if(prefs.getString(Buran.PREF_KEY_CLIENT_CERT_HUMAN_READABLE, null) != null){
+                if(prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)){
                     builder
                         .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
                             if(prefs.getBoolean("use_biometrics", false)){

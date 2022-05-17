@@ -20,9 +20,8 @@ class BuranKeyManager(val context: Context, val onKeyError: (error: String) -> U
 
     //If the user has a key loaded load it here - or else return null
     fun getFactory(clientCertPassword: String?): KeyManagerFactory? {
-        val isClientCertActive = prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)
         return when {
-            isClientCertActive and (clientCertPassword != null) -> {
+            clientCertPassword != null -> {
                 lastCallUsedKey = true
                 val keyStore: KeyStore = KeyStore.getInstance("pkcs12")
 
