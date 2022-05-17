@@ -1,5 +1,6 @@
 package corewala.buran.io.keymanager
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
@@ -8,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import corewala.buran.Buran
 import corewala.buran.R
 import java.nio.charset.Charset
@@ -24,10 +26,6 @@ class BuranBiometricManager {
 
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
-
-    private val ENCRYPTION_BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
-    private val ENCRYPTION_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE
-    private val ENCRYPTION_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
 
     fun createBiometricPrompt(context: Context, fragment: Fragment, callback: BiometricPrompt.AuthenticationCallback){
         val executor = ContextCompat.getMainExecutor(context)
@@ -76,7 +74,7 @@ class BuranBiometricManager {
     }
 
     private fun getCipher(): Cipher {
-        val transformation = "$ENCRYPTION_ALGORITHM/$ENCRYPTION_BLOCK_MODE/$ENCRYPTION_PADDING"
+        val transformation = "${KeyProperties.KEY_ALGORITHM_AES}/${KeyProperties.BLOCK_MODE_GCM}/${KeyProperties.ENCRYPTION_PADDING_NONE}"
         return Cipher.getInstance(transformation)
     }
 
@@ -90,8 +88,8 @@ class BuranBiometricManager {
             keyName,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         ).apply {
-            setBlockModes(ENCRYPTION_BLOCK_MODE)
-            setEncryptionPaddings(ENCRYPTION_PADDING)
+            setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             setKeySize(256)
             setUserAuthenticationRequired(true)
         }.build()
