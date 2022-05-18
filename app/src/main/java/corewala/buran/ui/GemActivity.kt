@@ -257,16 +257,24 @@ class GemActivity : AppCompatActivity() {
                         inSearch = true
                     }
                     R.id.overflow_menu_sign -> {
-                        if(prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()){
-                            biometricSecureRequest(binding.addressEdit.text.toString())
-                        }else{
-                            if(certPassword.isNullOrEmpty()){
-                                certPassword = prefs.getString(
-                                    Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                                    null
-                                )
+                        if(!prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, null).isNullOrEmpty()) {
+                            if (prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()) {
+                                biometricSecureRequest(binding.addressEdit.text.toString())
+                            }else if(certPassword.isNullOrEmpty()){
+                                if (certPassword.isNullOrEmpty()) {
+                                    certPassword = prefs.getString(
+                                        Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                        null
+                                    )
+                                }
+                                refresh()
+                            }else{
+                                certPassword = null
+                                refresh()
+                                updateClientCertIcon()
                             }
-                            gemRequest(binding.addressEdit.text.toString())
+                        }else{
+                            Snackbar.make(binding.root, getString(R.string.no_certificate), Snackbar.LENGTH_LONG).show()
                         }
                     }
 
@@ -357,22 +365,6 @@ class GemActivity : AppCompatActivity() {
             }
         }
 
-        when {
-            !prefs.getString(
-                Buran.PREF_KEY_CLIENT_CERT_URI,
-                null
-            ).isNullOrEmpty() -> {
-                binding.addressEdit.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.vector_client_cert,
-                    0,
-                    0,
-                    0
-                )
-                binding.addressEdit.compoundDrawablePadding = 6.toPx().toInt()
-            }
-            //else -> hideClientCertShield()
-        }
-
         val showInlineIcons = prefs.getBoolean(
             "show_inline_icons",
             true
@@ -397,8 +389,27 @@ class GemActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideClientCertShield(){
-        binding.addressEdit.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+    private fun updateClientCertIcon(){
+        if (!prefs.getString(
+                Buran.PREF_KEY_CLIENT_CERT_URI,
+                null
+            ).isNullOrEmpty()){
+            if(certPassword.isNullOrEmpty()){
+                binding.addressEdit.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            }else{
+                binding.addressEdit.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.vector_client_cert,
+                    0,
+                    0,
+                    0
+                )
+            }
+        }
     }
 
     private fun handleState(state: GemState) {
@@ -450,6 +461,7 @@ class GemActivity : AppCompatActivity() {
                                     )
                                 }
                                 gemRequest(state.uri.toString())
+                                updateClientCertIcon()
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -468,7 +480,8 @@ class GemActivity : AppCompatActivity() {
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
             is GemState.ClientCertError -> {
-                //hideClientCertShield()
+                certPassword = null
+                updateClientCertIcon()
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
             is GemState.ResponseGemtext -> renderGemtext(state)
@@ -575,6 +588,7 @@ class GemActivity : AppCompatActivity() {
 
                 certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
                 gemRequest(address)
+                updateClientCertIcon()
             }
         }
 
