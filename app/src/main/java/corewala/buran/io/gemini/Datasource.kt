@@ -8,7 +8,6 @@ import java.net.URI
 interface Datasource {
     fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit)
     fun canGoBack(): Boolean
-    fun goBack(onUpdate: (state: GemState) -> Unit)
 
     companion object{
         fun factory(context: Context, history: BuranHistory): Datasource {

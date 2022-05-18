@@ -8,6 +8,7 @@ import corewala.buran.OppenURI
 import corewala.buran.io.GemState
 import corewala.buran.io.database.history.BuranHistory
 import corewala.buran.io.keymanager.BuranKeyManager
+import corewala.toURI
 import corewala.toUri
 import java.io.*
 import java.lang.IllegalStateException
@@ -30,7 +31,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private var socketFactory: SSLSocketFactory? = null
 
-     override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit) {
+    override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit) {
         this.forceDownload = forceDownload
 
         this.onUpdate = onUpdate
@@ -113,7 +114,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
         when {
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
-            header.code == GeminiResponse.REDIRECT -> request(resolve(uri.host, header.meta), false, null, onUpdate)
+            header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri.host, header.meta)))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
             header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
             header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, uri, header, onUpdate)
@@ -216,11 +217,6 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
     }
 
     override fun canGoBack(): Boolean = runtimeHistory.isEmpty() || runtimeHistory.size > 1
-
-    override fun goBack(onUpdate: (state: GemState) -> Unit) {
-        runtimeHistory.removeLast()
-        request(runtimeHistory.last().toString(), false, null, onUpdate)
-    }
 
     //This just forces the factory to rebuild before the next request
     fun invalidate() {

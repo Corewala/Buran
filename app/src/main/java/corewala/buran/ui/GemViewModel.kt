@@ -28,15 +28,15 @@ class GemViewModel: ViewModel() {
         }
     }
 
-    fun requestBinaryDownload(uri: URI) {
-        gemini.request(uri.toString(), true, null){ state ->
+    fun requestBinaryDownload(uri: URI, clientCertPassword: String?) {
+        gemini.request(uri.toString(), true, clientCertPassword){ state ->
             onState(state)
         }
     }
 
     //todo - same action as above... refactor
-    fun requestInlineImage(uri: URI, onImageReady: (cacheUri: Uri?) -> Unit){
-        gemini.request(uri.toString(), false, null){ state ->
+    fun requestInlineImage(uri: URI, clientCertPassword: String?, onImageReady: (cacheUri: Uri?) -> Unit){
+        gemini.request(uri.toString(), false, clientCertPassword){ state ->
             when (state) {
                 is GemState.ResponseImage -> onImageReady(state.cacheUri)
                 else -> onState(state)

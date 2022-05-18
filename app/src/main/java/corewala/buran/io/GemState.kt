@@ -10,6 +10,7 @@ sealed class GemState {
     data class NotGeminiRequest(val uri: URI) : GemState()
     data class ResponseGemtext(val uri: URI, val header: GeminiResponse.Header, val lines: List<String>) : GemState()
     data class ResponseInput(val uri: URI, val header: GeminiResponse.Header) : GemState()
+    class Redirect(val uri: String) : GemState()
     data class ResponseText(val uri: URI, val header: GeminiResponse.Header, val content: String) : GemState()
     data class ResponseImage(val uri: URI, val header: GeminiResponse.Header, val cacheUri: Uri) : GemState()
     data class ResponseBinary(val uri: URI, val header: GeminiResponse.Header, val cacheUri: Uri) : GemState()

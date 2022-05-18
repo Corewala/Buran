@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.activity.viewModels
+import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -48,6 +49,7 @@ import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
+import kotlinx.android.synthetic.main.bookmark.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -115,8 +117,13 @@ class GemActivity : AppCompatActivity() {
     private val inlineImage: (link: URI, adapterPosition: Int) -> Unit = { uri, position: Int ->
         if(getInternetStatus()){
             omniTerm.imageAddress(uri.toString())
+            val clientCertPassword = if(isHostSigned(uri)){
+                certPassword
+            }else{
+                null
+            }
             omniTerm.uri.let{
-                model.requestInlineImage(URI.create(it.toString())){ imageUri ->
+                model.requestInlineImage(URI.create(it.toString()), clientCertPassword){ imageUri ->
                     imageUri?.let{
                         runOnUiThread {
                             loadImage(position, imageUri)
@@ -249,6 +256,20 @@ class GemActivity : AppCompatActivity() {
                         binding.addressEdit.requestFocus()
                         inSearch = true
                     }
+                    R.id.overflow_menu_sign -> {
+                        if(prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()){
+                            biometricSecureRequest(binding.addressEdit.text.toString())
+                        }else{
+                            if(certPassword.isNullOrEmpty()){
+                                certPassword = prefs.getString(
+                                    Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                    null
+                                )
+                            }
+                            gemRequest(binding.addressEdit.text.toString())
+                        }
+                    }
+
                     R.id.overflow_menu_bookmark -> {
                         val name = adapter.inferTitle()
                         BookmarkDialog(
@@ -407,6 +428,8 @@ class GemActivity : AppCompatActivity() {
                     .show()
             }
 
+            is GemState.Redirect -> gemRequest(state.uri)
+
             is GemState.ClientCertRequired -> runOnUiThread {
                 loadingView(false)
                 val builder = AlertDialog.Builder(this, R.style.AppDialogTheme)
@@ -463,12 +486,17 @@ class GemActivity : AppCompatActivity() {
                     val download = getString(R.string.download)
 
                     if(getInternetStatus()) {
+                        val clientCertPassword = if(isHostSigned(state.uri)){
+                            certPassword
+                        }else{
+                            null
+                        }
                         AlertDialog.Builder(this, R.style.AppDialogTheme)
                             .setTitle("$download: ${state.header.meta}")
                             .setMessage("${state.uri}")
                             .setPositiveButton(getString(R.string.download).toUpperCase()) { _, _ ->
                                 loadingView(true)
-                                model.requestBinaryDownload(state.uri)
+                                model.requestBinaryDownload(state.uri, clientCertPassword)
                             }
                             .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                             .show()
@@ -755,11 +783,16 @@ class GemActivity : AppCompatActivity() {
         return false
     }
 
-    private fun gemRequest(address: String){
-        if(address.toURI().host != omniTerm.getCurrent().toURI().host) {
-            certPassword = null
+    private fun isHostSigned(uri: URI): Boolean{
+        if((uri.host != omniTerm.getCurrent().toURI().host) && !certPassword.isNullOrEmpty()) {
+            return false
         }
-        println(certPassword)
+        return true
+    }
+
+    private fun gemRequest(address: String){
+        val clientCertAllowed = isHostSigned(address.toURI())
+        if(!clientCertAllowed) certPassword = null
 
         if(getInternetStatus()){
             if(initialised){

@@ -5,6 +5,9 @@
             android:id="@+id/overflow_menu_search"
             android:title="@string/search"/>
         <item
+            android:id="@+id/overflow_menu_sign"
+            android:title="@string/sign"/>
+        <item
             android:id="@+id/overflow_menu_bookmark"
             android:title="@string/add_bookmark"/>
         <item
