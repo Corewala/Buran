@@ -2,10 +2,8 @@ package corewala.buran.io.gemini
 
 import android.content.Context
 import androidx.core.net.toUri
-import androidx.preference.PreferenceManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import corewala.buran.Buran
 import corewala.buran.OppenURI
 import corewala.buran.io.GemState
 import corewala.buran.io.database.history.BuranHistory
@@ -21,7 +19,6 @@ import javax.net.ssl.*
 
 class GeminiDatasource(private val context: Context, val history: BuranHistory): Datasource {
 
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     private val runtimeHistory = mutableListOf<URI>()
     private var forceDownload = false
 
@@ -59,13 +56,10 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertPassword: String?){
         val protocol = "TLS"
-        val useClientCert = prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)
 
         //Update factory if operating mode has changed
-        when {
-            socketFactory == null -> initSSLFactory(protocol!!, clientCertPassword)
-            useClientCert && !buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!, clientCertPassword)
-            !useClientCert && buranKeyManager.lastCallUsedKey -> initSSLFactory(protocol!!, clientCertPassword)
+        when (socketFactory) {
+            null -> initSSLFactory(protocol!!, clientCertPassword)
         }
 
         val socket: SSLSocket?

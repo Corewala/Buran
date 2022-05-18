@@ -337,10 +337,10 @@ class GemActivity : AppCompatActivity() {
         }
 
         when {
-            prefs.getBoolean(
-                Buran.PREF_KEY_CLIENT_CERT_ACTIVE,
-                false
-            ) -> {
+            !prefs.getString(
+                Buran.PREF_KEY_CLIENT_CERT_URI,
+                null
+            ).isNullOrEmpty() -> {
                 binding.addressEdit.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.vector_client_cert,
                     0,
@@ -414,7 +414,7 @@ class GemActivity : AppCompatActivity() {
                     .setTitle(getString(R.string.client_certificate_required))
                     .setMessage(state.header.meta)
 
-                if(prefs.getBoolean(Buran.PREF_KEY_CLIENT_CERT_ACTIVE, false)){
+                if(!prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, null).isNullOrEmpty()){
                     builder
                         .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
                             if(prefs.getBoolean("use_biometrics", false) and !decryptedCertPassword.isNullOrEmpty()){
