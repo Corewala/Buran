@@ -273,7 +273,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         clientCertPassword.key = Buran.PREF_KEY_CLIENT_CERT_PASSWORD
         clientCertPassword.title = getString(R.string.client_certificate_password)
 
-        val certPassword = preferenceManager.sharedPreferences.getString(
+        var certPassword = preferenceManager.sharedPreferences.getString(
             Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
             null
         )
@@ -327,6 +327,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
                         println("Authentication succeeded")
 
                         if(newValue as Boolean){
+                            println(certPassword)
                             val encryptedData = biometricManager.encryptData(certPassword!!, result.cryptoObject?.cipher!!)
                             val ciphertext = encryptedData.ciphertext
                             val initializationVector = encryptedData.initializationVector
@@ -364,6 +365,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
                 clientCertPassword.summary = getDots(passphrase)
                 useBiometrics.isVisible = true
             }
+            certPassword = passphrase
             true//update the value
         }
     }
