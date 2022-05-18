@@ -77,7 +77,7 @@ class GemActivity : AppCompatActivity() {
         override fun openExternal(address: String) = openExternalLink(address)
     })
 
-    private var decryptedCertPassword: String? = null
+    private var certPassword: String? = null
 
     private var internetStatus: Boolean = false
 
@@ -349,7 +349,7 @@ class GemActivity : AppCompatActivity() {
                 )
                 binding.addressEdit.compoundDrawablePadding = 6.toPx().toInt()
             }
-            else -> hideClientCertShield()
+            //else -> hideClientCertShield()
         }
 
         val showInlineIcons = prefs.getBoolean(
@@ -417,13 +417,15 @@ class GemActivity : AppCompatActivity() {
                 if(!prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, null).isNullOrEmpty()){
                     builder
                         .setPositiveButton(getString(R.string.use_client_certificate).toUpperCase()) { _, _ ->
-                            if(prefs.getBoolean("use_biometrics", false) and !decryptedCertPassword.isNullOrEmpty()){
+                            if(prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()){
                                 biometricSecureRequest(state.uri.toString())
                             }else{
-                                decryptedCertPassword = prefs.getString(
-                                    Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                                    null
-                                )
+                                if(certPassword.isNullOrEmpty()){
+                                    certPassword = prefs.getString(
+                                        Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                        null
+                                    )
+                                }
                                 gemRequest(state.uri.toString())
                             }
                         }
@@ -443,7 +445,7 @@ class GemActivity : AppCompatActivity() {
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
             is GemState.ClientCertError -> {
-                hideClientCertShield()
+                //hideClientCertShield()
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
             is GemState.ResponseGemtext -> renderGemtext(state)
@@ -543,7 +545,7 @@ class GemActivity : AppCompatActivity() {
                     )!!
                 )
 
-                decryptedCertPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
+                certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
                 gemRequest(address)
             }
         }
@@ -755,13 +757,14 @@ class GemActivity : AppCompatActivity() {
 
     private fun gemRequest(address: String){
         if(address.toURI().host != omniTerm.getCurrent().toURI().host) {
-            decryptedCertPassword = null
+            certPassword = null
         }
+        println(certPassword)
 
         if(getInternetStatus()){
             if(initialised){
                 loadingView(true)
-                return model.request(address, decryptedCertPassword)
+                model.request(address, certPassword)
             }else{
                 val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                 intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

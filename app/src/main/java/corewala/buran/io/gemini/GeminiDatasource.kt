@@ -57,10 +57,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
     private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertPassword: String?){
         val protocol = "TLS"
 
-        //Update factory if operating mode has changed
-        when (socketFactory) {
-            null -> initSSLFactory(protocol!!, clientCertPassword)
-        }
+        initSSLFactory(protocol!!, clientCertPassword)
 
         val socket: SSLSocket?
         try {
