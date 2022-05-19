@@ -270,7 +270,6 @@ class GemActivity : AppCompatActivity() {
                         }else{
                             certPassword = null
                             refresh()
-                            updateClientCertIcon()
                         }
                     }
 
@@ -467,7 +466,6 @@ class GemActivity : AppCompatActivity() {
                                     )
                                 }
                                 gemRequest(state.uri.toString())
-                                updateClientCertIcon()
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -594,7 +592,6 @@ class GemActivity : AppCompatActivity() {
 
                 certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
                 gemRequest(address)
-                updateClientCertIcon()
             }
         }
 
@@ -811,8 +808,8 @@ class GemActivity : AppCompatActivity() {
     }
 
     private fun gemRequest(address: String){
-        val clientCertAllowed = isHostSigned(address.toURI())
-        if(!clientCertAllowed) certPassword = null
+        if(!isHostSigned(address.toURI())) certPassword = null
+        updateClientCertIcon()
 
         if(getInternetStatus()){
             if(initialised){
