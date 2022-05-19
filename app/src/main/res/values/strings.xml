@@ -73,8 +73,8 @@
     <string name="confirm_your_identity">Confirm your identity</string>
     <string name="use_biometric_unlock">Verify your biometric credentials to continue</string>
     <string name="biometric_cert_verification">Client Certificate biometrics</string>
-    <string name="sign">Certificate</string>
-    <string name="no_certificate">No Client Certificate selected</string>
+    <string name="load_cert">Load Certificate</string>
+    <string name="unload_cert">Unload Certificate</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="new_version_available">New version available</string>

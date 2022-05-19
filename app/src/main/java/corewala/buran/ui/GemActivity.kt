@@ -257,24 +257,20 @@ class GemActivity : AppCompatActivity() {
                         inSearch = true
                     }
                     R.id.overflow_menu_sign -> {
-                        if(!prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, null).isNullOrEmpty()) {
-                            if (prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()) {
-                                biometricSecureRequest(binding.addressEdit.text.toString())
-                            }else if(certPassword.isNullOrEmpty()){
-                                if (certPassword.isNullOrEmpty()) {
-                                    certPassword = prefs.getString(
-                                        Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
-                                        null
-                                    )
-                                }
-                                refresh()
-                            }else{
-                                certPassword = null
-                                refresh()
-                                updateClientCertIcon()
+                        if (prefs.getBoolean("use_biometrics", false) and certPassword.isNullOrEmpty()) {
+                            biometricSecureRequest(binding.addressEdit.text.toString())
+                        }else if(certPassword.isNullOrEmpty()){
+                            if (certPassword.isNullOrEmpty()) {
+                                certPassword = prefs.getString(
+                                    Buran.PREF_KEY_CLIENT_CERT_PASSWORD,
+                                    null
+                                )
                             }
+                            refresh()
                         }else{
-                            Snackbar.make(binding.root, getString(R.string.no_certificate), Snackbar.LENGTH_LONG).show()
+                            certPassword = null
+                            refresh()
+                            updateClientCertIcon()
                         }
                     }
 
@@ -314,6 +310,16 @@ class GemActivity : AppCompatActivity() {
                         startActivity(Intent(this, SettingsActivity::class.java))
                     }
                 }
+            }
+            if(!prefs.getString(Buran.PREF_KEY_CLIENT_CERT_URI, null).isNullOrEmpty()){
+                OverflowPopup.setItemVisibility(R.id.overflow_menu_sign, true)
+                if(certPassword.isNullOrEmpty()){
+                    OverflowPopup.setItemTitle(R.id.overflow_menu_sign, getString(R.string.load_cert))
+                }else{
+                    OverflowPopup.setItemTitle(R.id.overflow_menu_sign, getString(R.string.unload_cert))
+                }
+            }else{
+                OverflowPopup.setItemVisibility(R.id.overflow_menu_sign, false)
             }
         }
 

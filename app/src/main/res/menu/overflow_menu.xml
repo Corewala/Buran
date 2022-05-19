@@ -6,7 +6,7 @@
             android:title="@string/search"/>
         <item
             android:id="@+id/overflow_menu_sign"
-            android:title="@string/sign"/>
+            android:title="@string/load_cert"/>
         <item
             android:id="@+id/overflow_menu_bookmark"
             android:title="@string/add_bookmark"/>

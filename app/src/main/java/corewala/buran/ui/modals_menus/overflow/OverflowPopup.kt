@@ -16,9 +16,11 @@ import corewala.buran.R
 
 object OverflowPopup {
 
+    lateinit var popup: PopupMenu
+
     fun show(view: View?, onMenuOption: (menuId: Int) -> Unit){
         if(view != null) {
-            val popup = PopupMenu(view.context, view)
+            popup = PopupMenu(view.context, view)
             val inflater: MenuInflater = popup.menuInflater
             inflater.inflate(R.menu.overflow_menu, popup.menu)
             popup.setOnMenuItemClickListener { menuItem ->
@@ -29,6 +31,14 @@ object OverflowPopup {
             //insertMenuItemIcons(view.context, popup)
             popup.show()
         }
+    }
+
+    fun setItemTitle(id: Int, title: String){
+        popup.menu.findItem(id).title = title
+    }
+
+    fun setItemVisibility(id: Int, visible: Boolean){
+        popup.menu.findItem(id).isVisible = visible
     }
 
     fun insertMenuItemIcons(context: Context, popupMenu: PopupMenu) {
