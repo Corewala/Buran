@@ -376,7 +376,7 @@ class GemActivity : AppCompatActivity() {
 
         val showLinkButtons = prefs.getBoolean(
             "show_link_buttons",
-            true
+            false
         )
         adapter.linkButtons(showLinkButtons)
 
