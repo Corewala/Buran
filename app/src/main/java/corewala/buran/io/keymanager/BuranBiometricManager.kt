@@ -26,19 +26,13 @@ class BuranBiometricManager {
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    fun createBiometricPrompt(context: Context, fragment: Fragment, callback: BiometricPrompt.AuthenticationCallback){
+    fun createBiometricPrompt(context: Context, fragment: Fragment?, activity: FragmentActivity?, callback: BiometricPrompt.AuthenticationCallback){
         val executor = ContextCompat.getMainExecutor(context)
-        biometricPrompt = BiometricPrompt(fragment, executor, callback)
-        promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setConfirmationRequired(false)
-            .setTitle(context.getString(R.string.confirm_your_identity))
-            .setSubtitle(context.getString(R.string.use_biometric_unlock))
-            .setNegativeButtonText(context.getString(R.string.cancel).toUpperCase())
-            .build()
-    }
-    fun createBiometricPrompt(context: Context, activity: FragmentActivity, callback: BiometricPrompt.AuthenticationCallback){
-        val executor = ContextCompat.getMainExecutor(context)
-        biometricPrompt = BiometricPrompt(activity, executor, callback)
+        if(fragment != null){
+            biometricPrompt = BiometricPrompt(fragment, executor, callback)
+        }else if(activity != null){
+            biometricPrompt = BiometricPrompt(activity, executor, callback)
+        }
         promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setConfirmationRequired(false)
             .setTitle(context.getString(R.string.confirm_your_identity))

@@ -600,7 +600,7 @@ class GemActivity : AppCompatActivity() {
             )!!
         )
 
-        biometricManager.createBiometricPrompt(this, this, callback)
+        biometricManager.createBiometricPrompt(this, null, this, callback)
         biometricManager.authenticateToDecryptData(initializationVector)
     }
 

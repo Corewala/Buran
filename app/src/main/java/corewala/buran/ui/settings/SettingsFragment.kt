@@ -343,7 +343,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
                     }
                 }
 
-                biometricManager.createBiometricPrompt(requireContext(), this, callback)
+                biometricManager.createBiometricPrompt(requireContext(), this, null, callback)
 
                 if(newValue as Boolean){
                     biometricManager.authenticateToEncryptData()
