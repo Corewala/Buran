@@ -17,7 +17,6 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.activity.viewModels
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -49,7 +48,6 @@ import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
-import kotlinx.android.synthetic.main.bookmark.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -233,7 +231,7 @@ class GemActivity : AppCompatActivity() {
 
         binding.addressEdit.setOnFocusChangeListener { v, hasFocus ->
 
-            var addressPaddingRight = resources.getDimensionPixelSize(R.dimen.def_address_right_margin)
+            val addressPaddingRight = resources.getDimensionPixelSize(R.dimen.def_address_right_margin)
 
             if(!hasFocus) {
                 binding.addressEdit.hideKeyboard()
@@ -783,17 +781,15 @@ class GemActivity : AppCompatActivity() {
 
     private fun getInternetStatus(): Boolean {
         val connectivityManager = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        if(connectivityManager != null) {
-            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                println("Internet access found")
-                if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    return true
-                }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    return true
-                }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    return true
-                }
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            println("Internet access found")
+            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true
+            }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true
+            }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true
             }
         }
         println("No internet access found")
