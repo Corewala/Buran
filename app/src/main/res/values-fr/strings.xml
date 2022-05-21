@@ -76,7 +76,7 @@
     <string name="load_cert">Chargez Certificat</string>
     <string name="unload_cert">Déchargez Certificat</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
-    <string name="check_for_updates">Rechercher des nouvelles versions</string>
+    <string name="check_for_updates">Vérifier pour des mises à jour</string>
     <string name="new_version_available">Nouvelle version disponible</string>
     <string name="no_internet">Aucun accès internet</string>
     <string name="history_cleared">Historique vidé</string>
