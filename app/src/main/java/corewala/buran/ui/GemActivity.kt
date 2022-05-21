@@ -185,10 +185,11 @@ class GemActivity : AppCompatActivity() {
                 )
             }
 
+            val isSideLoaded = packageManager.getInstallerPackageName(BuildConfig.APPLICATION_ID).isNullOrEmpty()
             if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
                     "check_for_updates",
                     false
-                )) {
+                ) and isSideLoaded) {
                 val updates = BuranUpdates()
                 val latestVersion = updates.getLatestVersion()
 

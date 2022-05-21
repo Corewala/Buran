@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
 import androidx.preference.*
+import corewala.buran.BuildConfig
 import corewala.buran.Buran
 import corewala.buran.R
 import corewala.buran.io.keymanager.BuranBiometricManager
@@ -97,6 +98,12 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         checkForUpdates.key = "check_for_updates"
         checkForUpdates.title = getString(R.string.check_for_updates)
         appCategory.addPreference(checkForUpdates)
+
+        val isSideLoaded = context.packageManager.getInstallerPackageName(BuildConfig.APPLICATION_ID).isNullOrEmpty()
+        checkForUpdates.isVisible = isSideLoaded
+        if(!isSideLoaded){
+            checkForUpdates.equals(false)
+        }
 
         //Certificates
         buildClientCertificateSection(context, screen)
