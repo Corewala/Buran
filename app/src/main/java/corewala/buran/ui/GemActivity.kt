@@ -99,16 +99,12 @@ class GemActivity : AppCompatActivity() {
                 startActivity(Intent.createChooser(this, null))
             }
         }else{
-            if(getInternetStatus()){
-                //Reset input text hint after user has been searching
-                if(inSearch) {
-                    binding.addressEdit.hint = getString(R.string.main_input_hint)
-                    inSearch = false
-                }
-                omniTerm.navigation(uri.toString())
-            }else{
-                Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            //Reset input text hint after user has been searching
+            if(inSearch) {
+                binding.addressEdit.hint = getString(R.string.main_input_hint)
+                inSearch = false
             }
+            omniTerm.navigation(uri.toString())
         }
     }
 
