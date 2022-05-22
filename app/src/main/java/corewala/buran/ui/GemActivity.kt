@@ -460,7 +460,7 @@ class GemActivity : AppCompatActivity() {
                                         null
                                     )
                                 }
-                                gemRequest(state.uri.toString())
+                                gemRequest(state.uri.toString(), true)
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -586,7 +586,7 @@ class GemActivity : AppCompatActivity() {
                 )
 
                 certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
-                gemRequest(address)
+                gemRequest(address, true)
             }
         }
 
