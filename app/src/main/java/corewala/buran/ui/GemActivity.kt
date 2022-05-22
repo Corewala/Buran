@@ -16,6 +16,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -262,9 +263,11 @@ class GemActivity : AppCompatActivity() {
                                 )
                             }
                             refresh()
+                            Toast.makeText(this, this.getString(R.string.cert_loaded), Toast.LENGTH_SHORT).show()
                         }else{
                             certPassword = null
                             refresh()
+                            Toast.makeText(this, this.getString(R.string.cert_unloaded), Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -461,6 +464,7 @@ class GemActivity : AppCompatActivity() {
                                     )
                                 }
                                 gemRequest(state.uri.toString(), true)
+                                Toast.makeText(this, this.getString(R.string.cert_loaded), Toast.LENGTH_SHORT).show()
                             }
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
@@ -587,6 +591,7 @@ class GemActivity : AppCompatActivity() {
 
                 certPassword = biometricManager.decryptData(ciphertext, result.cryptoObject?.cipher!!)
                 gemRequest(address, true)
+                Toast.makeText(applicationContext, applicationContext.getString(R.string.cert_loaded), Toast.LENGTH_SHORT).show()
             }
         }
 

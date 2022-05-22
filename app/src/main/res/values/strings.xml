@@ -75,6 +75,8 @@
     <string name="biometric_cert_verification">Client Certificate biometrics</string>
     <string name="load_cert">Load Certificate</string>
     <string name="unload_cert">Unload Certificate</string>
+    <string name="cert_loaded">Certificate loaded</string>
+    <string name="cert_unloaded">Certificate unloaded</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="new_version_available">New version available</string>

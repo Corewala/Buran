@@ -75,6 +75,8 @@
     <string name="biometric_cert_verification">Certificat Client biométrique</string>
     <string name="load_cert">Chargez Certificat</string>
     <string name="unload_cert">Déchargez Certificat</string>
+    <string name="cert_loaded">Certificat chargé</string>
+    <string name="cert_unloaded">Certificat dechargé</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
     <string name="check_for_updates">Vérifier pour des mises à jour</string>
     <string name="new_version_available">Nouvelle version disponible</string>
