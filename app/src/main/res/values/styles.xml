@@ -10,6 +10,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:navigationBarColor">@color/navigation_bar_background</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="SettingsTheme" parent="@style/AppTheme">
