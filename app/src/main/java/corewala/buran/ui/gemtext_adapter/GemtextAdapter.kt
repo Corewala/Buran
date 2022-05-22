@@ -5,7 +5,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.gemtext_code_block.view.*
 import kotlinx.android.synthetic.main.gemtext_image_link.view.*
 import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
@@ -84,11 +83,7 @@ class GemtextAdapter(
             is GmiViewHolder.Text -> holder.itemView.gemtext_text_textview.text = line
             is GmiViewHolder.Code -> {
 
-                var altText: String? = null
-
                 if(line.startsWith("```<|ALT|>")){
-                    //there's alt text: "```<|ALT|>$alt</|ALT>"
-                    altText = line.substring(10, line.indexOf("</|ALT>"))
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(line.indexOf("</|ALT>") + 7)
                 }else{
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(3)
