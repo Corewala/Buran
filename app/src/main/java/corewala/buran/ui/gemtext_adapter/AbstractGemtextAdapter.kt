@@ -10,7 +10,6 @@ abstract class AbstractGemtextAdapter(
 ): RecyclerView.Adapter<GmiViewHolder>() {
 
     var showInlineIcons: Boolean = false
-    var hideCodeBlocks: Boolean = false
     var showLinkButtons: Boolean = false
     var showInlineImages: Boolean = false
 
