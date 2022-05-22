@@ -323,7 +323,7 @@ class GemActivity : AppCompatActivity() {
                 Buran.DEFAULT_HOME_CAPSULE
             )
             omniTerm.history.clear()
-            gemRequest(home!!)
+            gemRequest(home!!, false)
         }
 
         binding.pullToRefresh.setOnRefreshListener {
@@ -800,8 +800,12 @@ class GemActivity : AppCompatActivity() {
         return true
     }
 
-    private fun gemRequest(address: String){
-        if(!isHostSigned(address.toURI())) certPassword = null
+    private fun gemRequest(address: String, sign: Boolean?){
+        if(sign == null){
+            if(!isHostSigned(address.toURI())) certPassword = null
+        }else if(!sign){
+            certPassword = null
+        }
         updateClientCertIcon()
 
         if(getInternetStatus()){
@@ -818,6 +822,10 @@ class GemActivity : AppCompatActivity() {
             Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
             loadingView(false)
         }
+    }
+
+    private fun gemRequest(address: String){
+        gemRequest(address, null)
     }
 
     override fun onBackPressed() {
