@@ -21,7 +21,7 @@
                 android:textSize="@dimen/code_text_size"
                 android:typeface="monospace"
                 android:textColor="@color/stroke"
-                android:id="@id/gemtext_text_monospace_textview"
+                android:id="@+id/gemtext_text_monospace_textview"
                 android:paddingLeft="@dimen/default_margin_big"
                 android:paddingTop="@dimen/default_margin_big"
                 android:paddingRight="@dimen/default_margin_big"

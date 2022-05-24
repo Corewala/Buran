@@ -63,7 +63,7 @@
     <string name="web_content_label">Open websites internally using \'Custom Tabs\', instead of using the default browser. This might help you stay in Geminispace instead of being distracted by the wider web. Requires compatible default browser.</string>
     <string name="web_content_switch_label">Open internally</string>
     <string name="show_inline_images">Inline local images</string>
-    <string name="pkcs_notice">Only PKCS12 client keystores are currently supported</string>
+    <string name="pkcs_notice">Only PKCS12 client keystores are currently supported.</string>
     <string name="client_certificate">Client Certificate</string>
     <string name="tap_to_select_client_certificate">Tap to select client certificate</string>
     <string name="client_certificate_password">Client Certificate Password</string>
@@ -79,12 +79,14 @@
     <string name="cert_unloaded">Certificate unloaded</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="check_for_updates">Check for updates</string>
+    <string name="self_update_summary">Automatic update installation will only work if Buran is sideloaded.</string>
     <string name="new_version_available">New version available</string>
     <string name="no_internet">No internet access</string>
     <string name="history_cleared">History cleared</string>
     <string name="runtime_cache_cleared">Runtime cache cleared</string>
     <string name="show_inline_icons">Inline link icons</string>
     <string name="show_link_buttons">Show link buttons</string>
+    <string name="use_attention_guides">Use attention guides</string>
     <string name="bookmarks_empty">You don\'t have any bookmarks yet</string>
     <string name="import_bookmarks">Import bookmarks</string>
     <string name="export_bookmarks">Export bookmarks</string>

@@ -63,7 +63,7 @@
     <string name="web_content_label">Ouvrir les sites web en interne en utilisant des \'Onglets Personnalisés\', plutôt que d\'utiliser le navigateur par défaut. Cela pourrait vous aider à rester dans le Geminispace plutôt que d\'être distrait·e par le vaste web. Cela requiert un navigateur par défaut compatible.</string>
     <string name="web_content_switch_label">Ouvrir en interne</string>
     <string name="show_inline_images">Images locales en ligne</string>
-    <string name="pkcs_notice">Seuls les magasins de clés client PKCS12 sont actuellement supportés</string>
+    <string name="pkcs_notice">Seuls les magasins de clés client PKCS12 sont actuellement supportés.</string>
     <string name="client_certificate">Certificat Client</string>
     <string name="tap_to_select_client_certificate">Cliquez pour sélectionner un certificat client</string>
     <string name="client_certificate_password">Mot de passe du Certificat Client</string>
@@ -79,12 +79,14 @@
     <string name="cert_unloaded">Certificat dechargé</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
     <string name="check_for_updates">Vérifier pour des mises à jour</string>
+    <string name="self_update_summary">L\'instalation automatique des mises à jour ne fonctionne que si Bourane est installée manuellement.</string>
     <string name="new_version_available">Nouvelle version disponible</string>
     <string name="no_internet">Aucun accès internet</string>
     <string name="history_cleared">Historique vidé</string>
     <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>
     <string name="show_link_buttons">Boutons de lien</string>
+    <string name="use_attention_guides">Utiliser des guides d\'attention</string>
     <string name="bookmarks_empty">Vous n\'avez encore aucun marque-pages</string>
     <string name="import_bookmarks">Importer des marque-pages</string>
     <string name="export_bookmarks">Exporter des marque-pages</string>

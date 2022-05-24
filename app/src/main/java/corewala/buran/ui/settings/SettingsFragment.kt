@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricPrompt
 import androidx.preference.*
-import corewala.buran.BuildConfig
 import corewala.buran.Buran
 import corewala.buran.R
 import corewala.buran.io.keymanager.BuranBiometricManager
@@ -93,17 +92,17 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         appCategory.addPreference(searchPreference)
 
         //Updates ---------------------------------------------
+        val aboutUpdater = Preference(context)
+        aboutUpdater.summary = getString(R.string.self_update_summary)
+        aboutUpdater.isPersistent = false
+        aboutUpdater.isSelectable = false
+        appCategory.addPreference(aboutUpdater)
+
         val checkForUpdates = SwitchPreferenceCompat(context)
         checkForUpdates.setDefaultValue(true)
         checkForUpdates.key = "check_for_updates"
         checkForUpdates.title = getString(R.string.check_for_updates)
         appCategory.addPreference(checkForUpdates)
-
-        val isSideLoaded = context.packageManager.getInstallerPackageName(BuildConfig.APPLICATION_ID).isNullOrEmpty()
-        checkForUpdates.isVisible = isSideLoaded
-        if(!isSideLoaded){
-            checkForUpdates.equals(false)
-        }
 
         //Certificates
         buildClientCertificateSection(context, screen)
@@ -232,6 +231,13 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         showLinkButtonsPreference.key = "show_link_buttons"
         showLinkButtonsPreference.title = getString(R.string.show_link_buttons)
         accessibilityCategory.addPreference(showLinkButtonsPreference)
+
+        //Accessibility - gemtext attention guides
+        val focusGuidingText = SwitchPreferenceCompat(context)
+        focusGuidingText.setDefaultValue(false)
+        focusGuidingText.key = "use_attention_guides"
+        focusGuidingText.title = getString(R.string.use_attention_guides)
+        accessibilityCategory.addPreference(focusGuidingText)
     }
 
     private fun buildClientCertificateSection(context: Context?, screen: PreferenceScreen) {

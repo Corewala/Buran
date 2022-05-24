@@ -50,15 +50,4 @@ class BuranKeyManager(val context: Context, val onKeyError: (error: String) -> U
             }
         }
     }
-
-    //Working example with cert packaged with app
-    fun getFactoryDemo(context: Context): KeyManagerFactory? {
-        val keyStore: KeyStore = KeyStore.getInstance("pkcs12")
-        keyStore.load(context.resources.openRawResource(R.raw.cert), "PASSWORD".toCharArray())
-
-        val keyManagerFactory: KeyManagerFactory = KeyManagerFactory.getInstance("X509")
-        keyManagerFactory.init(keyStore, "PASSWORD".toCharArray())
-
-        return keyManagerFactory
-    }
 }

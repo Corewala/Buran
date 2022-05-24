@@ -2,16 +2,19 @@ package corewala.buran.ui.gemtext_adapter
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.gemtext_code_block.view.*
-import kotlinx.android.synthetic.main.gemtext_image_link.view.*
-import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
-import kotlinx.android.synthetic.main.gemtext_text.view.*
+import androidx.core.text.bold
 import corewala.buran.R
 import corewala.endsWithImage
 import corewala.visible
+import kotlinx.android.synthetic.main.gemtext_code_block.view.*
+import kotlinx.android.synthetic.main.gemtext_image_link.view.*
+import kotlinx.android.synthetic.main.gemtext_link.view.gemtext_text_link
+import kotlinx.android.synthetic.main.gemtext_quote.view.*
+import kotlinx.android.synthetic.main.gemtext_text.view.*
 import java.net.URI
 
 class GemtextAdapter(
@@ -80,16 +83,25 @@ class GemtextAdapter(
         val line = lines[position]
 
         when(holder){
-            is GmiViewHolder.Text -> holder.itemView.gemtext_text_textview.text = line
+            is GmiViewHolder.Text -> {
+                when {
+                    useAttentionGuides -> holder.itemView.gemtext_text_textview.text = getAttentionGuideText(line)
+                    else -> holder.itemView.gemtext_text_textview.text = line
+                }
+            }
             is GmiViewHolder.Code -> {
-
                 if(line.startsWith("```<|ALT|>")){
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(line.indexOf("</|ALT>") + 7)
                 }else{
                     holder.itemView.gemtext_text_monospace_textview.text = line.substring(3)
                 }
             }
-            is GmiViewHolder.Quote -> holder.itemView.gemtext_text_monospace_textview.text = line.substring(1).trim()
+            is GmiViewHolder.Quote -> {
+                when {
+                    useAttentionGuides -> holder.itemView.gemtext_quote_textview.text = getAttentionGuideText(line.substring(1).trim())
+                    else -> holder.itemView.gemtext_quote_textview.text = line.substring(1).trim()
+                }
+            }
             is GmiViewHolder.H1 -> {
                 when {
                     line.length > 2 -> holder.itemView.gemtext_text_textview.text = line.substring(2).trim()
@@ -108,7 +120,12 @@ class GemtextAdapter(
                     else -> holder.itemView.gemtext_text_textview.text = ""
                 }
             }
-            is GmiViewHolder.ListItem -> holder.itemView.gemtext_text_textview.text = "• ${line.substring(1)}".trim()
+            is GmiViewHolder.ListItem -> {
+                when {
+                    useAttentionGuides -> holder.itemView.gemtext_text_textview.text = getAttentionGuideText("• ${line.substring(1)}".trim())
+                    else -> holder.itemView.gemtext_text_textview.text = "• ${line.substring(1)}".trim()
+                }
+            }
             is GmiViewHolder.Link -> {
                 val linkParts = line.substring(2).trim().split("\\s+".toRegex(), 2)
                 var linkName = linkParts[0]
@@ -184,11 +201,11 @@ class GemtextAdapter(
                         holder.itemView.gemtext_link_button.visible(true)
                         holder.itemView.gemtext_link_button.text = displayText
                     } else -> {
-                        holder.itemView.gemtext_link_button.visible(false)
-                        holder.itemView.gemtext_text_link.visible(true)
-                        holder.itemView.gemtext_text_link.text = displayText
-                        holder.itemView.gemtext_text_link.paint.isUnderlineText = true
-                    }
+                    holder.itemView.gemtext_link_button.visible(false)
+                    holder.itemView.gemtext_text_link.visible(true)
+                    holder.itemView.gemtext_text_link.text = displayText
+                    holder.itemView.gemtext_text_link.paint.isUnderlineText = true
+                }
                 }
 
                 holder.itemView.gemtext_text_link.setOnClickListener {
@@ -265,6 +282,35 @@ class GemtextAdapter(
         return URI.create(linkParts.first())
     }
 
+    private fun getAttentionGuideText(text: String): SpannableStringBuilder {
+        val wordList = text.split(" ")
+
+        val attentionGuideText = SpannableStringBuilder()
+        for(word in wordList){
+            if(word.length > 1){
+                if(word.first().isLetterOrDigit()){
+                    val index = word.length/2
+                    attentionGuideText
+                        .bold{append(word.substring(0, index))}
+                        .append("${word.substring(index)} ")
+                }else{
+                    var offset = 1
+                    while(!word.substring(offset).first().isLetterOrDigit()){
+                        offset += 1
+                    }
+                    val index = (word.length - offset)/2
+                    attentionGuideText
+                        .append(word.substring(0, offset))
+                        .bold{append(word.substring(offset, index + offset))}
+                        .append("${word.substring(index + offset)} ")
+                }
+            }else{
+                attentionGuideText.append("$word ")
+            }
+        }
+        return attentionGuideText
+    }
+
     override fun inferTitle(): String? {
         lines.forEach { line ->
             if(line.startsWith("#")) return line.replace("#", "").trim()
@@ -285,6 +331,11 @@ class GemtextAdapter(
 
     override fun linkButtons(visible: Boolean){
         this.showLinkButtons = visible
+        notifyDataSetChanged()
+    }
+
+    override fun attentionGuides(enabled: Boolean){
+        this.useAttentionGuides = enabled
         notifyDataSetChanged()
     }
 

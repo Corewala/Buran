@@ -20,6 +20,8 @@ Buran is a simple Gemini protocol browser for Android.
 - [X] Inline rendering of images
 - [ ] Page navigation feature
 - [X] Update notifier
+- [X] Attention guide mode
+
 
 ## Statement about Ariane
 

@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
@@ -182,11 +181,10 @@ class GemActivity : AppCompatActivity() {
                 )
             }
 
-            val isSideLoaded = packageManager.getInstallerPackageName(BuildConfig.APPLICATION_ID).isNullOrEmpty()
             if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
                     "check_for_updates",
                     false
-                ) and isSideLoaded) {
+                )){
                 val updates = BuranUpdates()
                 val latestVersion = updates.getLatestVersion()
 
@@ -331,14 +329,7 @@ class GemActivity : AppCompatActivity() {
 
         binding.pullToRefresh.setOnRefreshListener {
             if(getInternetStatus()){
-                if(initialised){
-                    refresh()
-                }else{
-                    val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
-                    intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    finish()
-                    startActivity(intent)
-                }
+                refresh()
             }else{
                 binding.pullToRefresh.isRefreshing = false
                 Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
@@ -379,6 +370,12 @@ class GemActivity : AppCompatActivity() {
             false
         )
         adapter.linkButtons(showLinkButtons)
+
+        val useAttentionGuides = prefs.getBoolean(
+            "use_attention_guides",
+            false
+        )
+        adapter.attentionGuides(useAttentionGuides)
 
 
         val showInlineImages = prefs.getBoolean(
@@ -784,18 +781,13 @@ class GemActivity : AppCompatActivity() {
     private fun getInternetStatus(): Boolean {
         val connectivityManager = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
+        return if(capabilities != null){
             println("Internet access found")
-            if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return true
-            }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                return true
-            }else if(capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                return true
-            }
+            true
+        }else{
+            println("No internet access found")
+            false
         }
-        println("No internet access found")
-        return false
     }
 
     private fun isHostSigned(uri: URI): Boolean{
