@@ -233,11 +233,11 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         accessibilityCategory.addPreference(showLinkButtonsPreference)
 
         //Accessibility - gemtext attention guides
-        val focusGuidingText = SwitchPreferenceCompat(context)
-        focusGuidingText.setDefaultValue(false)
-        focusGuidingText.key = "use_attention_guides"
-        focusGuidingText.title = getString(R.string.use_attention_guides)
-        accessibilityCategory.addPreference(focusGuidingText)
+        val attentionGuidingText = SwitchPreferenceCompat(context)
+        attentionGuidingText.setDefaultValue(false)
+        attentionGuidingText.key = "use_attention_guides"
+        attentionGuidingText.title = getString(R.string.use_attention_guides)
+        accessibilityCategory.addPreference(attentionGuidingText)
     }
 
     private fun buildClientCertificateSection(context: Context?, screen: PreferenceScreen) {
