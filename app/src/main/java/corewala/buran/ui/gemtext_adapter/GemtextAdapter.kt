@@ -287,25 +287,34 @@ class GemtextAdapter(
 
         val attentionGuideText = SpannableStringBuilder()
         for(word in wordList){
-            if(word.length > 1){
-                if(word.first().isLetterOrDigit()){
-                    val index = word.length/2
-                    attentionGuideText
-                        .bold{append(word.substring(0, index))}
-                        .append("${word.substring(index)} ")
+            val wordComponents = word.split("-")
+
+            for(component in wordComponents) {
+                val joiner = if((wordComponents.size > 1) and (wordComponents.indexOf(component) != wordComponents.size - 1)){
+                    "-"
                 }else{
-                    var offset = 1
-                    while(!word.substring(offset).first().isLetterOrDigit()){
-                        offset += 1
-                    }
-                    val index = (word.length - offset)/2
-                    attentionGuideText
-                        .append(word.substring(0, offset))
-                        .bold{append(word.substring(offset, index + offset))}
-                        .append("${word.substring(index + offset)} ")
+                    " "
                 }
-            }else{
-                attentionGuideText.append("$word ")
+                if (component.length > 1) {
+                    if (component.first().isLetterOrDigit()) {
+                        val index = component.length / 2
+                        attentionGuideText
+                            .bold { append(component.substring(0, index)) }
+                            .append("${component.substring(index)}$joiner")
+                    } else {
+                        var offset = 1
+                        while (!component.substring(offset).first().isLetterOrDigit()) {
+                            offset += 1
+                        }
+                        val index = (component.length - offset) / 2
+                        attentionGuideText
+                            .append(component.substring(0, offset))
+                            .bold { append(component.substring(offset, index + offset)) }
+                            .append("${component.substring(index + offset)}$joiner")
+                    }
+                } else {
+                    attentionGuideText.append("$component$joiner")
+                }
             }
         }
         return attentionGuideText
