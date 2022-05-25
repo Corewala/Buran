@@ -82,6 +82,7 @@
     <string name="self_update_summary">L\'instalation automatique des mises à jour ne fonctionne que si Bourane est installée manuellement.</string>
     <string name="new_version_available">Nouvelle version disponible</string>
     <string name="no_internet">Aucun accès internet</string>
+    <string name="retry">Réessayer</string>
     <string name="history_cleared">Historique vidé</string>
     <string name="runtime_cache_cleared">Cache d\'exécution vidé</string>
     <string name="show_inline_icons">Icônes de lien en ligne</string>

@@ -82,6 +82,7 @@
     <string name="self_update_summary">Automatic update installation will only work if Buran is sideloaded.</string>
     <string name="new_version_available">New version available</string>
     <string name="no_internet">No internet access</string>
+    <string name="retry">Retry</string>
     <string name="history_cleared">History cleared</string>
     <string name="runtime_cache_cleared">Runtime cache cleared</string>
     <string name="show_inline_icons">Inline link icons</string>

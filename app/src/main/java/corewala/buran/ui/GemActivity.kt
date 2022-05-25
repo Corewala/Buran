@@ -25,6 +25,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import corewala.*
 import corewala.buran.BuildConfig
@@ -202,7 +203,14 @@ class GemActivity : AppCompatActivity() {
             initialised = true
         }else{
             loadingView(false)
-            Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
+            val home = PreferenceManager.getDefaultSharedPreferences(this).getString(
+                "home_capsule",
+                Buran.DEFAULT_HOME_CAPSULE
+            )
+            val title = "# ${this.getString(R.string.no_internet)}"
+            val link = "=> $home ${this.getString(R.string.retry)}"
+            omniTerm.set(home!!)
+            adapter.render(listOf(title, link))
             binding.addressEdit.inputType = InputType.TYPE_NULL
         }
 
