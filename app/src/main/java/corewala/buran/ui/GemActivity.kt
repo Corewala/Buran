@@ -483,8 +483,10 @@ class GemActivity : AppCompatActivity() {
             is GemState.Requesting -> loadingView(true)
             is GemState.NotGeminiRequest -> externalProtocol(state)
             is GemState.ResponseError -> {
-                omniTerm.reset()
-                showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
+                if(omniTerm.canGoBack() or (prefs.getString("home_capsule", Buran.DEFAULT_HOME_CAPSULE) == state.uri.toString())){
+                    omniTerm.reset()
+                    showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
+                }
             }
             is GemState.ClientCertError -> {
                 certPassword = null
