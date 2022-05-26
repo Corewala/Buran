@@ -8,7 +8,6 @@ import corewala.buran.OppenURI
 import corewala.buran.io.GemState
 import corewala.buran.io.database.history.BuranHistory
 import corewala.buran.io.keymanager.BuranKeyManager
-import corewala.toURI
 import corewala.toUri
 import java.io.*
 import java.lang.IllegalStateException
@@ -58,7 +57,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
     private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertPassword: String?){
         val protocol = "TLS"
 
-        initSSLFactory(protocol!!, clientCertPassword)
+        initSSLFactory(protocol, clientCertPassword)
 
         val socket: SSLSocket?
         try {

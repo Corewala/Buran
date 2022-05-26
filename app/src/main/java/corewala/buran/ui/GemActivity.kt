@@ -85,7 +85,7 @@ class GemActivity : AppCompatActivity() {
 
     lateinit var adapter: AbstractGemtextAdapter
 
-    private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, position: Int ->
+    private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
         if(longTap){
             val globalURI = if(!uri.toString().contains("//") and !uri.toString().contains(":")){
                 (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace("gemini:/", "gemini://")
@@ -232,7 +232,7 @@ class GemActivity : AppCompatActivity() {
             binding.addressEdit.requestFocus()
         }
 
-        binding.addressEdit.setOnFocusChangeListener { v, hasFocus ->
+        binding.addressEdit.setOnFocusChangeListener { _, hasFocus ->
 
             val addressPaddingRight = resources.getDimensionPixelSize(R.dimen.def_address_right_margin)
 
@@ -435,11 +435,11 @@ class GemActivity : AppCompatActivity() {
                 loadingView(false)
                 builder
                     .setTitle(state.header.meta)
-                    .setPositiveButton(getString(R.string.confirm).toUpperCase()){ dialog, which ->
+                    .setPositiveButton(getString(R.string.confirm).toUpperCase()){ _, _ ->
                         gemRequest("${state.uri}?${Uri.encode(editText.text.toString())}")
                         editText.hideKeyboard()
                     }
-                    .setNegativeButton(getString(R.string.cancel).toUpperCase()){ dialog, which ->
+                    .setNegativeButton(getString(R.string.cancel).toUpperCase()){ _, _ ->
                         editText.hideKeyboard()
                     }
                     .setView(dialogLayout)

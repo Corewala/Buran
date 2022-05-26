@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.preference.PreferenceManager
 import corewala.buran.Buran
-import corewala.buran.R
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.security.KeyStore
@@ -29,10 +28,10 @@ class BuranKeyManager(val context: Context, val onKeyError: (error: String) -> U
                 try {
                     context.contentResolver?.openInputStream(uri)?.use {
                         try {
-                            keyStore.load(it, clientCertPassword?.toCharArray())
+                            keyStore.load(it, clientCertPassword.toCharArray())
                             val keyManagerFactory: KeyManagerFactory =
                                 KeyManagerFactory.getInstance("X509")
-                            keyManagerFactory.init(keyStore, clientCertPassword?.toCharArray())
+                            keyManagerFactory.init(keyStore, clientCertPassword.toCharArray())
                             return@use keyManagerFactory
                         } catch (ioe: IOException) {
                             onKeyError("${ioe.message}")

@@ -40,7 +40,6 @@ class BuranHistory(private val db: BuranAbstractDatabase): HistoryDatasource {
 
     override fun add(uri: Uri, onAdded: () -> Unit) {
         if(!uri.toString().startsWith("gemini://")){
-            onAdded
             return
         }
         GlobalScope.launch(Dispatchers.IO){
