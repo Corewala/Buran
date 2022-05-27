@@ -15,7 +15,7 @@ sealed class GemState {
     data class ResponseImage(val uri: URI, val header: GeminiResponse.Header, val cacheUri: Uri) : GemState()
     data class ResponseBinary(val uri: URI, val header: GeminiResponse.Header, val cacheUri: Uri) : GemState()
     data class ResponseUnknownMime(val uri: URI, val header: GeminiResponse.Header) : GemState()
-    data class ResponseError(val uri: URI, val header: GeminiResponse.Header): GemState()
+    data class ResponseError(val header: GeminiResponse.Header): GemState()
     data class ResponseUnknownHost(val uri: URI): GemState()
     data class ClientCertRequired(val uri: URI, val header: GeminiResponse.Header): GemState()
     data class ClientCertError(val header: GeminiResponse.Header): GemState()

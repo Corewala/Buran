@@ -71,11 +71,11 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
             return
         }catch (ce: ConnectException){
             println("Buran socket error, connect exception: $ce")
-            onUpdate(GemState.ResponseError(uri, GeminiResponse.Header(-1, ce.message ?: ce.toString())))
+            onUpdate(GemState.ResponseError(GeminiResponse.Header(-1, ce.message ?: ce.toString())))
             return
         }catch (she: SSLHandshakeException){
             println("Buran socket error, ssl handshake exception: $she")
-            onUpdate(GemState.ResponseError(uri, GeminiResponse.Header(-2, she.message ?: she.toString())))
+            onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, she.message ?: she.toString())))
             return
         }
 
@@ -90,7 +90,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         outWriter.flush()
 
         if (outWriter.checkError()) {
-            onUpdate(GemState.ResponseError(uri, GeminiResponse.Header(-1, "Print Writer Error")))
+            onUpdate(GemState.ResponseError(GeminiResponse.Header(-1, "Print Writer Error")))
             outWriter.close()
             return
         }
@@ -105,7 +105,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         println("Buran: response header: $headerLine")
 
         if(headerLine == null){
-            onUpdate(GemState.ResponseError(uri, GeminiResponse.Header(-2, "Server did not respond with a Gemini header: $uri")))
+            onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, "Server did not respond with a Gemini header: $uri")))
             return
         }
 
@@ -115,7 +115,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
             header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri.host, header.meta)))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
-            header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(uri, header))
+            header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
             header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, uri, header, onUpdate)
             header.meta.startsWith("text/") -> getString(socket, uri, header, onUpdate)
             header.meta.startsWith("image/") -> getBinary(socket, uri, header, onUpdate)
