@@ -104,19 +104,19 @@ class GemtextAdapter(
             }
             is GmiViewHolder.H1 -> {
                 when {
-                    line.length > 2 -> holder.itemView.gemtext_text_textview.text = line.substring(2).trim()
+                    line.length > 2 -> holder.itemView.gemtext_text_textview.text = line.substring(1).trim()
                     else -> holder.itemView.gemtext_text_textview.text = ""
                 }
             }
             is GmiViewHolder.H2 -> {
                 when {
-                    line.length > 3 -> holder.itemView.gemtext_text_textview.text = line.substring(3).trim()
+                    line.length > 3 -> holder.itemView.gemtext_text_textview.text = line.substring(2).trim()
                     else -> holder.itemView.gemtext_text_textview.text = ""
                 }
             }
             is GmiViewHolder.H3 -> {
                 when {
-                    line.length > 4 -> holder.itemView.gemtext_text_textview.text = line.substring(4).trim()
+                    line.length > 4 -> holder.itemView.gemtext_text_textview.text = line.substring(3).trim()
                     else -> holder.itemView.gemtext_text_textview.text = ""
                 }
             }
