@@ -303,14 +303,19 @@ class GemtextAdapter(
                             .append("${component.substring(index)}$joiner")
                     } else {
                         var offset = 1
-                        while (!component.substring(offset).first().isLetterOrDigit()) {
-                            offset += 1
+
+                        if (component.length - offset > 1) {
+                            while (!component.substring(offset).first().isLetterOrDigit()) {
+                                offset += 1
+                            }
+                            val index = (component.length - offset) / 2
+                            attentionGuideText
+                                .append(component.substring(0, offset))
+                                .bold { append(component.substring(offset, index + offset)) }
+                                .append("${component.substring(index + offset)}$joiner")
+                        }else{
+                            attentionGuideText.append("$component$joiner")
                         }
-                        val index = (component.length - offset) / 2
-                        attentionGuideText
-                            .append(component.substring(0, offset))
-                            .bold { append(component.substring(offset, index + offset)) }
-                            .append("${component.substring(index + offset)}$joiner")
                     }
                 } else {
                     attentionGuideText.append("$component$joiner")
