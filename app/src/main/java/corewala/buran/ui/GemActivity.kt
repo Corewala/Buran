@@ -7,7 +7,9 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -64,6 +66,7 @@ class GemActivity : AppCompatActivity() {
     lateinit var prefs: SharedPreferences
     private var inSearch = false
     private lateinit var bookmarkDatasource: BookmarksDatasource
+    private lateinit var db: BuranDatabase
     private var bookmarksDialog: BookmarksDialog? = null
 
     private val model by viewModels<GemViewModel>()
@@ -78,8 +81,6 @@ class GemActivity : AppCompatActivity() {
     })
 
     private var certPassword: String? = null
-
-    private var internetStatus: Boolean = false
 
     private var initialised: Boolean = false
 
@@ -136,9 +137,6 @@ class GemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db = BuranDatabase(applicationContext)
-        bookmarkDatasource = db.bookmarks()
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_gem)
         binding.viewmodel = model
         binding.lifecycleOwner = this
@@ -159,47 +157,8 @@ class GemActivity : AppCompatActivity() {
 
         binding.gemtextRecycler.adapter = adapter
 
-        internetStatus = getInternetStatus()
-
-        if(internetStatus){
-            if(intent.data == null){
-                model.initialise(
-                    home = prefs.getString(
-                        "home_capsule",
-                        Buran.DEFAULT_HOME_CAPSULE
-                    ) ?: Buran.DEFAULT_HOME_CAPSULE,
-                    gemini = Datasource.factory(this, db.history()),
-                    db = db,
-                    onState = this::handleState
-                )
-            }else{
-                model.initialise(
-                    home = intent.data.toString(),
-                    gemini = Datasource.factory(this, db.history()),
-                    db = db,
-                    onState = this::handleState
-                )
-            }
-
-            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-                    "check_for_updates",
-                    false
-                )){
-                val updates = BuranUpdates()
-                val latestVersion = updates.getLatestVersion()
-
-                if (latestVersion == BuildConfig.VERSION_NAME){
-                    println("No new version available")
-                } else {
-                    println("New version available")
-
-                    Snackbar.make(binding.root, getString(R.string.new_version_available), Snackbar.LENGTH_LONG).setAction(getString(R.string.update)) {
-                        updates.installUpdate(this, latestVersion)
-                    }.show()
-                }
-            }
-
-            initialised = true
+        if(getInternetStatus()){
+            initialise()
         }else{
             loadingView(false)
             val home = PreferenceManager.getDefaultSharedPreferences(this).getString(
@@ -391,7 +350,7 @@ class GemActivity : AppCompatActivity() {
         )
         adapter.inlineImages(showInlineImages)
 
-        if(internetStatus){
+        if(getInternetStatus()){
             model.invalidateDatasource()
         }
     }
@@ -787,14 +746,66 @@ class GemActivity : AppCompatActivity() {
 
     private fun getInternetStatus(): Boolean {
         val connectivityManager = this.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        return if(capabilities != null){
-            println("Internet access found")
-            true
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if(capabilities != null){
+                when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> { return true }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> { return true }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> { return true }
+                }
+            }
         }else{
-            println("No internet access found")
-            false
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            if(activeNetworkInfo != null && activeNetworkInfo.isConnected){
+                return true
+            }
         }
+        return false
+    }
+
+    private fun initialise(){
+        db = BuranDatabase(applicationContext)
+        bookmarkDatasource = db.bookmarks()
+
+        if(intent.data == null){
+            model.initialise(
+                home = prefs.getString(
+                    "home_capsule",
+                    Buran.DEFAULT_HOME_CAPSULE
+                ) ?: Buran.DEFAULT_HOME_CAPSULE,
+                gemini = Datasource.factory(this, db.history()),
+                db = db,
+                onState = this::handleState
+            )
+        }else{
+            model.initialise(
+                home = intent.data.toString(),
+                gemini = Datasource.factory(this, db.history()),
+                db = db,
+                onState = this::handleState
+            )
+        }
+
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+                "check_for_updates",
+                false
+            )){
+            val updates = BuranUpdates()
+            val latestVersion = updates.getLatestVersion()
+
+            if (latestVersion == BuildConfig.VERSION_NAME){
+                println("No new version available")
+            } else {
+                println("New version available")
+
+                Snackbar.make(binding.root, getString(R.string.new_version_available), Snackbar.LENGTH_LONG).setAction(getString(R.string.update)) {
+                    updates.installUpdate(this, latestVersion)
+                }.show()
+            }
+        }
+
+        initialised = true
     }
 
     private fun isHostSigned(uri: URI): Boolean{
@@ -817,10 +828,7 @@ class GemActivity : AppCompatActivity() {
                 loadingView(true)
                 model.request(address, certPassword)
             }else{
-                val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
-                intent!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                finish()
-                startActivity(intent)
+                initialise()
             }
         }else{
             Snackbar.make(binding.root, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show()
