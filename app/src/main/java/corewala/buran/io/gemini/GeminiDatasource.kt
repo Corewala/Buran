@@ -211,7 +211,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private fun resolve(host: String, address: String): String{
         val ouri = OppenURI()
-        ouri.set(host)
+        ouri.set("gemini://$host")
         return ouri.resolve(address)
     }
 
