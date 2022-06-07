@@ -30,6 +30,8 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private var socketFactory: SSLSocketFactory? = null
 
+    private var latestRequestAddress: String? = null
+
     override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit) {
         this.forceDownload = forceDownload
 
@@ -38,6 +40,8 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         val uri = URI.create(address)
 
         onUpdate(GemState.Requesting(uri))
+
+        latestRequestAddress = address
 
         GlobalScope.launch {
             geminiRequest(uri, onUpdate, clientCertPassword)
@@ -66,16 +70,22 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
             println("Buran socket handshake with ${uri.host}")
             socket.startHandshake()
         }catch (uhe: UnknownHostException){
-            println("Buran socket error, unknown host: $uhe")
-            onUpdate(GemState.ResponseUnknownHost(uri))
+            if(latestRequestAddress == uri.toString()) {
+                println("Buran socket error, unknown host: $uhe")
+                onUpdate(GemState.ResponseUnknownHost(uri))
+            }
             return
         }catch (ce: ConnectException){
-            println("Buran socket error, connect exception: $ce")
-            onUpdate(GemState.ResponseError(GeminiResponse.Header(-1, ce.message ?: ce.toString())))
+            if(latestRequestAddress == uri.toString()) {
+                println("Buran socket error, connect exception: $ce")
+                onUpdate(GemState.ResponseError(GeminiResponse.Header(-1, ce.message ?: ce.toString())))
+            }
             return
         }catch (she: SSLHandshakeException){
-            println("Buran socket error, ssl handshake exception: $she")
-            onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, she.message ?: she.toString())))
+            if(latestRequestAddress == uri.toString()) {
+                println("Buran socket error, ssl handshake exception: $she")
+                onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, she.message ?: she.toString())))
+            }
             return
         }
 
@@ -105,13 +115,16 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         println("Buran: response header: $headerLine")
 
         if(headerLine == null){
-            onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, "Server did not respond with a Gemini header: $uri")))
+            if(latestRequestAddress == uri.toString()){
+                onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, "Server did not respond with a Gemini header: $uri")))
+            }
             return
         }
 
         val header = GeminiResponse.parseHeader(headerLine)
 
         when {
+            latestRequestAddress != uri.toString() -> {}
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
             header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri.host, header.meta)))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
