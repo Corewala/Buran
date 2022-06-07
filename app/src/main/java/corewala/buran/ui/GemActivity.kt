@@ -84,6 +84,8 @@ class GemActivity : AppCompatActivity() {
 
     private var initialised: Boolean = false
 
+    private var requesting: Boolean = false
+
     lateinit var adapter: AbstractGemtextAdapter
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
@@ -439,7 +441,9 @@ class GemActivity : AppCompatActivity() {
                 }
             }
 
-            is GemState.Requesting -> loadingView(true)
+            is GemState.Requesting -> {
+                loadingView(true)
+            }
             is GemState.NotGeminiRequest -> externalProtocol(state)
             is GemState.ResponseError -> {
                 omniTerm.reset()
@@ -485,6 +489,7 @@ class GemActivity : AppCompatActivity() {
                 }
             }
             is GemState.ResponseUnknownHost -> {
+                omniTerm.reset()
                 runOnUiThread {
                     val searchbase = prefs.getString(
                         "search_base",
@@ -825,7 +830,6 @@ class GemActivity : AppCompatActivity() {
 
         if(getInternetStatus()){
             if(initialised){
-                loadingView(true)
                 model.request(address, certPassword)
             }else{
                 initialise()
@@ -841,7 +845,9 @@ class GemActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (omniTerm.canGoBack()){
+        if(omniTerm.canGoBack() and model.isRequesting()){
+            model.cancel()
+        }else if(omniTerm.canGoBack()){
             gemRequest(omniTerm.goBack())
         }else{
             println("Buran history is empty - exiting")

@@ -30,7 +30,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private var socketFactory: SSLSocketFactory? = null
 
-    private var latestRequestAddress: String? = null
+    private var currentRequestAddress: String? = null
 
     override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit) {
         this.forceDownload = forceDownload
@@ -41,11 +41,19 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
         onUpdate(GemState.Requesting(uri))
 
-        latestRequestAddress = address
+        currentRequestAddress = address
 
         GlobalScope.launch {
             geminiRequest(uri, onUpdate, clientCertPassword)
         }
+    }
+
+    override fun isRequesting(): Boolean{
+        return !currentRequestAddress.isNullOrEmpty()
+    }
+
+    override fun cancel(){
+        currentRequestAddress = null
     }
 
     private fun initSSLFactory(protocol: String, clientCertPassword: String?){
@@ -70,19 +78,19 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
             println("Buran socket handshake with ${uri.host}")
             socket.startHandshake()
         }catch (uhe: UnknownHostException){
-            if(latestRequestAddress == uri.toString()) {
+            if(currentRequestAddress == uri.toString()) {
                 println("Buran socket error, unknown host: $uhe")
                 onUpdate(GemState.ResponseUnknownHost(uri))
             }
             return
         }catch (ce: ConnectException){
-            if(latestRequestAddress == uri.toString()) {
+            if(currentRequestAddress == uri.toString()) {
                 println("Buran socket error, connect exception: $ce")
                 onUpdate(GemState.ResponseError(GeminiResponse.Header(-1, ce.message ?: ce.toString())))
             }
             return
         }catch (she: SSLHandshakeException){
-            if(latestRequestAddress == uri.toString()) {
+            if(currentRequestAddress == uri.toString()) {
                 println("Buran socket error, ssl handshake exception: $she")
                 onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, she.message ?: she.toString())))
             }
@@ -115,7 +123,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         println("Buran: response header: $headerLine")
 
         if(headerLine == null){
-            if(latestRequestAddress == uri.toString()){
+            if(currentRequestAddress == uri.toString()){
                 onUpdate(GemState.ResponseError(GeminiResponse.Header(-2, "Server did not respond with a Gemini header: $uri")))
             }
             return
@@ -124,7 +132,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         val header = GeminiResponse.parseHeader(headerLine)
 
         when {
-            latestRequestAddress != uri.toString() -> {}
+            currentRequestAddress != uri.toString() -> {}
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
             header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri.host, header.meta)))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
@@ -152,6 +160,8 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         outWriter.close()
 
         socket.close()
+
+        currentRequestAddress = null
     }
 
     private fun getGemtext(reader: BufferedReader, uri: URI, header: GeminiResponse.Header, onUpdate: (state: GemState) -> Unit){

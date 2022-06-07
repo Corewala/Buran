@@ -28,6 +28,14 @@ class GemViewModel: ViewModel() {
         }
     }
 
+    fun isRequesting(): Boolean{
+        return gemini.isRequesting()
+    }
+
+    fun cancel(){
+        gemini.cancel()
+    }
+
     fun requestBinaryDownload(uri: URI, clientCertPassword: String?) {
         gemini.request(uri.toString(), true, clientCertPassword){ state ->
             onState(state)
