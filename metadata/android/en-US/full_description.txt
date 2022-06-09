@@ -1,0 +1,5 @@
+Buran is a simple Gemini protocol browser for Android which allows users to explore geminispace in style.
+
+This application has no external dependencies and does not require any nonfree services, using only default system libraries. It has been fully localized in English and French, and supports an array of accessibility and quality-of-life features.
+
+Buran is a fork of Ariane by ÖLAB allowed under the terms of the European Union Public Licence.

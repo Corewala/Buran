@@ -1,0 +1,1 @@
+Navigateur minimaliste pour le protocole Gemini
