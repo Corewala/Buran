@@ -844,7 +844,7 @@ class GemActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(omniTerm.canGoBack() and model.isRequesting()){
+        if(model.isRequesting()){
             model.cancel()
             loadingView(false)
         }else if(omniTerm.canGoBack()){
