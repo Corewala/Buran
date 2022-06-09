@@ -1,5 +1,5 @@
 Bourane est un navigateur minimaliste du protocole Gemini sur Android pour explorer l'espace Gemini avec style.
 
-Cette application n'a aucunes dépendances externes et ne nécessite aucun service non gratuit, en utilisant uniquement les bibliothèques système.
+Cette application n'a aucune dépendance externe et ne nécessite aucun service non gratuit, en utilisant uniquement les bibliothèques système.
 
 Bourane est basé sur le navigateur Ariane d\'ÖLAB autorisé conformément aux termes de la Licence Publique de l\'Union Européenne.
