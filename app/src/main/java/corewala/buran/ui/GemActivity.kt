@@ -84,8 +84,6 @@ class GemActivity : AppCompatActivity() {
 
     private var initialised: Boolean = false
 
-    private var requesting: Boolean = false
-
     lateinit var adapter: AbstractGemtextAdapter
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
