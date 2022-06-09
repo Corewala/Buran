@@ -264,7 +264,8 @@ class GemActivity : AppCompatActivity() {
                     }
                     R.id.overflow_menu_history -> HistoryDialog.show(
                         this,
-                        db.history()
+                        db.history(),
+                        omniTerm
                     ) { historyAddress ->
                         gemRequest(historyAddress)
                     }

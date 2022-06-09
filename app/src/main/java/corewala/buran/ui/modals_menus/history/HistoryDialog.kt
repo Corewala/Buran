@@ -8,13 +8,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.LinearLayoutManager
+import corewala.buran.OmniTerm
 import kotlinx.android.synthetic.main.dialog_history.view.*
 import corewala.buran.R
 import corewala.buran.io.database.history.BuranHistory
-import kotlinx.android.synthetic.main.dialog_bookmarks.view.*
 
 object HistoryDialog {
-    fun show(context: Context, history: BuranHistory, onHistoryItem: (address: String) -> Unit){
+    fun show(context: Context, history: BuranHistory, omniTerm: OmniTerm, onHistoryItem: (address: String) -> Unit){
 
         val dialog = AppCompatDialog(context, R.style.AppTheme)
 
@@ -37,6 +37,7 @@ object HistoryDialog {
                         }
                     }
                     R.id.menu_action_clear_runtime_cache -> {
+                        omniTerm.clearCache()
                         Toast.makeText(context, context.getString(R.string.runtime_cache_cleared), Toast.LENGTH_SHORT).show()
                     }
                     else -> {

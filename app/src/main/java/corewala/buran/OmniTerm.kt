@@ -87,6 +87,10 @@ class OmniTerm(private val listener: Listener) {
         return history.last().toString()
     }
 
+    fun clearCache() {
+        history.clear()
+    }
+
     interface Listener{
         fun request(address: String)
         fun openExternal(address: String)
