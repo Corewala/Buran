@@ -1,4 +1,4 @@
-Bourane est un navigateur minimaliste du protocole Gemini sur Android pour explorer l'espace gemini avec style
+Bourane est un navigateur minimaliste du protocole Gemini sur Android pour explorer l'espace Gemini avec style
 
 Cette application n'a aucune dépendances externes et ne nécessite aucun service non gratuit, en utilisant uniquement les bibliothèques système.
 
