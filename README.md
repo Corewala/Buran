@@ -22,7 +22,7 @@ Buran is a simple Gemini protocol browser for Android.
 - [X] Update notifier
 - [X] Attention guide mode
 - [ ] Simple A/B page switching system
-- [ ] Pass [Egsam test]( gemini://egsam.pitr.ca )
+- [ ] Pass [Egsam test](https://github.com/pitr/egsam)
 
 
 ## Statement about Ariane
