@@ -99,7 +99,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         appCategory.addPreference(aboutUpdater)
 
         val checkForUpdates = SwitchPreferenceCompat(context)
-        checkForUpdates.setDefaultValue(true)
+        checkForUpdates.setDefaultValue(false)
         checkForUpdates.key = "check_for_updates"
         checkForUpdates.title = getString(R.string.check_for_updates)
         appCategory.addPreference(checkForUpdates)
