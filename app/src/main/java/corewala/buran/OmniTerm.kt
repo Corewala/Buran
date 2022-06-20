@@ -1,6 +1,7 @@
 package corewala.buran
 
 import android.net.Uri
+import android.webkit.URLUtil
 import java.util.*
 
 const val GEM_SCHEME = "gemini://"
@@ -16,6 +17,10 @@ class OmniTerm(private val listener: Listener) {
      */
     fun input(term: String, searchbase: String?){
         when {
+            term.contains(" ") -> {
+                val encoded = Uri.encode(term)
+                listener.request("$searchbase$encoded")
+            }
             term.startsWith(GEM_SCHEME) && term != GEM_SCHEME -> {
                 listener.request(term)
                 return
