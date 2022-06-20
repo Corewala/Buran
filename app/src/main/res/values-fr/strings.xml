@@ -79,7 +79,6 @@
     <string name="cert_unloaded">Certificat dechargé</string>
     <string name="set_home_capsule">Choisir comme capsule d\'accueil</string>
     <string name="check_for_updates">Vérifier pour des mises à jour</string>
-    <string name="self_update_summary">L\'instalation automatique des mises à jour ne fonctionne que si Bourane est installée manuellement.</string>
     <string name="new_version_available">Nouvelle version disponible</string>
     <string name="no_internet">Aucun accès internet</string>
     <string name="retry">Réessayer</string>

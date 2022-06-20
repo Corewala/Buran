@@ -79,7 +79,6 @@
     <string name="cert_unloaded">Certificate unloaded</string>
     <string name="set_home_capsule">Set home capsule</string>
     <string name="check_for_updates">Check for updates</string>
-    <string name="self_update_summary">Automatic update installation will only work if Buran is sideloaded.</string>
     <string name="new_version_available">New version available</string>
     <string name="no_internet">No internet access</string>
     <string name="retry">Retry</string>

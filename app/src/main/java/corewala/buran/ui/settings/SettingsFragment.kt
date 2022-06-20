@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -92,16 +93,17 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         appCategory.addPreference(searchPreference)
 
         //Updates ---------------------------------------------
-        val aboutUpdater = Preference(context)
-        aboutUpdater.summary = getString(R.string.self_update_summary)
-        aboutUpdater.isPersistent = false
-        aboutUpdater.isSelectable = false
-        appCategory.addPreference(aboutUpdater)
+        val sideloadedHashCode = -899861527
+        val isSideloaded = context.packageManager.getPackageInfo(
+                context.packageName,
+                PackageManager.GET_SIGNATURES
+            ).signatures[0].hashCode() == sideloadedHashCode
 
         val checkForUpdates = SwitchPreferenceCompat(context)
         checkForUpdates.setDefaultValue(false)
         checkForUpdates.key = "check_for_updates"
         checkForUpdates.title = getString(R.string.check_for_updates)
+        checkForUpdates.isVisible = isSideloaded
         appCategory.addPreference(checkForUpdates)
 
         //Certificates
