@@ -1,7 +1,6 @@
 package corewala.buran
 
 import android.net.Uri
-import android.webkit.URLUtil
 import java.util.*
 
 const val GEM_SCHEME = "gemini://"
@@ -80,7 +79,11 @@ class OmniTerm(private val listener: Listener) {
     }
 
     fun getCurrent(): String {
-        return history.last().toString()
+        return if(history.size > 0){
+            history.last().toString()
+        }else{
+            ""
+        }
     }
 
     fun canGoBack(): Boolean {

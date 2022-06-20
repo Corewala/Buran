@@ -166,9 +166,9 @@ class GemActivity : AppCompatActivity() {
                 Buran.DEFAULT_HOME_CAPSULE
             )
             val title = "# ${this.getString(R.string.no_internet)}"
-            val link = "=> $home ${this.getString(R.string.retry)}"
+            val text = this.getString(R.string.retry)
             omniTerm.set(home!!)
-            adapter.render(listOf(title, link))
+            adapter.render(listOf(title, text))
             binding.addressEdit.inputType = InputType.TYPE_NULL
         }
 
@@ -773,6 +773,19 @@ class GemActivity : AppCompatActivity() {
         bookmarkDatasource = db.bookmarks()
 
         if(intent.data == null){
+            var home = prefs.getString(
+                "home_capsule",
+                Buran.DEFAULT_HOME_CAPSULE
+            ) ?: Buran.DEFAULT_HOME_CAPSULE
+
+            if(
+                home.startsWith("gemini://")
+                and !home.contains(" ")
+                and home.contains(".")
+            ){
+                home = ""
+            }
+
             model.initialise(
                 home = prefs.getString(
                     "home_capsule",
@@ -782,6 +795,11 @@ class GemActivity : AppCompatActivity() {
                 db = db,
                 onState = this::handleState
             )
+
+            if(home.isEmpty()){
+                loadingView(false)
+                adapter.render(listOf("# ${getString(R.string.app_name)}"))
+            }
         }else{
             model.initialise(
                 home = intent.data.toString(),
@@ -829,6 +847,10 @@ class GemActivity : AppCompatActivity() {
 
         if(getInternetStatus()){
             if(initialised){
+                if(address.isEmpty()){
+                    loadingView(false)
+                    adapter.render(listOf("# ${getString(R.string.app_name)}"))
+                }
                 model.request(address, certPassword)
             }else{
                 initialise()

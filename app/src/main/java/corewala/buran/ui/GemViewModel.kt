@@ -19,7 +19,9 @@ class GemViewModel: ViewModel() {
         this.db = db
         this.onState = onState
 
-        request(home, null)
+        if(home.startsWith("gemini://") and !home.contains(" ")){
+            request(home, null)
+        }
     }
 
     fun request(address: String, clientCertPassword: String?) {
