@@ -849,9 +849,11 @@ class GemActivity : AppCompatActivity() {
             if(initialised){
                 if(address.isEmpty()){
                     loadingView(false)
+                    binding.pullToRefresh.isRefreshing = false
                     adapter.render(listOf("# ${getString(R.string.app_name)}"))
+                }else{
+                    model.request(address, certPassword)
                 }
-                model.request(address, certPassword)
             }else{
                 initialise()
             }
