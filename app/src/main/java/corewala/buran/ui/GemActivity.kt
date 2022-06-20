@@ -86,6 +86,8 @@ class GemActivity : AppCompatActivity() {
 
     lateinit var adapter: AbstractGemtextAdapter
 
+    lateinit var home: String
+
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
         if(longTap){
             val globalURI = if(!uri.toString().contains("//") and !uri.toString().contains(":")){
@@ -156,6 +158,19 @@ class GemActivity : AppCompatActivity() {
         adapter = AbstractGemtextAdapter.getAdapter(onLink, inlineImage)
 
         binding.gemtextRecycler.adapter = adapter
+
+        home = prefs.getString(
+            "home_capsule",
+            Buran.DEFAULT_HOME_CAPSULE
+        ) ?: Buran.DEFAULT_HOME_CAPSULE
+
+        if(
+            !home.startsWith("gemini://")
+            or home.contains(" ")
+            or !home.contains(".")
+        ){
+            home = ""
+        }
 
         if(getInternetStatus()){
             initialise()
@@ -286,12 +301,8 @@ class GemActivity : AppCompatActivity() {
         }
 
         binding.home.setOnClickListener {
-            val home = PreferenceManager.getDefaultSharedPreferences(this).getString(
-                "home_capsule",
-                Buran.DEFAULT_HOME_CAPSULE
-            )
             omniTerm.history.clear()
-            gemRequest(home!!, false)
+            gemRequest(home, false)
         }
 
         binding.pullToRefresh.setOnRefreshListener {
@@ -316,6 +327,19 @@ class GemActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        home = prefs.getString(
+            "home_capsule",
+            Buran.DEFAULT_HOME_CAPSULE
+        ) ?: Buran.DEFAULT_HOME_CAPSULE
+
+        if(
+            !home.startsWith("gemini://")
+            or home.contains(" ")
+            or !home.contains(".")
+        ){
+            home = ""
+        }
 
         when {
             prefs.contains("background_colour") -> {
@@ -773,24 +797,8 @@ class GemActivity : AppCompatActivity() {
         bookmarkDatasource = db.bookmarks()
 
         if(intent.data == null){
-            var home = prefs.getString(
-                "home_capsule",
-                Buran.DEFAULT_HOME_CAPSULE
-            ) ?: Buran.DEFAULT_HOME_CAPSULE
-
-            if(
-                home.startsWith("gemini://")
-                and !home.contains(" ")
-                and home.contains(".")
-            ){
-                home = ""
-            }
-
             model.initialise(
-                home = prefs.getString(
-                    "home_capsule",
-                    Buran.DEFAULT_HOME_CAPSULE
-                ) ?: Buran.DEFAULT_HOME_CAPSULE,
+                home = home,
                 gemini = Datasource.factory(this, db.history()),
                 db = db,
                 onState = this::handleState
