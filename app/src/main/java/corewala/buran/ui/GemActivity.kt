@@ -806,6 +806,7 @@ class GemActivity : AppCompatActivity() {
 
             if(home.isEmpty()){
                 loadingView(false)
+                binding.pullToRefresh.isRefreshing = false
                 adapter.render(listOf("# ${getString(R.string.app_name)}"))
             }
         }else{
