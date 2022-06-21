@@ -46,7 +46,6 @@ import corewala.buran.ui.bookmarks.BookmarksDialog
 import corewala.buran.ui.content_image.ImageDialog
 import corewala.buran.ui.content_text.TextDialog
 import corewala.buran.ui.gemtext_adapter.AbstractGemtextAdapter
-import corewala.buran.ui.modals_menus.about.AboutDialog
 import corewala.buran.ui.modals_menus.history.HistoryDialog
 import corewala.buran.ui.modals_menus.overflow.OverflowPopup
 import corewala.buran.ui.settings.SettingsActivity
@@ -282,7 +281,7 @@ class GemActivity : AppCompatActivity() {
                     ) { historyAddress ->
                         gemRequest(historyAddress)
                     }
-                    R.id.overflow_menu_about -> AboutDialog.show(this)
+                    R.id.overflow_menu_about -> gemRequest("")
                     R.id.overflow_menu_settings -> {
                         startActivity(Intent(this, SettingsActivity::class.java))
                     }
@@ -840,13 +839,23 @@ class GemActivity : AppCompatActivity() {
         loadingView(false)
         binding.pullToRefresh.isRefreshing = false
 
-        val searchbase = prefs.getString(
-            "search_base",
-            Buran.DEFAULT_SEARCH_BASE
-        )
-        val searchLink = "=> $searchbase ${getString(R.string.search)}"
         val title = "# ${getString(R.string.app_name)}"
-        adapter.render(listOf(title, searchLink))
+        val sourceLink = "=> https://github.com/Corewala/Buran ${getString(R.string.source)}"
+        adapter.render(listOf(
+            title,
+            "",
+            getString(R.string.about_body),
+            "",
+            getString(R.string.about_ariane_source),
+            "",
+            getString(R.string.about_font),
+            "",
+            getString(R.string.about_glyphs),
+            "",
+            sourceLink,
+            getString(R.string.copyright)
+        ))
+        omniTerm.set("")
     }
 
     private fun isHostSigned(uri: URI): Boolean{

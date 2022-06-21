@@ -11,11 +11,12 @@
     <string name="share">Partager</string>
     <string name="set_home">Choisir comme Accueil</string>
     <string name="settings">Paramètres</string>
-    <string name="about_body">Bourane: Un navigateur minimaliste pour le protocole Gemini par Corewala</string>
+    <string name="about_body">Un navigateur minimaliste pour le protocole Gemini par Corewala</string>
     <string name="copyright">Copyright © 2022 Corewala</string>
     <string name="about_ariane_source">Bourane est basé sur le navigateur Ariane d\'ÖLAB sous la Licence Publique de l\'Union Européenne</string>
     <string name="about_font">Les blocs de code sont rendus avec JetBrains Mono de JetBrains</string>
     <string name="about_glyphs">Les glyphes utilisés proviennent de Material Icons par Google</string>
+    <string name="source">Source</string>
     <string name="clear_cache">Vider le cache d\'exécution</string>
     <string name="history">Historique</string>
     <string name="clear_history">Vider l\'historique</string>
