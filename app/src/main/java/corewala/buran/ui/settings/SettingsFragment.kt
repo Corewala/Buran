@@ -51,14 +51,36 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         val homecapsule = preferenceManager.sharedPreferences.getString(
             "home_capsule",
             Buran.DEFAULT_HOME_CAPSULE
-        )
+        )?.trim()
 
-        homePreference.summary = homecapsule
+        homePreference.summary = if(homecapsule.isNullOrEmpty()){
+            context.getString(R.string.no_home_capsule_set)
+        }else if(
+            !homecapsule.startsWith("gemini://")
+            or homecapsule.contains(" ")
+            or !homecapsule.contains(".")
+        ){
+            context.getString(R.string.not_valid_address)
+        }else{
+            homecapsule
+        }
+
         homePreference.positiveButtonText = getString(R.string.update)
         homePreference.negativeButtonText = getString(R.string.cancel)
         homePreference.title = getString(R.string.home_capsule)
         homePreference.setOnPreferenceChangeListener { _, newValue ->
-            homePreference.summary = newValue.toString()
+            val newHomecapsule = newValue.toString().trim()
+            if(newHomecapsule.isNullOrEmpty()){
+                homePreference.summary = context.getString(R.string.no_home_capsule_set)
+            }else if(
+                !newHomecapsule.startsWith("gemini://")
+                or newHomecapsule.contains(" ")
+                or !newHomecapsule.contains(".")
+            ){
+                homePreference.summary = context.getString(R.string.not_valid_address)
+            }else{
+                homePreference.summary = newHomecapsule
+            }
             true
         }
         homePreference.setOnBindEditTextListener{ editText ->

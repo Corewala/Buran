@@ -49,6 +49,8 @@
     <string name="file_saved_to_device">File saved to device</string>
     <string name="configure_buran">Configure Buran</string>
     <string name="home_capsule">Home Capsule</string>
+    <string name="not_valid_address">This is not a valid address</string>
+    <string name="no_home_capsule_set">No home capsule set</string>
     <string name="search_engine">Search Engine</string>
     <string name="search_base">Search Base</string>
     <string name="update">Update</string>

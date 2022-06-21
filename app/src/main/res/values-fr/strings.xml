@@ -49,6 +49,8 @@
     <string name="file_saved_to_device">Fichier sauvegardé dans l\'appareil</string>
     <string name="configure_buran">Configurer Buran</string>
     <string name="home_capsule">Capsule d\'accueil</string>
+    <string name="not_valid_address">Ceci n\'est pas une adresse valide</string>
+    <string name="no_home_capsule_set">Pas de capsule d\'accueil</string>
     <string name="search_engine">Moteur de recherche</string>
     <string name="search_base">Base de recherche</string>
     <string name="update">Mettre à jour</string>
