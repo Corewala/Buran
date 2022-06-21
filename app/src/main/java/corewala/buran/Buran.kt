@@ -5,7 +5,7 @@ import android.app.Application
 class Buran: Application() {
 
     companion object{
-        const val DEFAULT_HOME_CAPSULE = "gemini://tlgs.one"
+        const val DEFAULT_HOME_CAPSULE = ""
         const val DEFAULT_SEARCH_BASE = "gemini://tlgs.one/search?"
 
         const val PREF_KEY_CLIENT_CERT_URI = "client_cert_uri"
