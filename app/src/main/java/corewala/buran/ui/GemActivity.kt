@@ -803,11 +803,8 @@ class GemActivity : AppCompatActivity() {
                 db = db,
                 onState = this::handleState
             )
-
             if(home.isEmpty()){
-                loadingView(false)
-                binding.pullToRefresh.isRefreshing = false
-                adapter.render(listOf("# ${getString(R.string.app_name)}"))
+                loadLocalHome()
             }
         }else{
             model.initialise(
@@ -839,6 +836,19 @@ class GemActivity : AppCompatActivity() {
         initialised = true
     }
 
+    private fun loadLocalHome(){
+        loadingView(false)
+        binding.pullToRefresh.isRefreshing = false
+
+        val searchbase = prefs.getString(
+            "search_base",
+            Buran.DEFAULT_SEARCH_BASE
+        )
+        val searchLink = "=> $searchbase ${getString(R.string.search)}"
+        val title = "# ${getString(R.string.app_name)}"
+        adapter.render(listOf(title, searchLink))
+    }
+
     private fun isHostSigned(uri: URI): Boolean{
         if((uri.host != omniTerm.getCurrent().toURI().host) && !certPassword.isNullOrEmpty()) {
             return false
@@ -857,9 +867,7 @@ class GemActivity : AppCompatActivity() {
         if(getInternetStatus()){
             if(initialised){
                 if(address.isEmpty()){
-                    loadingView(false)
-                    binding.pullToRefresh.isRefreshing = false
-                    adapter.render(listOf("# ${getString(R.string.app_name)}"))
+                    loadLocalHome()
                 }else{
                     model.request(address, certPassword)
                 }
