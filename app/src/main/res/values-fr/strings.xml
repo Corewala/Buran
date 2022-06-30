@@ -50,6 +50,7 @@
     <string name="file_saved_to_device">Fichier sauvegardé dans l\'appareil</string>
     <string name="configure_buran">Configurer Buran</string>
     <string name="home_capsule">Capsule d\'accueil</string>
+    <string name="not_valid_search_string">Ceci n\'est pas une base de recherche valide</string>
     <string name="not_valid_address">Ceci n\'est pas une adresse valide</string>
     <string name="no_home_capsule_set">Pas de capsule d\'accueil</string>
     <string name="search_engine">Moteur de recherche</string>

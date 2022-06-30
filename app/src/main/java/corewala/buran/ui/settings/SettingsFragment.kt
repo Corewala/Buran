@@ -67,19 +67,18 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
         homePreference.positiveButtonText = getString(R.string.update)
         homePreference.negativeButtonText = getString(R.string.cancel)
-        homePreference.title = getString(R.string.home_capsule)
         homePreference.setOnPreferenceChangeListener { _, newValue ->
             val newHomecapsule = newValue.toString().trim()
-            if(newHomecapsule.isNullOrEmpty()){
-                homePreference.summary = context.getString(R.string.no_home_capsule_set)
+            homePreference.summary = if(newHomecapsule.isNullOrEmpty()){
+                context.getString(R.string.no_home_capsule_set)
             }else if(
                 !newHomecapsule.startsWith("gemini://")
                 or newHomecapsule.contains(" ")
                 or !newHomecapsule.contains(".")
             ){
-                homePreference.summary = context.getString(R.string.not_valid_address)
+                context.getString(R.string.not_valid_address)
             }else{
-                homePreference.summary = newHomecapsule
+                newHomecapsule
             }
             true
         }
@@ -98,14 +97,39 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         val searchengine = preferenceManager.sharedPreferences.getString(
             "search_base",
             Buran.DEFAULT_SEARCH_BASE
-        )
+        )?.trim()
 
-        searchPreference.summary = searchengine
+        searchPreference.summary = if(searchengine.isNullOrEmpty()){
+            Buran.DEFAULT_SEARCH_BASE
+        }else if(
+            !searchengine.startsWith("gemini://")
+            or searchengine.contains(" ")
+            or !searchengine.contains(".")
+        ){
+            context.getString(R.string.not_valid_address)
+        }else if(!searchengine.endsWith("?")){
+            context.getString(R.string.not_valid_search_string)
+        }else{
+            searchengine
+        }
+
         searchPreference.positiveButtonText = getString(R.string.update)
         searchPreference.negativeButtonText = getString(R.string.cancel)
-        searchPreference.title = getString(R.string.search_engine)
         searchPreference.setOnPreferenceChangeListener { _, newValue ->
-            searchPreference.summary = newValue.toString()
+            val newSearchBase = newValue.toString().trim()
+            searchPreference.summary = if(newSearchBase.isNullOrEmpty()){
+                Buran.DEFAULT_SEARCH_BASE
+            }else if(
+                !newSearchBase.startsWith("gemini://")
+                or newSearchBase.contains(" ")
+                or !newSearchBase.contains(".")
+            ){
+                context.getString(R.string.not_valid_address)
+            }else if(!newSearchBase.endsWith("?")){
+                context.getString(R.string.not_valid_search_string)
+            }else{
+                newSearchBase
+            }
             true
         }
         searchPreference.setOnBindEditTextListener{ editText ->

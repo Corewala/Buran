@@ -85,7 +85,9 @@ class GemActivity : AppCompatActivity() {
 
     lateinit var adapter: AbstractGemtextAdapter
 
-    lateinit var home: String
+    private lateinit var home: String
+
+    private lateinit var searchBase: String
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
         if(longTap){
@@ -171,6 +173,20 @@ class GemActivity : AppCompatActivity() {
             home = ""
         }
 
+        searchBase = prefs.getString(
+            "search_base",
+            Buran.DEFAULT_SEARCH_BASE
+        ) ?: Buran.DEFAULT_SEARCH_BASE
+
+        if(
+            !searchBase.startsWith("gemini://")
+            or searchBase.contains(" ")
+            or !searchBase.contains(".")
+            or !searchBase.endsWith("?")
+        ){
+            searchBase = Buran.DEFAULT_SEARCH_BASE
+        }
+
         if(getInternetStatus()){
             initialise()
         }else{
@@ -189,11 +205,7 @@ class GemActivity : AppCompatActivity() {
         binding.addressEdit.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_GO -> {
-                    val searchbase = prefs.getString(
-                        "search_base",
-                        Buran.DEFAULT_SEARCH_BASE
-                    )
-                    omniTerm.input(binding.addressEdit.text.toString().trim(), searchbase)
+                    omniTerm.input(binding.addressEdit.text.toString().trim(), searchBase)
                     binding.addressEdit.clearFocus()
                     return@setOnEditorActionListener true
                 }
@@ -338,6 +350,20 @@ class GemActivity : AppCompatActivity() {
             or !home.contains(".")
         ){
             home = ""
+        }
+
+        searchBase = prefs.getString(
+            "search_base",
+            Buran.DEFAULT_SEARCH_BASE
+        ) ?: Buran.DEFAULT_SEARCH_BASE
+
+        if(
+            !searchBase.startsWith("gemini://")
+            or searchBase.contains(" ")
+            or !searchBase.contains(".")
+            or !searchBase.endsWith("?")
+        ){
+            searchBase = Buran.DEFAULT_SEARCH_BASE
         }
 
         when {
@@ -513,17 +539,13 @@ class GemActivity : AppCompatActivity() {
             is GemState.ResponseUnknownHost -> {
                 omniTerm.reset()
                 runOnUiThread {
-                    val searchbase = prefs.getString(
-                        "search_base",
-                        Buran.DEFAULT_SEARCH_BASE
-                    )
                     loadingView(false)
                     AlertDialog.Builder(this, R.style.AppDialogTheme)
                         .setTitle(getString(R.string.unknown_host))
                         .setMessage("${getString(R.string.unknown_host)}: ${state.uri}\n\n${getString(R.string.search_instead)}")
                         .setPositiveButton(getString(R.string.search).toUpperCase()) { _, _ ->
                             loadingView(true)
-                            omniTerm.search(state.uri.toString(), searchbase)
+                            omniTerm.search(state.uri.toString(), searchBase)
                         }
                         .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                         .show()
