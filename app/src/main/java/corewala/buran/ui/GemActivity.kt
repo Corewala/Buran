@@ -860,6 +860,7 @@ class GemActivity : AppCompatActivity() {
     private fun loadLocalHome(){
         loadingView(false)
         binding.pullToRefresh.isRefreshing = false
+        binding.addressEdit.text?.clear()
 
         val title = "# ${getString(R.string.app_name)}"
         val sourceLink = "=> https://github.com/Corewala/Buran ${getString(R.string.source)}"
