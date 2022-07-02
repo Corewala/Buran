@@ -8,6 +8,12 @@
 [![shields](https://img.shields.io/badge/Download-Here-orange?style=for-the-badge)](https://github.com/Corewala/Buran/releases/latest)
 [![shields](https://img.shields.io/badge/license-GPL-blue?style=for-the-badge)](https://github.com/Corewala/Buran/blob/master/LICENSE)
 
+<a href="https://f-droid.org/packages/YOUR.APP.ID">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">
+</a>
+
 Buran is a simple Gemini protocol browser for Android.
 
 ### Todo list
