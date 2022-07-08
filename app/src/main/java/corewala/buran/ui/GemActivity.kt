@@ -81,7 +81,11 @@ class GemActivity : AppCompatActivity() {
 
     private var certPassword: String? = null
 
+    private var previousPosition: Int = 0
+
     private var initialised: Boolean = false
+
+    private var goingBack: Boolean = false
 
     lateinit var adapter: AbstractGemtextAdapter
 
@@ -103,6 +107,7 @@ class GemActivity : AppCompatActivity() {
                 startActivity(Intent.createChooser(this, null))
             }
         }else{
+            previousPosition = (binding.gemtextRecycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
             //Reset input text hint after user has been searching
             if(inSearch) {
                 binding.addressEdit.hint = getString(R.string.main_input_hint)
@@ -696,9 +701,16 @@ class GemActivity : AppCompatActivity() {
 
         adapter.render(state.lines)
 
-        //Scroll to top
-        binding.gemtextRecycler.post {
-            binding.gemtextRecycler.scrollToPosition(0)
+        //Scroll to correct position
+        if(goingBack){
+            println("Returning to previous position: $previousPosition")
+            binding.gemtextRecycler.scrollToPosition(previousPosition)
+            previousPosition = 0
+            goingBack = false
+        }else{
+            binding.gemtextRecycler.post {
+                binding.gemtextRecycler.scrollToPosition(0)
+            }
         }
 
         focusEnd()
@@ -921,6 +933,7 @@ class GemActivity : AppCompatActivity() {
             model.cancel()
             loadingView(false)
         }else if(omniTerm.canGoBack()){
+            goingBack = true
             gemRequest(omniTerm.goBack())
         }else{
             println("Buran history is empty - exiting")
