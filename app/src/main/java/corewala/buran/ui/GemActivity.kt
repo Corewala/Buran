@@ -107,7 +107,6 @@ class GemActivity : AppCompatActivity() {
                 startActivity(Intent.createChooser(this, null))
             }
         }else{
-            previousPosition = (binding.gemtextRecycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
             //Reset input text hint after user has been searching
             if(inSearch) {
                 binding.addressEdit.hint = getString(R.string.main_input_hint)
@@ -698,6 +697,10 @@ class GemActivity : AppCompatActivity() {
         //val addressSpan = SpannableString(state.uri.toString())
         //addressSpan.set(0, 9, ForegroundColorSpan(resources.getColor(R.color.protocol_address)))
         binding.addressEdit.setText(state.uri.toString())
+
+        if(!goingBack){
+            previousPosition = (binding.gemtextRecycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        }
 
         adapter.render(state.lines)
 
