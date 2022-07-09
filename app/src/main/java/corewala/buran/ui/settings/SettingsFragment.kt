@@ -191,6 +191,50 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceChang
         showInlineImages.title = getString(R.string.show_inline_images)
         webCategory.addPreference(showInlineImages)
 
+        val httpGeminiProxy = EditTextPreference(context)
+        httpGeminiProxy.title = getString(R.string.http_proxy)
+        httpGeminiProxy.key = "http_proxy"
+        httpGeminiProxy.dialogTitle = getString(R.string.http_proxy)
+
+        val httpProxy = preferenceManager.sharedPreferences.getString(
+            "http_proxy",
+            null
+        )?.trim()
+
+        httpGeminiProxy.summary = if(httpProxy.isNullOrEmpty()){
+            getString(R.string.no_http_proxy_set)
+        }else if(
+            !httpProxy.startsWith("gemini://")
+            or httpProxy.contains(" ")
+            or !httpProxy.contains(".")
+        ){
+            getString(R.string.not_valid_address)
+        }else{
+            httpProxy
+        }
+
+        httpGeminiProxy.positiveButtonText = getString(R.string.update)
+        httpGeminiProxy.negativeButtonText = getString(R.string.cancel)
+        httpGeminiProxy.setOnPreferenceChangeListener { _, newValue ->
+            val newHomecapsule = newValue.toString().trim()
+            httpGeminiProxy.summary = if(newHomecapsule.isNullOrEmpty()){
+                getString(R.string.no_http_proxy_set)
+            }else if(
+                !newHomecapsule.startsWith("gemini://")
+                or newHomecapsule.contains(" ")
+                or !newHomecapsule.contains(".")
+            ){
+                getString(R.string.not_valid_address)
+            }else{
+                newHomecapsule
+            }
+            true
+        }
+        httpGeminiProxy.setOnBindEditTextListener{ editText ->
+            editText.imeOptions = EditorInfo.IME_ACTION_DONE
+            editText.setSelection(editText.text.toString().length)//Set caret position to end
+        }
+        webCategory.addPreference(httpGeminiProxy)
     }
 
     private fun buildAppearanceSection(context: Context?, appCategory: PreferenceCategory) {

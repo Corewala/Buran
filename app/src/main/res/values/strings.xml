@@ -66,6 +66,8 @@
     <string name="web_content">Web Content</string>
     <string name="web_content_label">Open websites internally using \'Custom Tabs\', instead of using the default browser. This might help you stay in Geminispace instead of being distracted by the wider web. Requires compatible default browser.</string>
     <string name="web_content_switch_label">Open internally</string>
+    <string name="http_proxy">HTTP proxy</string>
+    <string name="no_http_proxy_set">No HTTP proxy set</string>
     <string name="show_inline_images">Inline local images</string>
     <string name="pkcs_notice">Only PKCS12 client keystores are currently supported.</string>
     <string name="client_certificate">Client Certificate</string>
