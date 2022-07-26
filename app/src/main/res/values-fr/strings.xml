@@ -68,6 +68,8 @@
     <string name="web_content_switch_label">Ouvrir en interne</string>
     <string name="http_proxy">Mandataire HTTP</string>
     <string name="no_http_proxy_set">Pas de mandataire HTTP</string>
+    <string name="proxied_content">Ce contenu est visualisé via un mandataire</string>
+    <string name="open_original">Ouvrir l\'original</string>
     <string name="show_inline_images">Images locales en ligne</string>
     <string name="pkcs_notice">Seuls les magasins de clés client PKCS12 sont actuellement supportés.</string>
     <string name="client_certificate">Certificat Client</string>

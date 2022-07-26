@@ -81,6 +81,8 @@ class GemActivity : AppCompatActivity() {
 
     private var certPassword: String? = null
 
+    private var proxiedAddress: String? = null
+
     private var previousPosition: Int = 0
 
     private var initialised: Boolean = false
@@ -96,7 +98,7 @@ class GemActivity : AppCompatActivity() {
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
         if(longTap){
             val globalURI = if(!uri.toString().contains("//") and !uri.toString().contains(":")){
-                (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace("gemini:/", "gemini://")
+                (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace(":/", "://")
             } else {
                 uri.toString()
             }
@@ -112,6 +114,7 @@ class GemActivity : AppCompatActivity() {
                 binding.addressEdit.hint = getString(R.string.main_input_hint)
                 inSearch = false
             }
+
             omniTerm.navigation(uri.toString())
         }
     }
@@ -496,7 +499,9 @@ class GemActivity : AppCompatActivity() {
             is GemState.Requesting -> {
                 loadingView(true)
             }
-            is GemState.NotGeminiRequest -> externalProtocol(state)
+            is GemState.NotGeminiRequest -> {
+                externalProtocol(state.uri)
+            }
             is GemState.ResponseError -> {
                 omniTerm.reset()
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
@@ -506,7 +511,14 @@ class GemActivity : AppCompatActivity() {
                 updateClientCertIcon()
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
-            is GemState.ResponseGemtext -> renderGemtext(state)
+            is GemState.ResponseGemtext -> {
+                if(state.uri.scheme != "gemini://"){
+                    Snackbar.make(binding.root, getString(R.string.proxied_content), Snackbar.LENGTH_LONG).setAction(getString(R.string.open_original)) {
+                        externalProtocol(state.uri)
+                    }.show()
+                }
+                renderGemtext(state)
+            }
             is GemState.ResponseText -> renderText(state)
             is GemState.ResponseImage -> renderImage(state)
             is GemState.ResponseBinary -> renderBinary(state)
@@ -531,7 +543,7 @@ class GemActivity : AppCompatActivity() {
                             .setMessage("${state.uri}")
                             .setPositiveButton(getString(R.string.download).toUpperCase()) { _, _ ->
                                 loadingView(true)
-                                model.requestBinaryDownload(state.uri, clientCertPassword)
+                                model.requestBinaryDownload(state.uri, clientCertPassword, null)
                             }
                             .setNegativeButton(getString(R.string.cancel).toUpperCase()) { _, _ -> }
                             .show()
@@ -638,15 +650,15 @@ class GemActivity : AppCompatActivity() {
         }
     }
 
-    private fun externalProtocol(state: GemState.NotGeminiRequest) = runOnUiThread {
+    private fun externalProtocol(uri: URI) = runOnUiThread {
         loadingView(false)
-        val uri = state.uri.toString()
+        val uri = uri.toString()
 
         when {
             (uri.startsWith("http://") || uri.startsWith("https://")) -> openExternalLink(uri)
             else -> {
                 val viewIntent = Intent(Intent.ACTION_VIEW)
-                viewIntent.data = Uri.parse(state.uri.toString())
+                viewIntent.data = Uri.parse(uri.toString())
 
                 try {
                     startActivity(viewIntent)
@@ -654,7 +666,7 @@ class GemActivity : AppCompatActivity() {
                     showAlert(
                         String.format(
                             getString(R.string.no_app_installed_that_can_open),
-                            state.uri
+                            uri
                         )
                     )
                 }
@@ -683,7 +695,6 @@ class GemActivity : AppCompatActivity() {
         }else{
             val viewIntent = Intent(Intent.ACTION_VIEW)
             viewIntent.data = Uri.parse(address)
-
             startActivity(viewIntent)
         }
     }
@@ -691,7 +702,7 @@ class GemActivity : AppCompatActivity() {
     private fun renderGemtext(state: GemState.ResponseGemtext) = runOnUiThread {
         loadingView(false)
 
-        omniTerm.set(state.uri.toString())
+        omniTerm.set(proxiedAddress ?: state.uri.toString())
 
         //todo - colours didn't change when switching themes, so disabled for now
         //val addressSpan = SpannableString(state.uri.toString())
@@ -911,12 +922,29 @@ class GemActivity : AppCompatActivity() {
         }
         updateClientCertIcon()
 
+        if(address.startsWith("http://") or address.startsWith("https://")){
+            val httpProxy = prefs.getString("http_proxy", null)
+
+            if (httpProxy != null) {
+                if(
+                    httpProxy.isNullOrEmpty()
+                    or !httpProxy.startsWith("gemini://")
+                    or httpProxy.contains(" ")
+                    or !httpProxy.contains(".")
+                ){
+                    openExternalLink(address)
+                }else{
+                    model.request(httpProxy, certPassword, address)
+                }
+            }
+        }
+
         if(getInternetStatus()){
             if(initialised){
                 if(address.isEmpty()){
                     loadLocalHome()
                 }else{
-                    model.request(address, certPassword)
+                    model.request(address, certPassword, null)
                 }
             }else{
                 initialise()

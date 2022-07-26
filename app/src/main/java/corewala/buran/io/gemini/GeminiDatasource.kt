@@ -8,9 +8,9 @@ import corewala.buran.OppenURI
 import corewala.buran.io.GemState
 import corewala.buran.io.database.history.BuranHistory
 import corewala.buran.io.keymanager.BuranKeyManager
+import corewala.toURI
 import corewala.toUri
 import java.io.*
-import java.lang.IllegalStateException
 import java.net.ConnectException
 import java.net.URI
 import java.net.UnknownHostException
@@ -32,7 +32,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
     private var currentRequestAddress: String? = null
 
-    override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit) {
+    override fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, alternativeRequest: String?, onUpdate: (state: GemState) -> Unit){
         this.forceDownload = forceDownload
 
         this.onUpdate = onUpdate
@@ -41,10 +41,12 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
 
         onUpdate(GemState.Requesting(uri))
 
-        currentRequestAddress = address
+        if(address.startsWith("gemini://")){
+                currentRequestAddress = address
+        }
 
         GlobalScope.launch {
-            geminiRequest(uri, onUpdate, clientCertPassword)
+            geminiRequest(uri, onUpdate, clientCertPassword, alternativeRequest)
         }
     }
 
@@ -66,14 +68,20 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         socketFactory = sslContext.socketFactory
     }
 
-    private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertPassword: String?){
+    private fun geminiRequest(uri: URI, onUpdate: (state: GemState) -> Unit, clientCertPassword: String?, alternativeRequest: String?){
         val protocol = "TLS"
 
         initSSLFactory(protocol, clientCertPassword)
 
+        val port = if(uri.port != -1){
+            uri.port
+        }else{
+            1965
+        }
+
         val socket: SSLSocket?
         try {
-            socket = socketFactory?.createSocket(uri.host, 1965) as SSLSocket
+            socket = socketFactory?.createSocket(uri.host, port) as SSLSocket
 
             println("Buran socket handshake with ${uri.host}")
             socket.startHandshake()
@@ -102,7 +110,12 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         val bufferedWriter = BufferedWriter(outputStreamWriter)
         val outWriter = PrintWriter(bufferedWriter)
 
-        val requestEntity = uri.toString() + "\r\n"
+        val requestEntity = if(alternativeRequest.isNullOrEmpty()){
+            uri.toString()
+        }else{
+            alternativeRequest
+        } + "\r\n"
+
         println("Buran socket requesting $requestEntity")
         outWriter.print(requestEntity)
         outWriter.flush()
@@ -134,10 +147,10 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         when {
             currentRequestAddress != uri.toString() -> {}
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
-            header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri.host, header.meta)))
+            header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri, header.meta)))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
             header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
-            header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, uri, header, onUpdate)
+            header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, requestEntity.trim().toURI(), header, onUpdate)
             header.meta.startsWith("text/") -> getString(socket, uri, header, onUpdate)
             header.meta.startsWith("image/") -> getBinary(socket, uri, header, onUpdate)
             else -> {
@@ -171,10 +184,6 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         lines.addAll(reader.readLines())
 
         val processed = GemtextHelper.findCodeBlocks(lines)
-
-        when {
-            !uri.toString().startsWith("gemini://") -> throw IllegalStateException("Not a Gemini Uri")
-        }
 
         updateHistory(uri)
         onUpdate(GemState.ResponseGemtext(uri, header, processed))
@@ -232,9 +241,9 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         }
     }
 
-    private fun resolve(host: String, address: String): String{
+    private fun resolve(uri: URI, address: String): String{
         val ouri = OppenURI()
-        ouri.set("gemini://$host")
+        ouri.set(uri.scheme + uri.host)
         return ouri.resolve(address)
     }
 

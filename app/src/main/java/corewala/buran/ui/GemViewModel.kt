@@ -20,12 +20,12 @@ class GemViewModel: ViewModel() {
         this.onState = onState
 
         if(home.startsWith("gemini://") and !home.contains(" ")){
-            request(home, null)
+            request(home, null, null)
         }
     }
 
-    fun request(address: String, clientCertPassword: String?) {
-        gemini.request(address, false, clientCertPassword){ state ->
+    fun request(address: String, clientCertPassword: String?, alternativeRequest: String?) {
+        gemini.request(address, false, clientCertPassword, alternativeRequest){ state ->
             onState(state)
         }
     }
@@ -38,15 +38,15 @@ class GemViewModel: ViewModel() {
         gemini.cancel()
     }
 
-    fun requestBinaryDownload(uri: URI, clientCertPassword: String?) {
-        gemini.request(uri.toString(), true, clientCertPassword){ state ->
+    fun requestBinaryDownload(uri: URI, clientCertPassword: String?, alternativeRequest: String?) {
+        gemini.request(uri.toString(), true, clientCertPassword, alternativeRequest){ state ->
             onState(state)
         }
     }
 
     //todo - same action as above... refactor
     fun requestInlineImage(uri: URI, clientCertPassword: String?, onImageReady: (cacheUri: Uri?) -> Unit){
-        gemini.request(uri.toString(), false, clientCertPassword){ state ->
+        gemini.request(uri.toString(), false, clientCertPassword, null){ state ->
             when (state) {
                 is GemState.ResponseImage -> onImageReady(state.cacheUri)
                 else -> onState(state)

@@ -56,14 +56,17 @@ class OmniTerm(private val listener: Listener) {
         when {
             link.startsWith(GEM_SCHEME) -> uri.set(link)
             link.startsWith("//") -> uri.set("gemini:$link")
+            link.startsWith("http://") or link.startsWith("https://") -> {
+                uri.set(link)
+            }
             link.contains(":") -> listener.openExternal(link)
             else -> uri.resolve(link)
         }
 
-        val address = uri.toString().replace("//", "/").replace("gemini:/", "gemini://")
-        println("OmniTerm resolved address: $address")
+        val address = uri.toString().replace("//", "/").replace(":/", "://")
 
         if(invokeListener) listener.request(address)
+        println("OmniTerm resolved address: $address")
     }
 
     fun reset(){

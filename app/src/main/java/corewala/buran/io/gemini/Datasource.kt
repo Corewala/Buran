@@ -6,7 +6,7 @@ import corewala.buran.io.database.history.BuranHistory
 import java.net.URI
 
 interface Datasource {
-    fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, onUpdate: (state: GemState) -> Unit)
+    fun request(address: String, forceDownload: Boolean, clientCertPassword: String?, alternativeRequest: String?, onUpdate: (state: GemState) -> Unit)
     fun isRequesting(): Boolean
     fun cancel()
     fun canGoBack(): Boolean
