@@ -512,7 +512,7 @@ class GemActivity : AppCompatActivity() {
                 showAlert("${GeminiResponse.getCodeString(state.header.code)}:\n\n${state.header.meta}")
             }
             is GemState.ResponseGemtext -> {
-                if(state.uri.scheme != "gemini://"){
+                if(state.uri.scheme != "gemini"){
                     Snackbar.make(binding.root, getString(R.string.proxied_content), Snackbar.LENGTH_LONG).setAction(getString(R.string.open_original)) {
                         externalProtocol(state.uri)
                     }.show()
