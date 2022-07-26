@@ -305,7 +305,7 @@ class GemtextAdapter(
                         var offset = 1
 
                         if (component.length - offset > 1) {
-                            while (!component.substring(offset).first().isLetterOrDigit()) {
+                            while ((component.length - offset > 1) and !component.substring(offset).first().isLetterOrDigit()) {
                                 offset += 1
                             }
                             val index = (component.length - offset) / 2
