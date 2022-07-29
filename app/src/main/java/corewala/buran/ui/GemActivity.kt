@@ -97,11 +97,7 @@ class GemActivity : AppCompatActivity() {
 
     private val onLink: (link: URI, longTap: Boolean, adapterPosition: Int) -> Unit = { uri, longTap, _: Int ->
         if(longTap){
-            val globalURI = if(!uri.toString().contains("//") and !uri.toString().contains(":")){
-                (omniTerm.getCurrent() + uri.toString()).replace("//", "/").replace(":/", "://")
-            } else {
-                uri.toString()
-            }
+            val globalURI = omniTerm.getGlobalUri(uri.toString())
             Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, globalURI)

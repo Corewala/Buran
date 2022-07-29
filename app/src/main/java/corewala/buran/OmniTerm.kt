@@ -58,7 +58,6 @@ class OmniTerm(private val listener: Listener) {
             link.startsWith("//") -> uri.set("gemini:$link")
             link.startsWith("http://") or link.startsWith("https://") -> {
                 uri.set(link)
-                println("MALD?")
             }
             link.contains(":") -> listener.openExternal(link)
             else -> uri.resolve(link)
@@ -68,6 +67,14 @@ class OmniTerm(private val listener: Listener) {
 
         if(invokeListener) listener.request(address)
         println("OmniTerm resolved address: $address")
+    }
+
+    fun getGlobalUri(reference: String): String {
+        when {
+            reference.contains(":") -> return reference
+            reference.startsWith("//") -> return "gemini:$reference"
+            else -> return uri.resolve(reference)
+        }
     }
 
     fun reset(){

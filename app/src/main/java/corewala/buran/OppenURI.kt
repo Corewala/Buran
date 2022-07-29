@@ -36,7 +36,6 @@ class OppenURI constructor(private var ouri: String) {
 
     fun resolve(reference: String): String{
         if(ouri == "$GEMSCHEME$host") ouri = "$ouri/"
-        println(host)
         when {
             reference.startsWith(GEMSCHEME) -> set(reference)
             reference.startsWith(SOLIDUS) -> ouri = "$scheme://$host$reference"
