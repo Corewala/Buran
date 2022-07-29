@@ -1,6 +1,8 @@
 package corewala.buran
 
-const val SCHEME = "gemini://"
+import corewala.toURI
+
+const val GEMSCHEME = "gemini://"
 const val TRAVERSE = "../"
 const val SOLIDUS = "/"
 const val DIREND = "/"
@@ -15,21 +17,29 @@ class OppenURI constructor(private var ouri: String) {
     constructor(): this("")
 
     var host: String = ""
+    var scheme: String = ""
 
     init {
-        extractHost()
+        if(ouri.isNotEmpty()){
+            host = ouri.toURI().host
+            scheme = ouri.toURI().scheme
+        }
     }
 
     fun set(ouri: String){
         this.ouri = ouri
-        extractHost()
+        if(ouri.isNotEmpty()){
+            host = ouri.toURI().host
+            scheme = ouri.toURI().scheme
+        }
     }
 
     fun resolve(reference: String): String{
-        if(ouri == "$SCHEME$host") ouri = "$ouri/"
+        if(ouri == "$GEMSCHEME$host") ouri = "$ouri/"
+        println(host)
         when {
-            reference.startsWith(SCHEME) -> set(reference)
-            reference.startsWith(SOLIDUS) -> ouri = "$SCHEME$host$reference"
+            reference.startsWith(GEMSCHEME) -> set(reference)
+            reference.startsWith(SOLIDUS) -> ouri = "$scheme://$host$reference"
             reference.startsWith(TRAVERSE) -> {
                 if(!ouri.endsWith(DIREND)) ouri = ouri.removeFile()
                 val traversalCount = reference.split(TRAVERSE).size - 1
@@ -46,16 +56,16 @@ class OppenURI constructor(private var ouri: String) {
     }
 
     fun traverse(): OppenURI{
-        val path = ouri.removePrefix("$SCHEME$host")
+        val path = ouri.removePrefix("$GEMSCHEME$host")
         val segments  = path.split(SOLIDUS).filter { it.isNotEmpty() }
 
-        var nouri = "$SCHEME$host"
+        var nouri = "$GEMSCHEME$host"
 
         when (ouri) {
             "" -> {
             }
-            SCHEME -> ouri = ""
-            "$nouri/" -> ouri = SCHEME
+            GEMSCHEME -> ouri = ""
+            "$nouri/" -> ouri = GEMSCHEME
             else -> {
                 when {
                     segments.isNotEmpty() -> {
@@ -74,10 +84,10 @@ class OppenURI constructor(private var ouri: String) {
     }
 
     private fun traverse(count: Int): String{
-        val path = ouri.removePrefix("$SCHEME$host")
+        val path = ouri.removePrefix("$GEMSCHEME$host")
         val segments  = path.split(SOLIDUS).filter { it.isNotEmpty() }
         val segmentCount = segments.size
-        var nouri = "$SCHEME$host"
+        var nouri = "$GEMSCHEME$host"
 
         segments.forEachIndexed{ index, segment ->
             if(index < segmentCount - count){
@@ -87,15 +97,6 @@ class OppenURI constructor(private var ouri: String) {
 
         return "$nouri/"
 
-    }
-
-    private fun extractHost(){
-        if(ouri.isEmpty()) return
-        val urn = ouri.removePrefix(SCHEME)
-        host = when {
-            urn.contains(SOLIDUS) -> urn.substring(0, urn.indexOf(SOLIDUS))
-            else -> urn
-        }
     }
 
     fun copy(): OppenURI = OppenURI(ouri)

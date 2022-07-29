@@ -58,6 +58,7 @@ class OmniTerm(private val listener: Listener) {
             link.startsWith("//") -> uri.set("gemini:$link")
             link.startsWith("http://") or link.startsWith("https://") -> {
                 uri.set(link)
+                println("MALD?")
             }
             link.contains(":") -> listener.openExternal(link)
             else -> uri.resolve(link)
