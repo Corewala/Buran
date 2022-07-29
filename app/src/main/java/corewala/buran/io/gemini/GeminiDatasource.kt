@@ -147,7 +147,7 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         when {
             currentRequestAddress != uri.toString() -> {}
             header.code == GeminiResponse.INPUT -> onUpdate(GemState.ResponseInput(uri, header))
-            header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(resolve(uri, header.meta)))
+            header.code == GeminiResponse.REDIRECT ->  onUpdate(GemState.Redirect(header.meta))
             header.code == GeminiResponse.CLIENT_CERTIFICATE_REQUIRED -> onUpdate(GemState.ClientCertRequired(uri, header))
             header.code != GeminiResponse.SUCCESS -> onUpdate(GemState.ResponseError(header))
             header.meta.startsWith("text/gemini") -> getGemtext(bufferedReader, requestEntity.trim().toURI(), header, onUpdate)
@@ -173,8 +173,6 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
         outWriter.close()
 
         socket.close()
-
-        currentRequestAddress = null
     }
 
     private fun getGemtext(reader: BufferedReader, uri: URI, header: GeminiResponse.Header, onUpdate: (state: GemState) -> Unit){
@@ -239,12 +237,6 @@ class GeminiDatasource(private val context: Context, val history: BuranHistory):
                 }
             }
         }
-    }
-
-    private fun resolve(uri: URI, address: String): String{
-        val ouri = OppenURI()
-        ouri.set(uri.scheme + uri.host)
-        return ouri.resolve(address)
     }
 
     override fun canGoBack(): Boolean = runtimeHistory.isEmpty() || runtimeHistory.size > 1
