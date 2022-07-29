@@ -1,5 +1,9 @@
 Changelog:
-* Default homepage is stored locally
-* Only the latest request is rendered
-* Back button cancels current request
-* Lots of bugfixes
+
+ - Default homepage is stored locally
+
+ - Only the latest request is rendered
+
+ - Back button cancels current request
+
+ - Lots of bugfixes
