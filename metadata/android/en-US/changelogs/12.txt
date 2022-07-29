@@ -1,0 +1,9 @@
+Changelog:
+
+ - HTTP proxy support
+
+ - Previous scroll position is stored
+
+ - Local links and redirects are fixed
+
+ - Minor tweaks and bugfixes
